@@ -165,6 +165,8 @@ account.
 | Decision records   | [docs/architecture-decisions.md](docs/architecture-decisions.md)                                    |
 | Board model        | [docs/board-data-model.md](docs/board-data-model.md)                                                |
 | Result contract    | [docs/result-data-contract.md](docs/result-data-contract.md)                                        |
+| Source adapters    | [docs/result-source-adapters.md](docs/result-source-adapters.md)                                    |
+| Result day         | [docs/result-day-operations.md](docs/result-day-operations.md)                                      |
 | SEO system         | [docs/seo-system.md](docs/seo-system.md)                                                            |
 | Design system      | [docs/design-system.md](docs/design-system.md)                                                      |
 | Operations         | [docs/operations.md](docs/operations.md)                                                            |

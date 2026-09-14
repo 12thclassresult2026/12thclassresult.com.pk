@@ -36,14 +36,18 @@ app/                     App Router. Routes are thin: resolve a registry entry,
 
 components/
 ├── layout/              header, footer  (server components)
+├── result/              access-model CTA, command centre, per-group status,
+│                     provenance, source health note
+├── ui/                  status chip
 └── seo/                 json-ld script wrapper
 
 lib/
 ├── seo/        site identity, canonical + normalizePath, metadata factory, sitemaps
 ├── content/    the page registry: routing metadata, sitemap membership, link graph
 ├── board/      board model and registry
-├── result/     result contract, VerifiedFact, capability wording
-├── result-sources/  official source contract and registry
+├── result/     result contract, VerifiedFact, capability wording, fallback ladder
+├── result-sources/  source registry, adapter contract, error taxonomy,
+│                 health + circuit breaker, the result service
 ├── schema/     JSON-LD builders
 ├── validation/ Zod wire schemas
 └── security/   rate limiting
@@ -122,9 +126,19 @@ cross-product of options, not confirmed that a 2026 dataset exists.
 ### Outcomes cannot be confused with each other
 
 `LookupOutcome` is a discriminated union — `found` / `not-found` / `not-announced` /
-`unsupported` / `source-unavailable` / `invalid-request`. There is no
-`{ found: boolean, record?: ... }` shape, because that permits `found: true` with no
-record, and lets "the source is down" render as "no such result".
+`not-announced-for-group` / `no-lookup-exists` / `unsupported` / `source-unavailable` /
+`invalid-request`. There is no `{ found: boolean, record?: ... }` shape, because that permits
+`found: true` with no record, and lets "the source is down" render as "no such result".
+
+Two distinctions carry most of the weight. `no-lookup-exists` says the board has no online
+roll-number check **at all** — four boards are in that state, and calling it `not-found` would
+tell those candidates their result is missing when it was never online.
+`not-announced-for-group` exists because a board-level "announced" is false comfort for a
+Commerce candidate when only Pre-Medical is out.
+
+Every outcome except `found` and `invalid-request` carries `fallbacks` **on the type**, so a
+dead end is a compile error rather than an oversight (ADR-014). And `not-found` is reachable
+from exactly one place: an adapter that completed and explicitly returned `null` (ADR-013).
 
 ---
 
@@ -329,3 +343,48 @@ answer.
 155 tests green (76 validation, 41 unit, 38 end-to-end) · OpenNext build succeeded · `stage-cache` staged 12 files ·
 `wrangler deploy --dry-run` at **gzip 1060.65 KiB** against a 3 MiB ceiling, with
 `ASSETS` and the site origin as the only bindings.
+
+---
+
+# Phase 4 — The Result Engine, 2026-09-14
+
+## What was built
+
+| Module                                 | Responsibility                                              |
+| -------------------------------------- | ----------------------------------------------------------- |
+| `lib/result-sources/service.ts`        | The one entry point: validate → declare → route → upstream. |
+| `lib/result-sources/adapter.ts`        | Adapter contract, four gates, kill switch, SSRF guard.      |
+| `lib/result-sources/errors.ts`         | 14 typed failure codes and their public wording.            |
+| `lib/result-sources/health.ts`         | Availability cache, staleness, circuit breaker.             |
+| `lib/result/fallback.ts`               | The fallback ladder and the primary-route definition.       |
+| `components/result/command-center.tsx` | Primary action + ladder + source health, in one block.      |
+
+## The decision that shaped it
+
+**No adapter is registered, because none can legitimately be.** Zero of 28 sources are
+classified `server-integration`: six sources across five boards carry a confirmed CAPTCHA,
+three sit behind `VIEWSTATE`,
+three need JavaScript, and none publishes an API or any permission to automate (ADR-012).
+
+So the engine's job is not fetching results. It is routing every student to the best legitimate
+path for their board and being explicit about what is verified. The adapter machinery is built
+and tested around an empty registry, so the day a board grants access, an adapter is added and
+no component, route or URL changes.
+
+## The three invariants the tests attack
+
+1. **A broken parser must never look like a missing result** (ADR-013). `not-found` is
+   reachable only from an adapter that completed and returned `null`; everything else throws.
+2. **No unresolved outcome may be a dead end** (ADR-014). `fallbacks` is on the type.
+3. **No upstream request is ever triggered by a site visitor.** Health checks are scheduled;
+   the read path consults a cache. On result day our traffic must not become the board's.
+
+## Verified by execution
+
+200 tests green (76 validation, 80 unit, 44 end-to-end) · typecheck clean · ESLint clean ·
+Next build succeeded, 12 static routes.
+
+Confirmed from built HTML rather than from the data that produced it: the gazette-only board
+renders **zero** `<input>` elements, shows its per-group table with an undeclared group, offers
+a deduplicated fallback ladder ending at the board's own domain, and carries an availability
+line that explicitly separates "the site responded" from "a result has been announced".

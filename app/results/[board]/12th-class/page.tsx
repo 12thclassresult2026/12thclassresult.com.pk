@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
-import { AccessModelAction } from '@/components/result/access-model-action'
+import { ResultCommandCenter } from '@/components/result/command-center'
 import { Breadcrumbs } from '@/components/seo/breadcrumbs'
 import { JsonLdScript } from '@/components/seo/json-ld'
 import { PerGroupStatus } from '@/components/result/per-group-status'
@@ -86,7 +86,7 @@ export default async function BoardResultPage({ params }: { params: Promise<{ bo
         </div>
 
         <div className="mt-8 max-w-3xl">
-          <AccessModelAction board={board} />
+          <ResultCommandCenter board={board} />
         </div>
 
         {board.studentCautions?.length ? (

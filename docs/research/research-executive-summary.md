@@ -58,7 +58,7 @@ almost nobody conveys it.
 
 ### 1.5 No first-party result checker is possible, and that is fine
 
-Four confirmed CAPTCHAs, VIEWSTATE-protected forms that structurally reject synthetic
+Six confirmed CAPTCHAs across five boards, VIEWSTATE-protected forms that reject synthetic
 posts, JavaScript-only portals, and **no board publishing an API or any permission to
 automate**. Exactly one board is even a technical candidate, and only with written
 permission.

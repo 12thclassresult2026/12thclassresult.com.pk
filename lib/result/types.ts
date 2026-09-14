@@ -1,3 +1,6 @@
+import type { GroupId } from '@/lib/board/types'
+import type { ResultFallback } from './fallback'
+
 /**
  * The normalized internal result contract (section 14).
  *
@@ -38,7 +41,15 @@ export type ResultRecord = {
   rollNumber: string
   candidateName: string | null
   fatherName: string | null
-  group: string | null
+  /**
+   * The registry's group vocabulary, not the board's wording.
+   *
+   * Typed rather than `string` because a per-group board declares results one
+   * group at a time: a record whose group cannot be matched to a known group
+   * cannot be checked against that board's declaration state, and a free
+   * string would let "Pre Medical" and "pre-medical" silently diverge.
+   */
+  group: GroupId | null
   subjects: SubjectRecord[]
   obtainedMarks: number | null
   totalMarks: number | null
@@ -61,13 +72,53 @@ export type ResultRecord = {
  */
 export type LookupOutcome =
   | { kind: 'found'; record: ResultRecord; alsoAtBoards?: string[] }
-  | { kind: 'not-found'; message: string }
-  | { kind: 'not-announced'; message: string; boardId: string }
-  | { kind: 'unsupported'; message: string; boardId: string }
+  | { kind: 'not-found'; message: string; boardId: string; fallbacks: ResultFallback[] }
+  | { kind: 'not-announced'; message: string; boardId: string; fallbacks: ResultFallback[] }
+  /**
+   * The board declares group by group, and THIS group is not out yet.
+   *
+   * Distinct from `not-announced` because a board-level "announced" is false
+   * comfort for a Commerce candidate when only Pre-Medical has been declared —
+   * and telling that candidate "no result found" would be materially wrong.
+   */
+  | {
+      kind: 'not-announced-for-group'
+      message: string
+      boardId: string
+      group: GroupId
+      fallbacks: ResultFallback[]
+    }
+  /**
+   * The board has no online roll-number lookup AT ALL.
+   *
+   * Distinct from `unsupported` (we cannot do it) — this says the thing does
+   * not exist, so no amount of retrying or waiting will produce it. Four boards
+   * are in this state today, and conflating it with `not-found` would tell
+   * those candidates their result is missing when it was never online.
+   */
+  | {
+      kind: 'no-lookup-exists'
+      message: string
+      boardId: string
+      gazetteSourceId?: string
+      fallbacks: ResultFallback[]
+    }
+  | { kind: 'unsupported'; message: string; boardId: string; fallbacks: ResultFallback[] }
   | {
       kind: 'source-unavailable'
       message: string
       boardId: string
       retryAfterSeconds: number | null
+      fallbacks: ResultFallback[]
     }
   | { kind: 'invalid-request'; message: string }
+
+/**
+ * Every outcome except `found` and `invalid-request` carries a fallback ladder.
+ *
+ * This is enforced by the type, not by convention: a reader who cannot get a
+ * result here must always leave with somewhere real to go. `invalid-request` is
+ * excluded because the fix is in the form the reader already has, and `found`
+ * because they have what they came for.
+ */
+export type UnresolvedOutcome = Extract<LookupOutcome, { fallbacks: ResultFallback[] }>

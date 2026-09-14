@@ -73,6 +73,42 @@ test.describe('the gazette-only board — the correctness rule', () => {
   })
 })
 
+test.describe('the fallback ladder', () => {
+  test('offers a second route, and never the same link twice', async ({ page }) => {
+    await page.goto('/results/karachi-board/12th-class')
+    await expect(page.getByRole('heading', { name: /If that does not work/i })).toBeVisible()
+
+    // The board's own domain is the last rung on every board, because the
+    // commonest way a student is misled here is an aggregator that looks
+    // official.
+    const ladder = page.getByRole('heading', { name: /If that does not work/i }).locator('..')
+    await expect(ladder.getByRole('link', { name: /official website/i })).toBeVisible()
+  })
+
+  test('states availability without implying a result has been declared', async ({ page }) => {
+    await page.goto('/results/karachi-board/12th-class')
+    // The qualifier is the point: a reachable portal says nothing about
+    // whether a result exists, and a reader can easily read it as if it did.
+    await expect(
+      page.getByText(/availability when it was checked, not whether a result has been announced/i),
+    ).toBeVisible()
+  })
+
+  test('every outbound board link is https and not followed', async ({ page }) => {
+    await page.goto('/results/karachi-board/12th-class')
+    const links = page.locator('a[href^="http"]')
+    const count = await links.count()
+    expect(count).toBeGreaterThan(0)
+    for (let i = 0; i < count; i += 1) {
+      const link = links.nth(i)
+      expect(await link.getAttribute('href')).toMatch(/^https:\/\//)
+      // Outbound links to boards must not pass authority, and must not leak a
+      // referrer chain back through our pages.
+      expect(await link.getAttribute('rel')).toContain('noopener')
+    }
+  })
+})
+
 test.describe('no fabricated data reaches the page', () => {
   const CIRCULATING_SHORTCODES = ['5050', '800291', '800299', '8583', '800296']
 

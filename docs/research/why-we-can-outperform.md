@@ -101,13 +101,13 @@ that is correct, dated and linked, in crawlable HTML.**
 
 Recording these matters as much as the opportunities.
 
-| Area                                                     | Why not                                                                                                                                                                                                      |
-| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Certificate verification / attestation / equivalence     | The official body owns half its own first page plus its portals                                                                                                                                              |
-| Duplicate DMC as a transaction                           | Officials and their own forms win it                                                                                                                                                                         |
-| Entry-test aggregate calculators                         | Crowded, settled formula, established tools                                                                                                                                                                  |
-| Position holders                                         | No official source exists for the current session                                                                                                                                                            |
-| Any result "checker" that claims to return marks in-page | **No first-party checker exists in this market**, and our own feasibility study shows why: four confirmed CAPTCHAs, VIEWSTATE-protected forms, JS-only portals, and no board publishing an API or permission |
+| Area                                                     | Why not                                                                                                                                                                                                                        |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Certificate verification / attestation / equivalence     | The official body owns half its own first page plus its portals                                                                                                                                                                |
+| Duplicate DMC as a transaction                           | Officials and their own forms win it                                                                                                                                                                                           |
+| Entry-test aggregate calculators                         | Crowded, settled formula, established tools                                                                                                                                                                                    |
+| Position holders                                         | No official source exists for the current session                                                                                                                                                                              |
+| Any result "checker" that claims to return marks in-page | **No first-party checker exists in this market**, and our own feasibility study shows why: six confirmed CAPTCHAs across five boards, VIEWSTATE-protected forms, JS-only portals, and no board publishing an API or permission |
 
 ---
 

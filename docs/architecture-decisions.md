@@ -306,7 +306,7 @@ a result form that cannot work. `BOARD_ADAPTERS` stays empty.
 
 ### Context
 
-Four confirmed CAPTCHAs, VIEWSTATE-protected forms that structurally reject synthetic
+Six confirmed CAPTCHAs across five boards, VIEWSTATE-protected forms that reject synthetic
 posts, JavaScript-only portals, and no board publishing an API or permission. Every
 "checker" in this market is a router; one competitor even adds a synthetic
 "Verifying details…" delay before an outbound link.
@@ -358,3 +358,103 @@ next dependency pass.
 **TypeScript 7, ESLint 10 and Vitest 5 remain rejected** for the reasons in ADR-002 —
 `typescript-eslint` still caps TypeScript below 6.1, and `eslint-config-next`'s plugin
 set is still not ESLint 10 ready. Re-evaluated, not assumed.
+
+---
+
+## ADR-012 — The adapter registry ships empty
+
+**Date:** 2026-09-14 · **Status:** Accepted · **Phase:** 4
+
+### Context
+
+Phase 4 asked for a real result engine with source adapters. The obvious reading is "integrate
+the boards we can". The source survey says which those are: **none**.
+
+Six sources across five boards present a confirmed CAPTCHA, three sit behind
+`VIEWSTATE`/`EVENTVALIDATION`, three need JavaScript to render anything, and zero publish an API
+or any statement permitting automated access. Exactly one board is a clean technical candidate — and its payload is a named minor's
+marks beside their father's name, which a permissive `robots.txt` does not license us to
+republish.
+
+### Decision
+
+`BOARD_ADAPTERS` is `[]`, asserted by test. The full adapter contract, circuit breaker, timeout,
+error taxonomy and provenance assertion are built and tested around it via a synthetic adapter
+that cannot be registered outside the test runner.
+
+`getAdapterForBoard()` applies four independent gates, two of which read the live source
+registry — so a source that acquires a CAPTCHA or is reclassified stops being called with no
+other change.
+
+### Consequences
+
+Every board returns a routing outcome with a fallback ladder rather than a record. When a board
+grants access, an adapter is added and **no component, route or URL changes**.
+
+The alternative — shipping an adapter that defeats a control a board deliberately installed — was
+never on the table, and the code makes it awkward rather than merely discouraged.
+
+---
+
+## ADR-013 — A parser failure may never become "not found"
+
+**Date:** 2026-09-14 · **Status:** Accepted · **Phase:** 4
+
+### Context
+
+The worst defect this system can have is not an outage. It is telling a student their result does
+not exist when it does.
+
+That happens by default. A board redesigns its HTML, the selector matches nothing, the adapter
+returns "no rows", and the engine reports a confident `not-found` to every candidate who asks —
+with nothing in any log to notice, because from the code's perspective nothing failed.
+
+### Decision
+
+`not-found` is reachable from exactly one place: an adapter that completed and explicitly
+returned `null`. Every other condition throws a typed `ResultSourceError`.
+
+An unrecognised exception classifies as `PARSER_FAILURE`, not `INTERNAL_ERROR` — an unexpected
+throw mid-lookup usually means the page changed under us, and that classification fails **toward
+the official link** rather than toward a confident wrong answer. A record without provenance, or
+citing a source absent from the registry, is rejected rather than displayed.
+
+### Consequences
+
+A broken parser degrades to "we could not read this reliably, so we will not guess — here is the
+board's own portal". That is a worse user experience than a working lookup and a far better one
+than a lie.
+
+---
+
+## ADR-014 — Every unresolved outcome carries a fallback ladder
+
+**Date:** 2026-09-14 · **Status:** Accepted · **Phase:** 4
+
+### Context
+
+Honest routing is only better than a fake checker if the honest answer is _actionable_. "We
+cannot check this board" with nothing attached is worse than a lookup box, because at least the
+box implies a next step.
+
+### Decision
+
+The `fallbacks` field is on the type, not left to convention: every `LookupOutcome` except
+`found` and `invalid-request` carries `ResultFallback[]`, so a dead end is a compile error rather
+than an oversight. `invalid-request` is excluded because the fix is in the form the reader
+already has.
+
+The ladder is built from verified capabilities only, ordered direct → official portal → SMS →
+gazette → board website, with the gazette promoted to first for a `gazette-only` board, where it
+is the route rather than a fallback. It is deduplicated by URL, and it always ends with the
+board's own domain — the one rung that still helps when everything else breaks, and the direct
+answer to a market where students are routinely misled by aggregators that look official.
+
+An SMS rung requires a shortcode `confirmed` from a board's own domain. None exists, so it never
+renders, and a test asserts that. The codes circulating on aggregator sites contradict each
+other, and an SMS is charged — a wrong shortcode costs a student money and returns nothing.
+
+### Consequences
+
+`primarySourceFor()` is the single definition of "the route to take first", shared by the call to
+action and the ladder, so the button and the list beneath it cannot disagree or repeat a link.

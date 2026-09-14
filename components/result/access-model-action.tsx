@@ -1,7 +1,7 @@
 import type { Board } from '@/lib/board/types'
 
 import { identifierRequirementSentence } from '@/lib/result/capability'
-import { gazetteSources, linkableSources, rollNumberSources } from '@/lib/result-sources/registry'
+import { primarySourceFor } from '@/lib/result/fallback'
 
 /**
  * The primary call to action for a board.
@@ -61,7 +61,7 @@ function OfficialLink({ href, children }: { href: string; children: React.ReactN
 }
 
 function RollNumberAction({ board }: { board: Board }) {
-  const portal = rollNumberSources(board.id)[0] ?? linkableSources(board.id)[0]
+  const portal = primarySourceFor(board)
   if (!portal) return <UnverifiedAction board={board} />
 
   const requirement = identifierRequirementSentence({
@@ -84,7 +84,7 @@ function RollNumberAction({ board }: { board: Board }) {
 }
 
 function GazetteAction({ board }: { board: Board }) {
-  const gazette = gazetteSources(board.id)[0] ?? linkableSources(board.id)[0]
+  const gazette = primarySourceFor(board)
 
   return (
     <ActionShell title="Find your result in the board’s gazette">
@@ -109,7 +109,7 @@ function GazetteAction({ board }: { board: Board }) {
 }
 
 function RotatingPortalAction({ board }: { board: Board }) {
-  const portal = rollNumberSources(board.id)[0] ?? linkableSources(board.id)[0]
+  const portal = primarySourceFor(board)
 
   return (
     <ActionShell title="Check on the board’s own portal">

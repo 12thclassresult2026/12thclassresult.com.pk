@@ -37,12 +37,12 @@ flagged as such.
 
 ## 2. Why seven of eight are not viable
 
-| Blocker                                                                  | Boards affected                                    |
-| ------------------------------------------------------------------------ | -------------------------------------------------- |
-| Confirmed CAPTCHA                                                        | Lahore, Gujranwala, Multan (reCAPTCHA), Bahawalpur |
-| Requires JavaScript to produce any result                                | Gujranwala (live), Multan, Sargodha                |
-| `__VIEWSTATE` / `__EVENTVALIDATION` structurally rejects synthetic posts | Lahore, Rawalpindi, Bahawalpur                     |
-| No API and no published permission to automate                           | **all eight**                                      |
+| Blocker                                                                  | Boards affected                                                           |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| Confirmed CAPTCHA                                                        | Lahore, Gujranwala, Multan (reCAPTCHA), Bahawalpur, Bannu (added Phase 3) |
+| Requires JavaScript to produce any result                                | Gujranwala (live), Multan, Sargodha                                       |
+| `__VIEWSTATE` / `__EVENTVALIDATION` structurally rejects synthetic posts | Lahore, Rawalpindi, Bahawalpur                                            |
+| No API and no published permission to automate                           | **all eight**                                                             |
 
 **Sahiwal alone** combines a real form POST, stable markup and an explicitly permissive
 `robots.txt`. Even there, integration is **permission-conditional** — see §5.

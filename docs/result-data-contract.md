@@ -10,7 +10,7 @@
 
 Phase 1 established, by loading every portal:
 
-> **No board in Pakistan can currently be integrated.** Four confirmed CAPTCHAs,
+> **No board in Pakistan can currently be integrated.** Six confirmed CAPTCHAs across five boards,
 > VIEWSTATE-protected forms that structurally reject synthetic posts, JavaScript-only
 > portals, and **not one board publishing an API or any permission to automate**.
 
