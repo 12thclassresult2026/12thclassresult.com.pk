@@ -1,0 +1,29 @@
+Region,Board,Board ID,HSSC-II,Official Website,Result Portal,Gazette Available,Gazette Source,Roll Lookup,SMS,CAPTCHA,Local Dataset,Parser,Coverage Status,Last Verified
+"Punjab","BISE Lahore",bise-lahore,yes,"https://biselahore.com/","https://result.biselahore.com/",not-verified,"",yes,not-verified,yes,none,none,fallback-only,2026-09-14T00:00:00.000Z
+"Punjab","BISE Gujranwala",bise-gujranwala,yes,"https://bisegrw.edu.pk/","https://bisegrw.edu.pk/prev-years-result.html",yes,"https://bisegrw.edu.pk/result-gazatte.html",yes,not-verified,yes,none,none,source-pending,2026-09-14T00:00:00.000Z
+"Punjab","BISE Faisalabad",bise-faisalabad,yes,"https://bisefsd.edu.pk/","",not-verified,"",not-verified,not-verified,blocked,none,none,fallback-only,2026-09-14T00:00:00.000Z
+"Punjab","BISE Multan",bise-multan,yes,"https://web.bisemultan.edu.pk/","https://results.bisemultan.edu.pk/archive",yes,"https://web.bisemultan.edu.pk/result-gazette-inter/",yes,not-verified,yes,none,none,source-pending,2026-09-14T00:00:00.000Z
+"Punjab","BISE Rawalpindi",bise-rawalpindi,yes,"https://biserawalpindi.edu.pk/","https://results.biserawalpindi.edu.pk/",not-verified,"",yes,not-verified,not-verified,none,none,fallback-only,2026-09-14T00:00:00.000Z
+"Punjab","BISE Sargodha",bise-sargodha,yes,"https://bisesargodha.edu.pk/","https://results.bisesargodha.edu.pk/",not-verified,"",yes,not-verified,not-verified,none,none,fallback-only,2026-09-14T00:00:00.000Z
+"Punjab","BISE Bahawalpur",bise-bahawalpur,yes,"https://bisebwp.edu.pk/","https://results.bisebwp.pk/indexHSSC_PII.aspx",not-verified,"",yes,not-verified,yes,none,none,fallback-only,2026-09-14T00:00:00.000Z
+"Punjab","BISE Sahiwal",bise-sahiwal,yes,"https://bisesahiwal.edu.pk/","https://bisesahiwal.edu.pk/allresult/",yes,"https://bisesahiwal.edu.pk/result-stats-gazzet.php",yes,not-verified,not-verified,none,none,source-pending,2026-09-14T00:00:00.000Z
+"Punjab","BISE DG Khan",bise-dg-khan,yes,"https://bisedgkhan.edu.pk/","https://bisedgkhan.edu.pk/results-hssc.php",not-verified,"",yes,not-verified,not-verified,none,none,fallback-only,2026-09-14T00:00:00.000Z
+"Federal","FBISE",fbise,yes,"https://fbise.edu.pk/","",not-verified,"",not-verified,not-verified,blocked,none,none,fallback-only,2026-09-14T00:00:00.000Z
+"Khyber Pakhtunkhwa","BISE Peshawar",bise-peshawar,yes,"https://www.bisep.edu.pk/","",not-verified,"",not-verified,not-verified,not-verified,none,none,fallback-only,2026-09-14T00:00:00.000Z
+"Khyber Pakhtunkhwa","BISE Mardan",bise-mardan,yes,"https://web.bisemdn.edu.pk/","",not-verified,"",not-verified,not-verified,not-verified,none,none,fallback-only,2026-09-14T00:00:00.000Z
+"Khyber Pakhtunkhwa","BISE Abbottabad",bise-abbottabad,yes,"https://www.biseatd.edu.pk/","https://www.biseatd.edu.pk/all_results.php",not-verified,"",yes,not-verified,not-verified,none,none,fallback-only,2026-09-14T00:00:00.000Z
+"Khyber Pakhtunkhwa","BISE Swat",bise-swat,yes,"https://www.bisess.edu.pk/","https://www.bisess.edu.pk/site/home/results-section",not-verified,"",yes,not-verified,not-verified,none,none,fallback-only,2026-09-14T00:00:00.000Z
+"Khyber Pakhtunkhwa","BISE Kohat",bise-kohat,yes,"https://www.bisekt.edu.pk/","",not-verified,"",not-verified,not-verified,not-verified,none,none,fallback-only,2026-09-14T00:00:00.000Z
+"Khyber Pakhtunkhwa","BISE Bannu",bise-bannu,yes,"https://www.biseb.edu.pk/","https://www.biseb.edu.pk/result-search.php",not-verified,"",yes,not-verified,yes,none,none,fallback-only,2026-09-14T00:00:00.000Z
+"Khyber Pakhtunkhwa","BISE Malakand",bise-malakand,yes,"https://www.bisemalakand.edu.pk/","https://www.bisemalakand.edu.pk/result/latest-supply",not-verified,"",yes,not-verified,not-verified,none,none,fallback-only,2026-09-14T00:00:00.000Z
+"Khyber Pakhtunkhwa","BISE D.I. Khan",bise-dera-ismail-khan,yes,"https://www.bisedik.edu.pk/","https://www.bisedik.edu.pk/results",not-verified,"",yes,not-verified,not-verified,none,none,fallback-only,2026-09-14T00:00:00.000Z
+"Sindh","BIEK",biek,yes,"https://www.biek.edu.pk/","",yes,"https://www.biek.edu.pk/results.asp",no,not-verified,not-verified,none,none,source-pending,2026-09-14T00:00:00.000Z
+"Sindh","BISE Hyderabad",bise-hyderabad,yes,"https://www.biseh.edu.pk/","",not-verified,"",no,not-verified,not-verified,none,none,fallback-only,2026-09-14T00:00:00.000Z
+"Sindh","BISE Larkana",bise-larkana,yes,"https://biselrk.edu.pk/","https://results.biselrk.edu.pk/",not-verified,"",yes,not-verified,not-verified,none,none,fallback-only,2026-09-14T00:00:00.000Z
+"Sindh","BISE Sukkur",bise-sukkur,yes,"https://bisesuksindh.edu.pk/","",not-verified,"",not-verified,not-verified,not-verified,none,none,fallback-only,2026-09-14T00:00:00.000Z
+"Sindh","BISE Mirpurkhas",bise-mirpurkhas,yes,"https://bisempk.edu.pk/","",not-verified,"",not-verified,not-verified,not-verified,none,none,fallback-only,2026-09-14T00:00:00.000Z
+"Sindh","BISE Shaheed Benazirabad",bise-shaheed-benazirabad,yes,"https://bisesba.edu.pk/","",not-verified,"",not-verified,not-verified,not-verified,none,none,fallback-only,2026-09-14T00:00:00.000Z
+"Balochistan","BBISE Quetta",bbise,yes,"https://bbise.edu.pk/","https://result.bbise.edu.pk/Results/HSSC",yes,"https://bbise.edu.pk/Notifications",yes,not-verified,not-verified,none,none,source-pending,2026-09-14T00:00:00.000Z
+"Azad Jammu & Kashmir","AJK BISE",ajkbise,yes,"https://www.ajkbise.net/","",yes,"https://www.ajkbise.net/results.php",no,not-verified,not-verified,none,none,source-pending,2026-09-14T00:00:00.000Z
+"Sindh","AKU-EB",aku-eb,yes,"https://examinationboard.aku.edu/","",not-verified,"",not-verified,not-verified,not-verified,none,none,fallback-only,2026-09-14T00:00:00.000Z
+"Sindh","ZUEB",zueb,yes,"https://zueb.edu.pk/","",not-verified,"",no,not-verified,not-verified,none,none,fallback-only,2026-09-14T00:00:00.000Z
