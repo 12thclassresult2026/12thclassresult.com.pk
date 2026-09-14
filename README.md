@@ -190,6 +190,7 @@ Full evidence, including the QA that did pass, is in
 | Year rollover      | [docs/year-rollover.md](docs/year-rollover.md)                                                      |
 | Launch report      | [docs/launch-report.md](docs/launch-report.md)                                                      |
 | Incidents          | [docs/incidents/](docs/incidents/)                                                                  |
+| Authority / PR     | [docs/authority/](docs/authority/)                                                                  |
 | Deployment         | [docs/deployment.md](docs/deployment.md)                                                            |
 | Security · Privacy | [docs/security.md](docs/security.md) · [docs/privacy-architecture.md](docs/privacy-architecture.md) |
 | Research evidence  | [docs/research/](docs/research/)                                                                    |

@@ -31,6 +31,22 @@ export type Intent = {
 
 export const INTENTS: readonly Intent[] = [
   {
+    /*
+     * The trust layer. A site that does not say who runs it, how it verifies a
+     * fact, or how to report an error is hard for a journalist or an educator
+     * to cite — and the footer already makes an independence claim that needs a
+     * page behind it.
+     */
+    id: 'site.about',
+    description: 'Find out who operates this site and whether it can be trusted.',
+    ownership: 'owned',
+  },
+  {
+    id: 'site.methodology',
+    description: 'Understand how a fact on this site was verified, and what is never published.',
+    ownership: 'owned',
+  },
+  {
     id: 'site.brand',
     description: 'Reach this site by name and route onward.',
     ownership: 'owned',

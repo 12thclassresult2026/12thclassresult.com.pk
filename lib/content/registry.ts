@@ -53,7 +53,7 @@ const BUILT_PAGES: PageEntry[] = [
     contentUpdatedAt: UPDATED_AT,
     lastVerifiedAt: UPDATED_AT,
     lastReviewedAt: UPDATED_AT,
-    internalLinksOut: ['/results/12th-class', '/boards'],
+    internalLinksOut: ['/results/12th-class', '/boards', '/about', '/methodology'],
     isEntryPoint: true,
   },
   {
@@ -287,6 +287,76 @@ const BUILT_PAGES: PageEntry[] = [
     lastVerifiedAt: UPDATED_AT,
     lastReviewedAt: UPDATED_AT,
     internalLinksOut: ['/guides/how-percentage-is-calculated', '/results/12th-class'],
+  },
+  {
+    /*
+     * THE TRUST LAYER.
+     *
+     * A site that does not say who operates it, how it verifies a fact, or how
+     * to report an error is hard for a journalist or an educator to cite — and
+     * the footer already asserts independence, which needs a page behind it.
+     */
+    id: 'about',
+    path: '/about',
+    pageType: 'legal',
+    intentId: 'site.about',
+    sitemapSegment: 'core',
+    status: 'published',
+    index: true,
+    title: 'About 12thClassResult.com.pk',
+    h1: 'About this site',
+    description:
+      'An independent information service for Pakistani HSSC Part-II results. What it is, what it deliberately is not, who operates it, and how it stays independent of the boards.',
+    seoTarget: {
+      primaryKeyword: 'about 12thclassresult.com.pk',
+      secondaryKeywords: ['who runs 12thclassresult'],
+      semanticEntities: ['12thClassResult.com.pk', 'HSSC Part-II', 'Pakistan education boards'],
+      searchIntent: 'Navigational — establish whether this site can be trusted.',
+      queryVariants: [],
+    },
+    breadcrumb: [
+      { name: 'Home', path: '/' },
+      { name: 'About', path: '/about' },
+    ],
+    sourceRequirementMode: 'none',
+    sourceIds: [],
+    freshnessClass: 'D',
+    contentUpdatedAt: UPDATED_AT,
+    lastVerifiedAt: UPDATED_AT,
+    lastReviewedAt: UPDATED_AT,
+    internalLinksOut: ['/methodology', '/results/12th-class'],
+  },
+  {
+    id: 'methodology',
+    path: '/methodology',
+    pageType: 'legal',
+    intentId: 'site.methodology',
+    sitemapSegment: 'core',
+    status: 'published',
+    index: true,
+    title: 'How This Site Verifies a Fact',
+    h1: 'How this site verifies a fact',
+    description:
+      'The sourcing rules behind every claim here: the five confidence states, which sources count, what is never published, and how to report an error.',
+    seoTarget: {
+      primaryKeyword: '12thclassresult methodology',
+      secondaryKeywords: ['result source verification', 'editorial policy'],
+      semanticEntities: ['source verification', 'education boards', 'editorial policy'],
+      searchIntent:
+        'Informational — a journalist, educator or reader checking whether a claim here is defensible.',
+      queryVariants: [],
+    },
+    breadcrumb: [
+      { name: 'Home', path: '/' },
+      { name: 'Methodology', path: '/methodology' },
+    ],
+    sourceRequirementMode: 'none',
+    sourceIds: [],
+    freshnessClass: 'D',
+    contentUpdatedAt: UPDATED_AT,
+    lastVerifiedAt: UPDATED_AT,
+    lastReviewedAt: UPDATED_AT,
+    internalLinksOut: ['/about', '/boards'],
   },
 ]
 

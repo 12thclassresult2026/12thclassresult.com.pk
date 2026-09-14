@@ -21,6 +21,22 @@ export function SiteFooter() {
                 Boards
               </Link>
             </li>
+            {/*
+              The trust links sit in the footer of every page on purpose. A
+              reader deciding whether to believe a date, and a journalist
+              deciding whether to cite one, both need them reachable from
+              wherever they landed — not only from the homepage.
+            */}
+            <li>
+              <Link href="/methodology" className="hover:text-primary-700 text-[var(--text-body)]">
+                How we verify
+              </Link>
+            </li>
+            <li>
+              <Link href="/about" className="hover:text-primary-700 text-[var(--text-body)]">
+                About
+              </Link>
+            </li>
           </ul>
         </nav>
 

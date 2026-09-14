@@ -120,6 +120,8 @@ test.describe('no fabricated data reaches the page', () => {
     '/guides/rechecking',
     '/guides/how-percentage-is-calculated',
     '/tools/percentage-calculator',
+    '/about',
+    '/methodology',
   ]) {
     test(`no unverified SMS shortcode on ${path}`, async ({ page }) => {
       await page.goto(path)
@@ -253,6 +255,55 @@ test.describe('the percentage calculator — correcting a wrong market answer', 
   })
 })
 
+test.describe('the trust layer — what makes the site citable', () => {
+  test('states plainly that it is not a board and not a checker', async ({ page }) => {
+    await page.goto('/about')
+    const body = (await page.locator('body').innerText()).replace(/\s+/g, ' ')
+    expect(body).toMatch(/Not an education board/i)
+    expect(body).toMatch(/Not affiliated with, endorsed by, or acting for any board/i)
+    expect(body).toMatch(/Not a result checker/i)
+  })
+
+  test('claims no official status for itself', async ({ page }) => {
+    // Several sites in this market use board-like naming. Anything here that
+    // read as an official endorsement would be the same deception.
+    for (const path of ['/about', '/methodology']) {
+      await page.goto(path)
+      const body = (await page.locator('body').innerText()).replace(/\s+/g, ' ')
+      expect(body, `${path} implies official status`).not.toMatch(
+        /\bwe are (an? )?official\b|\bofficially endorsed\b|\bgovernment approved\b|\bin partnership with\b/i,
+      )
+    }
+  })
+
+  test('publishes the confidence states a reader can check a claim against', async ({ page }) => {
+    await page.goto('/methodology')
+    for (const state of ['confirmed', 'tentative', 'expected', 'historical', 'unknown']) {
+      await expect(page.getByRole('rowheader', { name: state, exact: true })).toBeVisible()
+    }
+    // The distinction the whole capability model rests on.
+    await expect(page.getByText(/“Not verified” never becomes “No”/i)).toBeVisible()
+  })
+
+  test('says what is never published, including personal results', async ({ page }) => {
+    await page.goto('/methodology')
+    const body = (await page.locator('body').innerText()).replace(/\s+/g, ' ')
+    expect(body).toMatch(/no page on this site at which an individual’s result can be looked up/i)
+    expect(body).toMatch(/Position holders or toppers/i)
+  })
+
+  test('is reachable from every page via the footer', async ({ page }) => {
+    for (const path of ['/', '/results/12th-class', '/guides/rechecking']) {
+      await page.goto(path)
+      await expect(
+        page.getByRole('link', { name: 'How we verify' }),
+        `${path} has no methodology link`,
+      ).toBeVisible()
+      await expect(page.getByRole('link', { name: 'About', exact: true })).toBeVisible()
+    }
+  })
+})
+
 test.describe('accessibility and layout', () => {
   test('skip link is the first tab stop and targets main', async ({ page }) => {
     await page.goto('/')
@@ -271,6 +322,8 @@ test.describe('accessibility and layout', () => {
       '/guides/rechecking',
       '/guides/how-percentage-is-calculated',
       '/tools/percentage-calculator',
+      '/about',
+      '/methodology',
     ]) {
       await page.goto(path)
       await expect(page.locator('h1')).toHaveCount(1)
@@ -287,6 +340,8 @@ test.describe('accessibility and layout', () => {
       '/guides/rechecking',
       '/guides/how-percentage-is-calculated',
       '/tools/percentage-calculator',
+      '/about',
+      '/methodology',
     ]) {
       await page.goto(path)
       const overflow = await page.evaluate(
