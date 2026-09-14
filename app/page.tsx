@@ -3,6 +3,8 @@ import Link from 'next/link'
 
 import { JsonLdScript } from '@/components/seo/json-ld'
 import { BOARDS, routedBoards } from '@/lib/board/registry'
+import { PROVINCE_LABELS } from '@/lib/board/types'
+import { boardsInRegion, nationalRegions } from '@/lib/gazettes/coverage'
 import { boardsWithObservedResultPortal } from '@/lib/result-sources/registry'
 import { requirePage } from '@/lib/content/registry'
 import { breadcrumbSchema, webPageSchema } from '@/lib/schema/json-ld'
@@ -91,10 +93,10 @@ export default function HomePage() {
 
       <section className="pb-16">
         <div className="container-wide">
-          <h2 className="text-2xl font-bold tracking-tight">Boards covered</h2>
+          <h2 className="text-2xl font-bold tracking-tight">Boards across Pakistan</h2>
           <p className="mt-3 max-w-2xl text-[var(--text-body)]">
-            {BOARDS.length} boards are registered, {verifiedPortalCount} with an official result
-            portal confirmed by loading it.
+            {BOARDS.length} boards in {nationalRegions().length} regions are registered,{' '}
+            {verifiedPortalCount} with an official result portal confirmed by loading it.
           </p>
           {/*
             A board links only where its page actually serves. The rest are
@@ -102,31 +104,38 @@ export default function HomePage() {
             looking for Sukkur should see that we know it exists and have not
             yet verified enough to publish a page for it.
           */}
-          <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {BOARDS.map((board) => {
-              const hasPage = routed.has(board.slug)
-              return (
-                <li
-                  key={board.id}
-                  className="rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-[var(--surface)] p-4 shadow-[var(--shadow-card)]"
-                >
-                  <p className="font-semibold text-[var(--text-strong)]">
-                    {hasPage ? (
-                      <Link
-                        href={`/results/${board.slug}/12th-class`}
-                        className="text-primary-700 underline underline-offset-4"
-                      >
-                        {board.shortName}
-                      </Link>
-                    ) : (
-                      board.shortName
-                    )}
-                  </p>
-                  <p className="mt-1 text-sm text-[var(--text-muted)]">{board.officialName}</p>
-                </li>
-              )
-            })}
-          </ul>
+          {nationalRegions().map((province) => (
+            <section key={province} className="mt-8">
+              <h3 className="text-sm font-semibold tracking-wide text-[var(--text-muted)] uppercase">
+                {PROVINCE_LABELS[province]}
+              </h3>
+              <ul className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {boardsInRegion(province).map((board) => {
+                  const hasPage = routed.has(board.slug)
+                  return (
+                    <li
+                      key={board.id}
+                      className="rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-[var(--surface)] p-4 shadow-[var(--shadow-card)]"
+                    >
+                      <p className="font-semibold text-[var(--text-strong)]">
+                        {hasPage ? (
+                          <Link
+                            href={`/results/${board.slug}/12th-class`}
+                            className="text-primary-700 underline underline-offset-4"
+                          >
+                            {board.shortName}
+                          </Link>
+                        ) : (
+                          board.shortName
+                        )}
+                      </p>
+                      <p className="mt-1 text-sm text-[var(--text-muted)]">{board.officialName}</p>
+                    </li>
+                  )
+                })}
+              </ul>
+            </section>
+          ))}
           <p className="mt-6">
             <Link
               href="/boards"

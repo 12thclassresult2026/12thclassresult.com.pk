@@ -15,7 +15,19 @@ which is why `BOARD_ADAPTERS` is empty and will stay empty (ADR-012), while this
 
 ## 1. The premise, checked
 
-Phase 9.5 opens by correcting a Punjab-only assumption. **This codebase does not have one.**
+Phase 9.5 opens by correcting a Punjab-only assumption. **The registry does not have one. The
+user interface did.**
+
+This document originally claimed the codebase was clean. That was checked against the board
+registry only, and it was incomplete — the board directory page rendered a hard-coded
+`['punjab', 'federal']`, so **eighteen boards across Sindh, Khyber Pakhtunkhwa, Balochistan and
+AJK were invisible** on a page claiming to cover Pakistan.
+
+Fixed in the locked scope correction: the region list is now derived from the registry
+(`nationalRegions()`), all 28 boards render, and `tests/validation/national-coverage.test.ts`
+fails the build if any region with a registered board stops appearing.
+
+The registry was national throughout:
 
 | Region             | Boards |
 | ------------------ | -----: |
