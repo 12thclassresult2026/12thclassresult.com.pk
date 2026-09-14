@@ -129,3 +129,35 @@ pointing at nothing.
 
 `.github/workflows/ci.yml` runs validation only. A single system should own
 production; two competing deploy systems are worse than one.
+
+---
+
+## Phase 2 confirmation — deployment model
+
+Reviewed at Phase 2; the model stands unchanged.
+
+**One system owns production.** Cloudflare deployment runs from the maintainer's machine
+via `npm run deploy`. GitHub Actions performs validation only and never deploys. Two
+competing deploy pipelines are worse than one, and the CI dry-run already proves the
+Worker bundle assembles without needing any credential.
+
+```
+Local → git → GitHub main → CI validation → (manual) npm run deploy → Cloudflare Workers
+```
+
+### Why not Cloudflare Workers Builds
+
+It would be a legitimate alternative, but adopting it now would create the second
+pipeline this project is avoiding. Revisit only if deploys become frequent enough that a
+manual step is the bottleneck — which, given that a deploy accompanies a **verified fact
+change**, is unlikely and arguably undesirable: a human in the loop on a fact change is a
+feature.
+
+### Architecture dependencies this runbook must keep honouring
+
+| Dependency                                             | Source                              |
+| ------------------------------------------------------ | ----------------------------------- |
+| `stage-cache` between build and deploy, non-negotiable | `caching-strategy.md` §3            |
+| No `routes` until zone ownership is confirmed          | `url-architecture.md`, ADR-003      |
+| Deploy **is** the cache invalidation boundary          | `data-storage-decision.md`, ADR-008 |
+| No binding beyond `ASSETS` without a decision record   | ADR-007                             |

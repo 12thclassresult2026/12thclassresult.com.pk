@@ -155,3 +155,206 @@ silently duplicating the site.
 to be on the authenticated Cloudflare account and a deploy to it has succeeded. A
 `routes` entry naming a zone the account does not hold fails the deploy outright,
 so this value is never guessed (section 12).
+
+---
+
+## ADR-004 — Board pages are yearless
+
+**Date:** 2026-09-14 · **Status:** Accepted · **Phase:** 2
+
+### Decision
+
+`/results/<board-slug>/12th-class`, not `/results/<board-slug>/12th-class/2026`.
+
+### Context
+
+The Phase 1 preliminary inventory proposed year-stamped board URLs. Phase 2 is required
+to challenge the preliminary IA rather than approve it, and the evidence refutes it:
+**no competitor maintains year-stamped archive URLs.** Their year-stamped equivalents
+return 404 while the yearless page resolves and carries the year in its title. The sites
+that bake a year into the URL — or into the domain — have a one-season architecture.
+
+### Options
+
+1. Year-stamped primary (preliminary) — annual migration, link equity reset each year, empty future-year pages tempting.
+2. **Yearless primary, year archives on a value gate** — chosen.
+3. Yearless only — loses genuinely valuable historical records.
+
+### Consequences
+
+Link equity accumulates on one URL. No annual migration. The year lives in the title and
+H1, which is exactly the pattern that survives in the market. A year-specific board page
+is created only when a past session clears a durable-value gate (two of: verified
+declared date, board gazette, verified statistics, session-specific method).
+
+---
+
+## ADR-005 — Board access model becomes a first-class field
+
+**Date:** 2026-09-14 · **Status:** Accepted · **Phase:** 2
+
+### Decision
+
+Add `accessModel` (`roll-number-portal` | `gazette-only` | `session-rotating-portal` |
+`unverified`) and `declarationModel` (`whole-board` | `per-group` | `unknown`) to `Board`.
+
+### Context
+
+The existing model assumes every board has a roll-number form and one declaration per
+year. Phase 1 proved otherwise: Karachi and Hyderabad have **no lookup form at all** and
+publish per group, Karachi's 2026 groups declaring across four weeks with Commerce still
+undeclared; AJK's route is the gazette; Peshawar and Mardan expose one session at a time
+so deep links rot.
+
+Every competitor encodes the single-model assumption and is therefore structurally wrong
+about roughly a fifth of the country.
+
+### Consequences
+
+`AccessModelAction` switches on the field, so a gazette-only board can never be shown a
+roll-number call to action — and a missing case is a TypeScript exhaustiveness error
+rather than a silently wrong page. A validation gate asserts the same at build time.
+
+`ResultDataset` gains `group` and `declaredAt`, so Karachi's session is seven rows rather
+than one flattened lie. A whole-board board keeps one row with `group: null`, so the
+model costs nothing where it is not needed.
+
+---
+
+## ADR-006 — CapabilityStatus replaces the boolean tri-state
+
+**Date:** 2026-09-14 · **Status:** Accepted · **Phase:** 2
+
+### Decision
+
+Replace `boolean | null` with a six-state union: `verified-supported`,
+`verified-unsupported`, `unknown`, `temporarily-unavailable`, `blocked`, `manual-only`.
+
+### Context
+
+`null` currently means both "we have not checked" and "the board blocks us from
+checking". Those are different facts. Faisalabad, FBISE and Kohat refuse automated
+requests; recording that as `unknown` loses the reason.
+
+### Consequences
+
+Migration is mechanical and lossless. The display rule is unchanged: only
+`verified-supported` may be advertised, and `capabilityLabel()` gains cases but never a
+default-to-false branch — the bug the module exists to prevent.
+
+---
+
+## ADR-007 — No D1, no KV, no R2
+
+**Date:** 2026-09-14 · **Status:** Accepted · **Phase:** 2
+
+### Decision
+
+All data stays typed TypeScript in the repository, prerendered at build. The only binding
+is `ASSETS`.
+
+### Context
+
+Every row of data changes because **a human verified something** — never from user
+traffic, never at runtime. We hold no student results and the feasibility study says we
+cannot legitimately obtain any. Boards plus sources is 28 rows joined to ~40.
+
+### Consequences
+
+Code review on every fact change, git history as a provenance audit trail, and **no
+runtime dependency that can be down on result morning** — the decisive argument, given
+that boards measurably collapse at 10:00 AM.
+
+Cost: a fact change requires a deploy. That is a benefit disguised as a cost, because it
+makes every change reviewed and revertible.
+
+Triggers to revisit are recorded per store in `data-storage-decision.md` §7. Nothing is
+pre-provisioned and no placeholder id exists anywhere.
+
+---
+
+## ADR-008 — Static-only rendering, no ISR yet
+
+**Date:** 2026-09-14 · **Status:** Accepted · **Phase:** 2
+
+### Decision
+
+Every public route is prerendered. No route sets `revalidate`.
+
+### Context
+
+`staticAssetsIncrementalCache` can serve prerendered pages but its `set` is a no-op, so
+it cannot write revalidated ones. Status changes are editorial, so a deploy is the
+natural invalidation boundary.
+
+### Consequences
+
+A visitor's page load can never trigger an upstream request — which is the result-day
+posture the research demands. Adopting ISR later means provisioning KV or R2 and swapping
+the override: one contained change, not a rewrite.
+
+---
+
+## ADR-009 — Honest routing over a simulated checker
+
+**Date:** 2026-09-14 · **Status:** Accepted · **Phase:** 2
+
+### Decision
+
+The product routes readers to official sources with verified context. It does not render
+a result form that cannot work. `BOARD_ADAPTERS` stays empty.
+
+### Context
+
+Four confirmed CAPTCHAs, VIEWSTATE-protected forms that structurally reject synthetic
+posts, JavaScript-only portals, and no board publishing an API or permission. Every
+"checker" in this market is a router; one competitor even adds a synthetic
+"Verifying details…" delay before an outbound link.
+
+### Consequences
+
+The empty adapter registry is a policy state, not an unfinished feature, and a test
+asserts it. The abstraction still earns its place: if a board ever grants access, an
+adapter plus normalization is added and **no component, route or URL changes**.
+
+---
+
+## ADR-010 — Group is a data dimension before it is a URL
+
+**Date:** 2026-09-14 · **Status:** Accepted · **Phase:** 2
+
+### Decision
+
+Groups render as status sections on the board page. No Punjab group pages are approved;
+`result.group.punjab` has no canonical owner.
+
+### Context
+
+Generic and group queries share zero URLs, so group terms are not simple synonyms. But
+Punjab, KPK and Federal boards have **no group field** and declare all groups
+simultaneously — so a Punjab group page would repeat one identical lookup and one
+identical date. The market leader's own group pages are decaying template swaps carrying
+a current-year title over a previous-year heading.
+
+Sindh is different: separate dates, separate gazettes, a genuinely different event.
+
+### Consequences
+
+Sindh group status is modelled in data and rendered per group. A Punjab group page may
+only be created if it carries subject list, marks distribution, grading and pathways
+verified from a scheme of studies.
+
+---
+
+## ADR-011 — Version matrix reaffirmed
+
+**Date:** 2026-09-14 · **Status:** Accepted · **Phase:** 2
+
+Re-verified against the live registry at Phase 2. `next` 16.3.5, `react` 19.3.0,
+`tailwindcss` 4.3.3, `@opennextjs/cloudflare` 1.20.6, `@playwright/test` 1.63.0 and `zod`
+4.6.5 all remain current. `wrangler` has a patch bump (4.131.1 → 4.131.2), adopted on the
+next dependency pass.
+
+**TypeScript 7, ESLint 10 and Vitest 5 remain rejected** for the reasons in ADR-002 —
+`typescript-eslint` still caps TypeScript below 6.1, and `eslint-config-next`'s plugin
+set is still not ESLint 10 ready. Re-evaluated, not assumed.

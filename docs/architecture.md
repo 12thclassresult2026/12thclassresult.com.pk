@@ -213,3 +213,67 @@ binding the optimizer returns the untouched original through a Worker invocation
 without the static-asset headers.
 
 Current bundle: **gzip 1023 KiB** against a 3 MiB compressed free-plan ceiling.
+
+---
+
+# Phase 2 Additions — 2026-09-14
+
+Phase 2 converted the research into an implementation blueprint. This section records
+what changed at system level; the detail lives in the documents listed at the end.
+
+## The finding that reshaped the model
+
+> There is not one board model in Pakistan. There are four, and they are orthogonal.
+
+| Model                | Boards                           | Consequence                                                             |
+| -------------------- | -------------------------------- | ----------------------------------------------------------------------- |
+| Roll-number portal   | most of Punjab, KPK, Balochistan | the assumed default                                                     |
+| **Gazette-only**     | Karachi, Hyderabad, AJK          | **no lookup form exists** — a roll-number call to action would be wrong |
+| **Group-staggered**  | Karachi, Hyderabad               | one `released` flag cannot hold seven answers                           |
+| **Session-rotating** | Peshawar, Mardan                 | deep links rot as the portal advances                                   |
+
+`Board` gains `accessModel` and `declarationModel`; `ResultDataset` gains `group` and
+`declaredAt`. A single `AccessModelAction` component switches on the field, so a missing
+case is a compile error rather than a silently wrong page.
+
+Every competitor encodes the single-model assumption. Correcting it is the main
+architectural output of this phase.
+
+## Other system-level decisions
+
+| Decision                  | Summary                                                                                                                                             |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Yearless board URLs**   | `/results/<board>/12th-class`. Year-stamped competitor URLs 404 while yearless ones resolve                                                         |
+| **CapabilityStatus**      | Six states replace `boolean \| null`, separating "not checked" from "blocked"                                                                       |
+| **No D1, KV or R2**       | Every fact changes because a human verified it; a deploy is the invalidation boundary, and there is no runtime dependency to fail on result morning |
+| **Static-only rendering** | A visitor's page load can never trigger an upstream request                                                                                         |
+| **Honest routing**        | No result form is rendered that cannot work; the adapter registry stays empty by policy                                                             |
+| **Group as data first**   | Sindh groups are modelled; Punjab group pages have no canonical owner                                                                               |
+
+## Inventory scale
+
+Approximately **80–110 indexable URLs** at full national coverage — not thousands. The
+theoretical product of boards × years × groups × artifacts is tens of thousands and is
+deliberately not published; the publish gate is in `page-family-specifications.md`.
+
+## Phase 2 document map
+
+| Concern                                                | Document                            |
+| ------------------------------------------------------ | ----------------------------------- |
+| Final hierarchy, canonical intents, breadcrumbs, links | `information-architecture.md`       |
+| Routes, slugs, year handling, parameters, redirects    | `url-architecture.md`               |
+| Rendering, components, server/client boundary          | `application-route-architecture.md` |
+| Per-family specs, publish gates, similarity control    | `page-family-specifications.md`     |
+| Board model, capability status, state axes             | `board-data-model.md`               |
+| Result contract, adapters, lookup states, errors       | `result-data-contract.md`           |
+| D1 / KV / R2                                           | `data-storage-decision.md`          |
+| Content storage, freshness fields, provenance          | `content-architecture.md`           |
+| Metadata, canonical, sitemap, robots, schema, AEO      | `seo-system.md`                     |
+| Journeys, homepage, command centre, mobile, a11y       | `ux-architecture.md`                |
+| Cache classes and the 1102 guard                       | `caching-strategy.md`               |
+| Threat model, validation, headers, rate limits         | `security.md`                       |
+| Personal-data rules and the analytics contract         | `privacy-architecture.md`           |
+| Logging, editorial monitoring, smoke test              | `observability.md`                  |
+| Test layers and the gate list                          | `testing-strategy.md`               |
+| Sequencing                                             | `seo/implementation-roadmap.md`     |
+| Approved inventory                                     | `seo/final-page-inventory.csv`      |

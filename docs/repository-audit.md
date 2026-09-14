@@ -304,3 +304,71 @@ because none have been received.
    does not distinguish "absent" from "private".
 3. Whether the 12th-class site should deploy to the same Cloudflare account as
    the 11th-class site is unconfirmed and awaits owner direction.
+
+---
+
+# Phase 2 Re-Inspection — 2026-09-14
+
+Master prompt section 3 requires inspecting the actual repository before proposing
+architecture that affects code. This records what was found, and what it changed.
+
+## State
+
+| Item                | Finding                                                                                   |
+| ------------------- | ----------------------------------------------------------------------------------------- |
+| Branch / status     | `main`, clean tree                                                                        |
+| Commits             | `17d21fc` foundation, `6c5adad` Phase 1 research                                          |
+| Source files        | 47 (excluding deps and build output)                                                      |
+| Routes built        | 3 indexable pages + robots, sitemap index, 3 sitemap segments, 404, error                 |
+| `lib/` modules      | 15 files across board, content, result, result-sources, schema, security, seo, validation |
+| Tests               | 95 passing — 37 unit, 58 validation                                                       |
+| Quality gate        | `npm run check` green                                                                     |
+| Cloudflare bindings | `ASSETS` only; no D1, KV or R2                                                            |
+| Git remote          | **still none** — the target repository remains unverified                                 |
+| Node / npm          | 24.19.0 / 11.17.0, matching `.nvmrc`                                                      |
+
+## Version gate (section 6)
+
+Re-verified live rather than assumed. `next` 16.3.5, `react` 19.3.0, `tailwindcss`
+4.3.3, `@opennextjs/cloudflare` 1.20.6, `@playwright/test` 1.63.0, `zod` 4.6.5 are all
+still current. `wrangler` 4.131.1 → **4.131.2** is a patch bump, adopted on the next
+dependency pass.
+
+**TypeScript 7, ESLint 10 and Vitest 5 remain rejected** — `typescript-eslint` still caps
+TypeScript below 6.1 and `eslint-config-next`'s plugins are still not ESLint 10 ready.
+See ADR-002 and ADR-011.
+
+## Reusable work — preserved, not replaced
+
+The foundation is sound and **nothing is being restructured**. The following are kept as
+built: the canonical and metadata system, segmented sitemaps, the page registry and its
+validation gates, `VerifiedFact`, the capability-label module, the source registry and
+its filter ladder, security headers and CSP, rate limiting, Zod schemas, the JSON-LD
+escape, and the prerender-cache staging script.
+
+Phase 3 **adds** to `lib/` and `app/`. It moves no files and renames nothing.
+
+## What the inspection changed
+
+One gap between the code and the research drove most of Phase 2:
+
+> `lib/board/types.ts` can express exactly one board model — a roll-number portal with
+> one declaration per year. Phase 1 proved there are four, and that the other three
+> cover roughly a fifth of the country.
+
+That produced ADR-005 (access and declaration models), ADR-006 (capability status) and
+ADR-010 (group as data before URL), and it is the first item in the Phase 3 batch plan.
+
+A second, smaller gap: `PageEntry` has no `intentId`, so canonical-intent ownership is
+documented but not machine-checkable. Added in Batch 0.
+
+## Obsolete or conflicting files
+
+**None.** No dead code, no unused dependency, no placeholder id, no TODO or FIXME, and no
+fabricated value anywhere in the tree.
+
+## Risks carried forward
+
+1. **No git remote.** The target GitHub repository could not be reached and no duplicate was created.
+2. **Cloudflare account ownership of the zone is unconfirmed**, so `wrangler.jsonc` still declares no `routes`.
+3. **Three boards remain WAF-blocked** and no page may ship for them.
