@@ -1,0 +1,50 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# builds
+.next/
+out/
+build/
+dist/
+.open-next/
+next-env.d.ts
+
+# cloudflare / wrangler
+.wrangler/
+.dev.vars
+.dev.vars.*
+cloudflare-env.d.ts
+
+# testing
+coverage/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# typescript
+*.tsbuildinfo
+
+# env / secrets (section 36: never commit credentials)
+.env
+.env.*
+!.env.example
+
+# owner-supplied private research (section 56).
+# Keyword exports, competitor exports, SERP exports and any result-source
+# material stay local. Only sanitized conclusions go to docs/research/.
+research/private/
+
+# local scratch
+scratch/
+
+# os / editor
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+.vscode/*
+!.vscode/extensions.json
+.idea/

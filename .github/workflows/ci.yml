@@ -1,0 +1,58 @@
+name: CI
+
+# Quality validation only — this workflow never deploys.
+#
+# A single system should own production (section 49). Cloudflare deployment runs
+# from the maintainer's machine via `npm run deploy`; two competing deploy
+# systems are worse than one.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Formatting
+        run: npm run format:check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Content validation
+        run: npm run validate
+
+      - name: Unit tests
+        run: npm run test
+
+      - name: Production build
+        run: npm run build
+
+      - name: Cloudflare build and dry-run deploy
+        # Needs no credentials: proves the Worker bundle assembles and the
+        # wrangler config is valid before anything is deployed for real.
+        run: |
+          npx opennextjs-cloudflare build
+          npx wrangler deploy --dry-run
+
+      - name: Refuse committed secrets
+        run: |
+          if git ls-files | grep -E '(^|/)\.(env|dev\.vars)($|\.)'; then
+            echo "A secrets file is committed to the repository."
+            exit 1
+          fi

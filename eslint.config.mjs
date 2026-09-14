@@ -1,0 +1,47 @@
+import nextCoreWebVitals from 'eslint-config-next/core-web-vitals'
+import nextTypescript from 'eslint-config-next/typescript'
+import prettier from 'eslint-config-prettier'
+
+/** @type {import('eslint').Linter.Config[]} */
+const config = [
+  {
+    ignores: [
+      'node_modules/**',
+      '.next/**',
+      '.open-next/**',
+      '.wrangler/**',
+      'out/**',
+      'coverage/**',
+      'test-results/**',
+      'playwright-report/**',
+      'next-env.d.ts',
+      'cloudflare-env.d.ts',
+      'research/private/**',
+      'docs/research/evidence/**',
+      // One-off debugging scripts. Gitignored, never built, and not worth
+      // holding to the app's rules — but they must not drown the real lint
+      // output in `no-console` warnings either.
+      'scratch/**',
+    ],
+  },
+  ...nextCoreWebVitals,
+  ...nextTypescript,
+  {
+    rules: {
+      // Guard the rules this project actually depends on (sections 36, 57).
+      'no-eval': 'error',
+      'no-implied-eval': 'error',
+      'no-new-func': 'error',
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
+    },
+  },
+  {
+    // Build-time CLI scripts are expected to report progress on stdout.
+    files: ['scripts/**'],
+    rules: { 'no-console': 'off' },
+  },
+  // Must stay last so formatting rules never fight Prettier.
+  prettier,
+]
+
+export default config
