@@ -92,17 +92,19 @@ exist. `.env` and `.dev.vars` are gitignored and CI greps for them.
 
 ```
 app/          routes — thin: resolve a registry entry, emit JSON-LD, render a component
-components/   ui/ primitives · result/ domain components · layout/ · seo/
+components/   ui/ primitives · result/ domain components · tools/ · layout/ · seo/
 lib/
   board/          board registry and model (access models, groups, datasets)
   result-sources/ official source registry and capability contract
-  result/         result contract, VerifiedFact, capability wording
+  result/         result contract, VerifiedFact, capability wording, fallback ladder
+  rechecking/     per-board rechecking facts (fees, deadlines, rules)
+  marks/          percentage calculation
   content/        page registry, canonical intents, lifecycle
   seo/            site identity, canonical, metadata, sitemaps
   schema/         JSON-LD builders
   security/       rate limiting
   validation/     Zod wire schemas
-tests/        unit/ and validation/
+tests/        unit/ · validation/ · e2e/
 docs/         architecture, decisions, research, SEO inventory
 ```
 
@@ -134,8 +136,8 @@ without shipping a thin page.
 ## Result-source workflow
 
 No board is integrated, and `BOARD_ADAPTERS` is empty **by policy** — a test asserts it.
-Four confirmed CAPTCHAs, VIEWSTATE-protected forms, JavaScript-only portals, and no board
-publishing an API or permission to automate.
+Six confirmed CAPTCHAs across five boards, VIEWSTATE-protected forms, JavaScript-only portals,
+and no board publishing an API or permission to automate.
 
 If a board ever grants access, an adapter plus normalization is added and **no component,
 route or URL changes**. That is what the abstraction is for.
@@ -154,6 +156,20 @@ Two things that must not be forgotten, both documented in
 [docs/deployment.md](docs/deployment.md): `stage-cache` must run between build and deploy,
 and `routes` must not be declared until the zone is confirmed on the authenticated
 account.
+
+### Launch state — not yet deployed
+
+As of the Phase 7 audit (`e2270bf`) the site has **never been deployed**, and two things must
+be settled first. Both need the owner, not code:
+
+1. **No git remote is configured.** Credentials could not be read non-interactively, and per the
+   git-safety rules no alternative repository was created. Everything is committed locally.
+2. **The authenticated Cloudflare account is `11thclassresult@gmail.com`** — the sibling
+   project's. It has `workers (write)`, so a deploy _would_ succeed, which is exactly why it
+   must not happen unconfirmed.
+
+Full evidence, including the QA that did pass, is in
+[docs/launch-report.md](docs/launch-report.md).
 
 ---
 

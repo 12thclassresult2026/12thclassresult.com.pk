@@ -174,3 +174,48 @@ numbers, candidate or father names, marks, result records or request bodies.
 
 The reader is shown the digest as a reference, so a report can be matched to a log line
 without storing anything about the reader.
+
+---
+
+## 11. Launch state and the first deploy
+
+**The site has never been deployed.** This section is the handoff for whoever does it.
+
+### The two gates that are still closed
+
+| Gate               | State                                                              |
+| ------------------ | ------------------------------------------------------------------ |
+| GitHub remote      | Not configured. Credentials unreadable non-interactively.          |
+| Cloudflare account | Authenticated as `11thclassresult@gmail.com` — the sibling project |
+
+Neither is a code problem. Both need an owner decision, and until they are settled a deploy is
+an absolute launch blocker under the Phase 7 rules.
+
+### Sequence once they are settled
+
+1. **Confirm the Cloudflare account** holds the `12thclassresult.com.pk` zone.
+   `wrangler whoami` shows the current login; switch with `wrangler login` if it is wrong.
+2. **Configure the remote** and push `main` to `12thclassresult-sys/12thclassresult.com.pk`.
+   Never force-push; never create a second repository if auth fails.
+3. **Verify CI** on the remote. Local green does not guarantee remote green.
+4. **Add the `routes` entry** to `wrangler.jsonc` — only now, and only with the confirmed zone.
+   A `routes` entry naming a zone the account does not hold fails the deploy outright.
+5. **Deploy:** `npm run deploy` (which runs the OpenNext build, `stage-cache`, then wrangler).
+6. **Smoke test** the live apex: `/`, `/robots.txt`, `/sitemap.xml`, the result hub, the board
+   page, a 404, and the calculator.
+7. **Check live headers** — particularly that the production apex does _not_ carry the
+   preview `X-Robots-Tag: noindex`, which every non-apex host does by design.
+8. **Search Console** only after the smoke test passes.
+
+### Rolling back a first deploy
+
+There is no previous version to revert to, and no database to restore — no D1, KV or R2 binding
+exists. Rollback of a first deploy means removing the Worker route so the domain stops serving.
+That is the whole procedure.
+
+### Why `www` is not in `routes` yet
+
+When it is added it exists for exactly one purpose: giving the permanent `www → apex` redirect a
+hostname that resolves. It must never pass the production-host check, so that if the redirect
+ever failed open, `www` emits `noindex` and an apex canonical rather than quietly duplicating
+the site.
