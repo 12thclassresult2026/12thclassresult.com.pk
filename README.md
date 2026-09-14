@@ -159,14 +159,23 @@ account.
 
 ### Launch state — not yet deployed
 
-As of the Phase 7 audit (`e2270bf`) the site has **never been deployed**, and two things must
-be settled first. Both need the owner, not code:
+The site has **never served a page**. The Worker deploys successfully; the domain cannot be
+attached. This is now measured rather than assumed:
 
-1. **No git remote is configured.** Credentials could not be read non-interactively, and per the
-   git-safety rules no alternative repository was created. Everything is committed locally.
-2. **The authenticated Cloudflare account is `11thclassresult@gmail.com`** — the sibling
-   project's. It has `workers (write)`, so a deploy _would_ succeed, which is exactly why it
-   must not happen unconfirmed.
+```
+Uploaded 12thclassresult-com-pk          <- the Worker ships fine
+No targets deployed                       <- routeless, so nothing is public
+Could not find zone for 12thclassresult.com.pk
+```
+
+1. **The zone is not on the authenticated Cloudflare account.** Wrangler is logged in as
+   `11thclassresult@gmail.com`; the domain delegates to Cloudflare nameservers, so a zone
+   exists — on some other account. Fix by adding the zone to this account, or by
+   `wrangler login` against the one that holds it. Then restore the `routes` block recorded
+   verbatim in `wrangler.jsonc` and redeploy.
+2. **No git remote is configured.** Credentials could not be read non-interactively, and per the
+   git-safety rules no alternative repository was created. Everything is committed locally. This
+   blocks CI only, not the deploy.
 
 Full evidence, including the QA that did pass, is in
 [docs/launch-report.md](docs/launch-report.md).
