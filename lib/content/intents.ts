@@ -119,9 +119,20 @@ export const INTENTS: readonly Intent[] = [
   {
     id: 'compute.percentage',
     description: 'Turn HSSC marks into a percentage.',
-    ownership: 'deferred',
+    ownership: 'owned',
     reason:
-      'Approved: the currently ranking answer applies a foreign board’s formula that is wrong for Pakistan.',
+      'Owned by the explainer. The currently ranking answer applies CBSE’s CGPA x 9.5, a foreign board’s formula that is wrong for Pakistan, where HSSC marks are out of 1100.',
+  },
+  {
+    /*
+     * Split from the explainer deliberately. "How is percentage calculated" and
+     * "percentage calculator" are different tasks — one wants to understand the
+     * rule, the other wants a number now — and Phase 2 approved both with
+     * distinct primary keywords.
+     */
+    id: 'compute.percentage.tool',
+    description: 'Compute an HSSC percentage from marks, without reading an explanation first.',
+    ownership: 'owned',
   },
   {
     id: 'method.sms',

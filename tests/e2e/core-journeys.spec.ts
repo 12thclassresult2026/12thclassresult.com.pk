@@ -118,6 +118,8 @@ test.describe('no fabricated data reaches the page', () => {
     '/boards',
     '/results/karachi-board/12th-class',
     '/guides/rechecking',
+    '/guides/how-percentage-is-calculated',
+    '/tools/percentage-calculator',
   ]) {
     test(`no unverified SMS shortcode on ${path}`, async ({ page }) => {
       await page.goto(path)
@@ -181,6 +183,76 @@ test.describe('the rechecking guide — the market gap', () => {
   })
 })
 
+test.describe('the percentage calculator — correcting a wrong market answer', () => {
+  test('computes a percentage from marks', async ({ page }) => {
+    await page.goto('/tools/percentage-calculator')
+    await page.getByLabel('Marks you obtained').fill('842')
+    // 1100 is pre-filled as the usual HSSC total.
+    await expect(page.getByLabel('Total marks')).toHaveValue('1100')
+    await expect(page.getByText('76.55%')).toBeVisible()
+  })
+
+  test('never shows a grade or a division', async ({ page }) => {
+    /*
+     * The central constraint. Grade bands came back from research as
+     * "several variants — unverified, not carried", and the grade is the
+     * figure a student is most likely to act on.
+     */
+    await page.goto('/tools/percentage-calculator')
+    await page.getByLabel('Marks you obtained').fill('900')
+
+    // Scoped to the calculator's own output. The surrounding copy legitimately
+    // discusses grades in order to explain why none is given.
+    const output = page.locator('[aria-live="polite"]')
+    await expect(output).toContainText('81.82%')
+
+    const outputText = (await output.innerText()).replace(/\s+/g, ' ')
+    expect(outputText, 'calculator emitted a letter grade').not.toMatch(
+      /\bgrade\s*[:=]\s*[A-F]|\b[A-F][+-]?1?\s+grade\b|\bA-?one\b/i,
+    )
+    expect(outputText, 'calculator emitted a division').not.toMatch(
+      /\b(first|second|third)\s+division\b/i,
+    )
+    await expect(page.getByText(/No grade or division is shown here/i)).toBeVisible()
+  })
+
+  test('refuses marks above the total instead of printing nonsense', async ({ page }) => {
+    await page.goto('/tools/percentage-calculator')
+    await page.getByLabel('Marks you obtained').fill('1200')
+    // Scoped to the calculator: Next injects its own route-announcer alert.
+    const alert = page.locator('[aria-live="polite"]').getByRole('alert')
+    await expect(alert).toBeVisible()
+    // Carried in text, not by colour alone.
+    await expect(alert).toHaveText(/cannot be higher than the total/i)
+    // And critically: no percentage is offered alongside the refusal.
+    await expect(page.getByText('Your percentage')).toHaveCount(0)
+  })
+
+  test('accepts a total that is not 1100', async ({ page }) => {
+    // The total is a scheme fact, not a safe default — the field is editable.
+    await page.goto('/tools/percentage-calculator')
+    await page.getByLabel('Total marks').fill('550')
+    await page.getByLabel('Marks you obtained').fill('400')
+    await expect(page.getByText('72.73%')).toBeVisible()
+  })
+
+  test('the guide names the wrong formula and why it does not apply', async ({ page }) => {
+    await page.goto('/guides/how-percentage-is-calculated')
+    const body = (await page.locator('body').innerText()).replace(/\s+/g, ' ')
+    expect(body).toMatch(/CGPA × 9\.5/)
+    expect(body).toMatch(/CBSE/)
+    expect(body).toMatch(/Part-I and Part-II together/i)
+  })
+
+  test('is reachable from the result hub', async ({ page }) => {
+    await page.goto('/results/12th-class')
+    const link = page.getByRole('link', { name: /how the percentage is calculated/i })
+    await expect(link).toBeVisible()
+    await link.click()
+    await expect(page).toHaveURL(/how-percentage-is-calculated$/)
+  })
+})
+
 test.describe('accessibility and layout', () => {
   test('skip link is the first tab stop and targets main', async ({ page }) => {
     await page.goto('/')
@@ -197,6 +269,8 @@ test.describe('accessibility and layout', () => {
       '/boards',
       '/results/karachi-board/12th-class',
       '/guides/rechecking',
+      '/guides/how-percentage-is-calculated',
+      '/tools/percentage-calculator',
     ]) {
       await page.goto(path)
       await expect(page.locator('h1')).toHaveCount(1)
@@ -211,6 +285,8 @@ test.describe('accessibility and layout', () => {
       '/boards',
       '/results/karachi-board/12th-class',
       '/guides/rechecking',
+      '/guides/how-percentage-is-calculated',
+      '/tools/percentage-calculator',
     ]) {
       await page.goto(path)
       const overflow = await page.evaluate(

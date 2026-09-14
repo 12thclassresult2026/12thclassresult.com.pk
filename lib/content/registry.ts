@@ -104,7 +104,12 @@ const BUILT_PAGES: PageEntry[] = [
     contentUpdatedAt: UPDATED_AT,
     lastVerifiedAt: UPDATED_AT,
     lastReviewedAt: UPDATED_AT,
-    internalLinksOut: ['/boards', '/', '/guides/rechecking'],
+    internalLinksOut: [
+      '/boards',
+      '/',
+      '/guides/rechecking',
+      '/guides/how-percentage-is-calculated',
+    ],
   },
   {
     id: 'boards-directory',
@@ -200,6 +205,88 @@ const BUILT_PAGES: PageEntry[] = [
     lastVerifiedAt: UPDATED_AT,
     lastReviewedAt: UPDATED_AT,
     internalLinksOut: ['/results/12th-class', '/boards'],
+  },
+  {
+    /*
+     * THE ONE CATEGORY WHERE THE MARKET'S ANSWER IS WRONG, NOT THIN.
+     *
+     * Evidence G6c, verified: the advice currently ranking for 12th class
+     * percentage is CBSE's CGPA x 9.5 — an Indian formula for a grading
+     * system Pakistan does not use. HSSC results are marks out of a total.
+     */
+    id: 'guide-percentage',
+    path: '/guides/how-percentage-is-calculated',
+    pageType: 'guide',
+    intentId: 'compute.percentage',
+    sitemapSegment: 'guides',
+    status: 'published',
+    index: true,
+    title: 'How 12th Class Percentage Is Calculated in Pakistan',
+    h1: 'How your 12th class percentage is calculated',
+    description:
+      'HSSC marks are out of a total, not a CGPA — so the CGPA × 9.5 formula in circulation does not apply in Pakistan. The actual rule, what counts toward it, and why no grade is shown.',
+    seoTarget: {
+      primaryKeyword: '12th class percentage calculation',
+      secondaryKeywords: [
+        'marks out of 1100',
+        'hssc percentage',
+        'how to calculate percentage 12th',
+      ],
+      semanticEntities: ['HSSC Part-II', 'percentage', 'aggregate marks', 'CGPA'],
+      searchIntent: 'Informational — understand how the percentage is worked out and what counts.',
+      queryVariants: [
+        '2nd year percentage calculation',
+        'inter percentage formula',
+        'hssc marks percentage',
+      ],
+      parentTopic: '12th class result',
+    },
+    breadcrumb: [
+      { name: 'Home', path: '/' },
+      { name: '12th Class Result', path: '/results/12th-class' },
+      { name: 'Percentage', path: '/guides/how-percentage-is-calculated' },
+    ],
+    // The arithmetic is not a volatile claim; the 1100 total and the aggregate
+    // rule are, and both are rendered from verified evidence.
+    sourceRequirementMode: 'none',
+    sourceIds: [],
+    freshnessClass: 'D',
+    contentUpdatedAt: UPDATED_AT,
+    lastVerifiedAt: UPDATED_AT,
+    lastReviewedAt: UPDATED_AT,
+    internalLinksOut: ['/tools/percentage-calculator', '/results/12th-class'],
+  },
+  {
+    id: 'tool-percentage',
+    path: '/tools/percentage-calculator',
+    pageType: 'tool',
+    intentId: 'compute.percentage.tool',
+    sitemapSegment: 'tools',
+    status: 'published',
+    index: true,
+    title: 'HSSC Percentage Calculator — 12th Class Marks',
+    h1: 'HSSC percentage calculator',
+    description:
+      'Work out your 12th class percentage from your obtained and total marks. No grade or division is shown, because board grade bands could not be verified.',
+    seoTarget: {
+      primaryKeyword: 'hssc percentage calculator',
+      secondaryKeywords: ['12th class marks calculator', 'percentage calculator pakistan'],
+      semanticEntities: ['HSSC Part-II', 'percentage', 'marks'],
+      searchIntent: 'Transactional — get a number now, without reading an explanation first.',
+      queryVariants: ['2nd year percentage calculator', 'inter marks percentage calculator'],
+      parentTopic: '12th class percentage calculation',
+    },
+    breadcrumb: [
+      { name: 'Home', path: '/' },
+      { name: 'Tools', path: '/tools/percentage-calculator' },
+    ],
+    sourceRequirementMode: 'none',
+    sourceIds: [],
+    freshnessClass: 'D',
+    contentUpdatedAt: UPDATED_AT,
+    lastVerifiedAt: UPDATED_AT,
+    lastReviewedAt: UPDATED_AT,
+    internalLinksOut: ['/guides/how-percentage-is-calculated', '/results/12th-class'],
   },
 ]
 

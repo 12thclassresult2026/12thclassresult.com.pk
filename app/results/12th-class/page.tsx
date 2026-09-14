@@ -141,6 +141,17 @@ export default function TwelfthClassResultHub() {
           . It is worth knowing before you pay that no board re-marks a paper: a recheck confirms
           the totals add up and were copied correctly, and nothing more.
         </p>
+        <p className="mt-4 max-w-3xl text-[var(--text-body)]">
+          To turn your marks into a percentage, the rule is simply obtained ÷ total — see{' '}
+          <Link
+            href="/guides/how-percentage-is-calculated"
+            className="text-primary-700 font-medium underline underline-offset-4"
+          >
+            how the percentage is calculated
+          </Link>
+          . The CGPA × 9.5 formula widely suggested for this is an Indian one and does not apply to
+          a Pakistani result.
+        </p>
 
         <p className="mt-10">
           <Link

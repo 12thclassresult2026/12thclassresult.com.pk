@@ -110,3 +110,54 @@ Reasons are recorded per row in `preliminary-page-inventory.csv` and
 | A board publishes an SMS shortcode on its own page    | The SMS cluster unblocks for that board only                                      |
 | A board grants API access or a data-sharing agreement | Changes the product from router to checker for that board                         |
 | The amending improvement policy becomes readable      | Resolves the supersession caveat on the improvement guide                         |
+
+---
+
+# Phase 6 — Topical Authority Expansion
+
+**Date:** 2026-09-14 · Scored in `docs/research/topical-expansion-analysis.md`.
+
+## The finding that set the scope
+
+Most of the Phase 6 surface is **blocked**, and almost always by the same thing: **there is no
+verified Pakistani HSSC scheme of studies in evidence.** Subject hubs, group hubs, chapter
+taxonomies, notes, MCQs and syllabus pages all need one. Past papers, textbooks and notes carry
+a second, independent blocker — copyright.
+
+So Phase 6 did not open nine families. It opened one, and the one where the market's answer is
+not merely thin but **wrong**.
+
+## Tier 4A — Tools (BUILT)
+
+| Item                                   | Status    | Why it cleared every gate                                                   |
+| -------------------------------------- | --------- | --------------------------------------------------------------------------- |
+| `/guides/how-percentage-is-calculated` | **Built** | Evidence G6c: the ranking answer is CBSE's `CGPA × 9.5`, wrong for Pakistan |
+| `/tools/percentage-calculator`         | **Built** | Needs no board permission, no copyright clearance, no curriculum document   |
+
+Both are freshness class D. The calculator returns a percentage and **no grade or division**,
+because grade bands came back from research as "several variants — unverified, not carried".
+
+## Blocked, with the unblocking step named
+
+| Family                    | Blocker                              | Unblocks when                                        |
+| ------------------------- | ------------------------------------ | ---------------------------------------------------- |
+| Subject hubs              | No curriculum source                 | A scheme of studies is obtained and registered       |
+| Group hubs (FSc/ICS/ICom) | Phase 2 gate unmet on all four items | Subject list + marks distribution + grading verified |
+| Grade bands               | Verified as unverifiable             | A board publishes its own band table                 |
+| Past papers               | Copyright                            | A licence, or owner-supplied originals               |
+| Textbooks                 | Copyright                            | Link-only architecture, or permission                |
+| Pairing schemes           | Maintenance — re-issued each session | An official per-session source is verified           |
+| Notes · MCQs · Chapters   | No curriculum source                 | Follows the subject taxonomy                         |
+
+## Deferred rather than blocked
+
+- **Historical gazette archive** — real and verified (G6h: boards publish 2012–2025 archives),
+  but it belongs behind the Phase 5 gazette hub, which is not built. Link, never host.
+- **Result statistics archive** — durable and uncovered, but the source would be news reporting
+  at tier 4 of the editorial hierarchy. Acceptable only where a report quotes a board document.
+
+## Rejected, and staying rejected
+
+- **Aggregate / entry-test calculators** — weightings differ by institution and cycle. A stale
+  formula costs a student a decision, and established tools exist.
+- **University / degree pages** — outside the topical boundary at this stage.

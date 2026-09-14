@@ -5,6 +5,8 @@ import { metadata as notFoundMetadata } from '@/app/not-found'
 import { metadata as homeMetadata } from '@/app/page'
 import { metadata as hubMetadata } from '@/app/results/12th-class/page'
 import { metadata as recheckingMetadata } from '@/app/guides/rechecking/page'
+import { metadata as percentageGuideMetadata } from '@/app/guides/how-percentage-is-calculated/page'
+import { metadata as percentageToolMetadata } from '@/app/tools/percentage-calculator/page'
 import { getPageByPath, indexablePages } from '@/lib/content/registry'
 import { canonicalUrl } from '@/lib/seo/site'
 
@@ -20,6 +22,8 @@ const ROUTE_MODULES = [
   { path: '/results/12th-class', metadata: hubMetadata },
   { path: '/boards', metadata: boardsMetadata },
   { path: '/guides/rechecking', metadata: recheckingMetadata },
+  { path: '/guides/how-percentage-is-calculated', metadata: percentageGuideMetadata },
+  { path: '/tools/percentage-calculator', metadata: percentageToolMetadata },
 ] as const
 
 describe('route metadata matches the registry', () => {
