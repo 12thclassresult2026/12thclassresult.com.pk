@@ -299,7 +299,7 @@ documentation and implementation agree.
 | `AccessModelAction`                                                                    | One component, compiler-checked exhaustiveness                                                                  |
 | `StatusSentence` · `PerGroupStatus` · `ProvenanceBlock` · `StatusChip` · `Breadcrumbs` | Built                                                                                                           |
 | Board route                                                                            | `/results/[board]/12th-class`, yearless, `dynamicParams = false`                                                |
-| Tests                                                                                  | **117** — 76 validation, 41 unit                                                                                |
+| Tests                                                                                  | **155** — 76 validation, 41 unit, 38 E2E                                                                        |
 
 ## The representative implementation
 
@@ -326,6 +326,6 @@ answer.
 
 ## Verified by execution
 
-`npm run check` green · OpenNext build succeeded · `stage-cache` staged 12 files ·
+155 tests green (76 validation, 41 unit, 38 end-to-end) · OpenNext build succeeded · `stage-cache` staged 12 files ·
 `wrangler deploy --dry-run` at **gzip 1060.65 KiB** against a 3 MiB ceiling, with
 `ASSETS` and the site origin as the only bindings.
