@@ -12,7 +12,7 @@
 | **0 — Production foundation**        | ✅ Next.js 16 on Cloudflare Workers, 3 pages, gate green                              |
 | **1 — Research**                     | ✅ 21 deliverables, 28 boards verified                                                |
 | **2 — Architecture**                 | ✅ 20 blueprint documents, 11 ADRs                                                    |
-| **3 — Production foundation build**  | ✅ **Complete.** Domain model, registries, components, representative page, 117 tests |
+| **3 — Production foundation build**  | ✅ **Complete.** Domain model, registries, components, representative page, 155 tests |
 | **4 — Core product + result engine** | ⏸ Not started                                                                         |
 
 ---
