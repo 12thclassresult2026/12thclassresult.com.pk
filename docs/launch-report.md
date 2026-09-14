@@ -2,7 +2,8 @@
 
 **Phase:** 7 — Full-site QA, launch and production deployment
 **Date:** 2026-09-14
-**Decision:** **DO NOT LAUNCH** — two deployment-target blockers, both requiring the owner.
+**Decision:** **DO NOT LAUNCH** — the production zone is not on the authenticated Cloudflare
+account. Proven by a deploy attempt, not assumed. Worker deploys fine; domain cannot attach.
 
 Every gate that can be run without external credentials was run and passed. The site itself is
 in good shape; what is missing is confirmation of _where_ it should be deployed.
@@ -40,7 +41,50 @@ alternative repository was created** and nothing was pushed anywhere else.
 
 All work is committed locally. Nothing is lost; it is simply not pushed.
 
-### BLOCKER 2 — Cloudflare account is not verified as the right one (§86, §144)
+### BLOCKER 2 — RESOLVED THEN DISPROVEN: the zone is not on the authenticated account
+
+**Update after the deploy attempt.** The owner confirmed the account was correct, so the deploy
+proceeded — in two steps, deliberately.
+
+**Step 1, routeless deploy: SUCCEEDED.**
+
+```
+Uploaded 12thclassresult-com-pk
+No targets deployed for 12thclassresult-com-pk
+Worker Startup Time: 31 ms
+Version ID: dfdb88e3-45bb-4d76-b5b7-90621043ed6c
+```
+
+This proves account access while serving nothing publicly — which is exactly why it was done
+first.
+
+**Step 2, attaching the custom domains: FAILED.**
+
+```
+Could not find zone for `12thclassresult.com.pk`.
+Make sure the domain is set up to be proxied by Cloudflare.
+```
+
+So the answer is now measured rather than assumed: **the zone is NOT on account
+`c085ba412b1289d5950bd55daf501b51`.** The domain does delegate to Cloudflare nameservers
+(`thea.ns` / `hasslo.ns`), so a zone exists — just not on the account Wrangler is logged into.
+
+**No harm done.** The failure happened before any DNS write. Verified afterwards: no address
+record was created, and both `https://12thclassresult.com.pk/` and `https://www.…/` still
+return no response. The account is in exactly the state step 1 left it: a Worker uploaded with
+no targets.
+
+**To finish the launch, one of:**
+
+1. Add `12thclassresult.com.pk` as a zone on the authenticated account, or
+2. `wrangler login` against whichever Cloudflare account already holds the zone.
+
+Then restore the `routes` block recorded in `wrangler.jsonc` and redeploy. Everything else is
+ready.
+
+---
+
+### Original blocker 2 assessment (§86, §144), retained for the record
 
 ```
 wrangler whoami
