@@ -219,3 +219,64 @@ When it is added it exists for exactly one purpose: giving the permanent `www �
 hostname that resolves. It must never pass the production-host check, so that if the redirect
 ever failed open, `www` emits `noindex` and an apex canonical rather than quietly duplicating
 the site.
+
+---
+
+## 12. Freshness operations
+
+The stale-content detector lives in [`lib/freshness/stale.ts`](../lib/freshness/stale.ts) and is
+gated by `tests/validation/freshness.test.ts`, which runs inside `npm run validate` and therefore
+inside `npm run check`.
+
+### What blocks a build
+
+**Only `critical` findings.** Staleness is continuous, so a gate that failed on every medium
+finding would be red most of the year and would train everyone to ignore it. Critical means a
+reader is being told something false _right now_:
+
+| Check                      | Why it is critical                                                         |
+| -------------------------- | -------------------------------------------------------------------------- |
+| `result-date-passed`       | An expected date came and went and was never confirmed                     |
+| `unsourced-sms`            | A shortcode with no source — an SMS is charged, so a wrong one costs money |
+| `old-year-in-metadata`     | A past year presented as the current cycle                                 |
+| `future-year-page`         | A next-year page published before that cycle exists                        |
+| `review-overdue` (class A) | Live result status not reviewed inside its 3-day cadence                   |
+
+Everything else is reported, not enforced.
+
+### Review cadence
+
+Derived from `freshnessClass`, never stored — a stored `nextReviewAt` would be a second copy of
+a fact that can disagree with the first.
+
+| Class | Cadence  | Applies to                         |
+| ----- | -------- | ---------------------------------- |
+| A     | 3 days   | Live result status during a season |
+| B     | 30 days  | Dates, announcements, fees         |
+| C     | 90 days  | Board procedure and methods        |
+| D     | 365 days | Evergreen explanation              |
+
+### Reading the report
+
+When a critical finding fires, the full report prints in the test failure. To see the
+non-blocking findings, call `detectStaleContent(new Date())` and `formatStaleReport(...)` from a
+scratch test — the functions are exported for exactly this.
+
+### Timestamps are not build artefacts
+
+`contentUpdatedAt`, `lastVerifiedAt` and `lastReviewedAt` are distinct, and **none of them is
+ever bumped by a build, a deploy or a reformat**. A timestamp that moves without a human
+re-reading the source is a lie about verification, and it is the specific dishonesty one
+competitor in this market commits on every page.
+
+Update only the one that actually changed:
+
+- re-read the board's page and it still says the same thing → `lastVerifiedAt`
+- rewrote the copy → `contentUpdatedAt`
+- did an editorial pass over the whole page → `lastReviewedAt`
+
+### Known standing finding
+
+`bbise` (Quetta) carries `result-date-archivable` — its confirmed 2026-07-20 result date is the
+only confirmed date on the site, and the session is now well past. It is `low` severity because
+the page is still correct; it is a prompt to archive the session, not a defect.

@@ -186,6 +186,10 @@ Full evidence, including the QA that did pass, is in
 | SEO system         | [docs/seo-system.md](docs/seo-system.md)                                                            |
 | Design system      | [docs/design-system.md](docs/design-system.md)                                                      |
 | Operations         | [docs/operations.md](docs/operations.md)                                                            |
+| Ops report         | [docs/operations-report.md](docs/operations-report.md)                                              |
+| Year rollover      | [docs/year-rollover.md](docs/year-rollover.md)                                                      |
+| Launch report      | [docs/launch-report.md](docs/launch-report.md)                                                      |
+| Incidents          | [docs/incidents/](docs/incidents/)                                                                  |
 | Deployment         | [docs/deployment.md](docs/deployment.md)                                                            |
 | Security · Privacy | [docs/security.md](docs/security.md) · [docs/privacy-architecture.md](docs/privacy-architecture.md) |
 | Research evidence  | [docs/research/](docs/research/)                                                                    |
