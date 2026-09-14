@@ -277,3 +277,55 @@ deliberately not published; the publish gate is in `page-family-specifications.m
 | Test layers and the gate list                          | `testing-strategy.md`               |
 | Sequencing                                             | `seo/implementation-roadmap.md`     |
 | Approved inventory                                     | `seo/final-page-inventory.csv`      |
+
+---
+
+# Phase 3 — As Implemented, 2026-09-14
+
+The Phase 2 blueprint is now code. This section records what actually shipped, so
+documentation and implementation agree.
+
+## Implemented
+
+| Area                                                                                   | State                                                                                                           |
+| -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `ResultAccessModel` + `DeclarationModel`                                               | Implemented on all 28 boards                                                                                    |
+| `CapabilityStatus` (six states)                                                        | Replaces `boolean \| null` throughout; `blocked` now distinguishes "prevented from checking" from "not checked" |
+| Group-aware `ResultDataset`                                                            | `group`, `declaredAt`, `gazetteSourceId`                                                                        |
+| Board registry                                                                         | **28 boards** — 10 Punjab/Federal, 8 KPK, 6 Sindh, Balochistan, AJK, 2 private                                  |
+| Source registry                                                                        | **28 records**, each with a provenance note                                                                     |
+| Canonical intent registry                                                              | `lib/content/intents.ts`, with `intentId` on every page and an entity-scoped uniqueness gate                    |
+| Page lifecycle                                                                         | `published` · `archived` · `review` · `draft` · `planned`, **derived from board lifecycle**                     |
+| `AccessModelAction`                                                                    | One component, compiler-checked exhaustiveness                                                                  |
+| `StatusSentence` · `PerGroupStatus` · `ProvenanceBlock` · `StatusChip` · `Breadcrumbs` | Built                                                                                                           |
+| Board route                                                                            | `/results/[board]/12th-class`, yearless, `dynamicParams = false`                                                |
+| Tests                                                                                  | **117** — 76 validation, 41 unit                                                                                |
+
+## The representative implementation
+
+**Karachi** is the one board page built, and deliberately the hardest case: it is
+`gazette-only` **and** `per-group`. Verified from the built HTML:
+
+- The page **renders no roll-number input**, and states plainly that no checker exists.
+- Seven groups render with their own statuses and genuinely different dates.
+- The undeclared group shows "Not announced" rather than inheriting a board-level claim.
+- No circulating SMS shortcode appears anywhere in the build output.
+
+If the architecture could not express this board, that would have surfaced here rather
+than after seven similar Punjab pages were written against the wrong shape.
+
+It is held at `draft` — the route serves, `noindex`, out of the sitemap, awaiting a
+publication review conducted from the rendered page.
+
+## One coupling added during implementation
+
+Page lifecycle is **derived** from board lifecycle (`status: board.publishState`) rather
+than duplicated. A board and its page cannot drift, and a gate asserts it. This was not
+in the Phase 2 blueprint; it emerged from implementing it, and is the smaller, better
+answer.
+
+## Verified by execution
+
+`npm run check` green · OpenNext build succeeded · `stage-cache` staged 12 files ·
+`wrangler deploy --dry-run` at **gzip 1060.65 KiB** against a 3 MiB ceiling, with
+`ASSETS` and the site origin as the only bindings.

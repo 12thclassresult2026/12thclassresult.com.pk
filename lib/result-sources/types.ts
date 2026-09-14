@@ -1,3 +1,5 @@
+import type { CapabilityStatus } from '@/lib/result/capability'
+
 /**
  * The official-source registry contract (sections 66, 69, 87, 144).
  *
@@ -114,12 +116,12 @@ export type ResultSource = {
   name: string
   url: string
   isOfficial: boolean
-  supportsRollNumber: boolean | null
-  supportsName: boolean | null
-  supportsSms: boolean | null
-  supportsGazette: boolean | null
-  hasCaptcha: boolean | null
-  requiresAdditionalIdentifier: boolean | null
+  supportsRollNumber: CapabilityStatus
+  supportsName: CapabilityStatus
+  supportsSms: CapabilityStatus
+  supportsGazette: CapabilityStatus
+  hasCaptcha: CapabilityStatus
+  requiresAdditionalIdentifier: CapabilityStatus
   additionalIdentifierNote: string | null
   integrationMode: IntegrationMode
   lastCheckedAt: string | null

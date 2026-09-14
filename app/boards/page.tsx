@@ -5,7 +5,7 @@ import { JsonLdScript } from '@/components/seo/json-ld'
 import { BOARDS } from '@/lib/board/registry'
 import { PROVINCE_LABELS, type Province } from '@/lib/board/types'
 import { requirePage } from '@/lib/content/registry'
-import { identifierRequirementSentence } from '@/lib/result/capability-label'
+import { identifierRequirementSentence } from '@/lib/result/capability'
 import { linkableSources } from '@/lib/result-sources/registry'
 import { breadcrumbSchema, webPageSchema } from '@/lib/schema/json-ld'
 import { metadataForPage } from '@/lib/seo/metadata'
@@ -50,9 +50,10 @@ export default function BoardsDirectory() {
                   const sources = linkableSources(board.id)
                   const requirement = identifierRequirementSentence({
                     requiresAdditionalIdentifier:
-                      sources.find((s) => s.requiresAdditionalIdentifier !== null)
-                        ?.requiresAdditionalIdentifier ?? null,
-                    hasCaptcha: sources.find((s) => s.hasCaptcha !== null)?.hasCaptcha ?? null,
+                      sources.find((s) => s.requiresAdditionalIdentifier !== 'unknown')
+                        ?.requiresAdditionalIdentifier ?? 'unknown',
+                    hasCaptcha:
+                      sources.find((s) => s.hasCaptcha !== 'unknown')?.hasCaptcha ?? 'unknown',
                   })
 
                   return (

@@ -2,6 +2,9 @@ import { describe, expect, it } from 'vitest'
 
 import {
   PAGES,
+  findIntentConflicts,
+  findUnknownIntents,
+  getPageByPath,
   findBrokenInternalLinks,
   findKeywordConflicts,
   findOrphanPages,
@@ -10,6 +13,8 @@ import {
   populatedSegments,
 } from '@/lib/content/registry'
 import { SITEMAP_SEGMENTS } from '@/lib/content/types'
+import { getBoardById, routedBoards } from '@/lib/board/registry'
+import { unownableIntents } from '@/lib/content/intents'
 import { allSitemapUrls, buildSitemapIndex, oversizedSegments } from '@/lib/seo/sitemap'
 import { SITE_ORIGIN, normalizePath } from '@/lib/seo/site'
 
@@ -164,5 +169,76 @@ describe('sitemap', () => {
 
   it('keeps every segment within the protocol limit', () => {
     expect(oversizedSegments()).toEqual([])
+  })
+})
+
+describe('canonical intent ownership', () => {
+  it('declares a known intent on every page', () => {
+    expect(findUnknownIntents()).toEqual([])
+  })
+
+  it('gives every entity-scoped intent exactly one live owner', () => {
+    // The machine-checkable form of the cannibalization map. Scoped by board
+    // and year, so Lahore and Multan can share the 'result.board' family while
+    // two Lahore pages for one session would collide.
+    expect(findIntentConflicts()).toEqual([])
+  })
+
+  it('never lets a rejected or blocked intent acquire an owner', () => {
+    const forbidden = new Set(unownableIntents().map((i) => i.id))
+    for (const page of PAGES) {
+      expect(
+        forbidden.has(page.intentId),
+        page.path + ' claims intent ' + page.intentId + ', which is not ownable',
+      ).toBe(false)
+    }
+  })
+
+  it('records a reason for every intent left unowned', () => {
+    for (const intent of unownableIntents()) {
+      expect(intent.reason, intent.id + ' is unowned with no reason').toBeTruthy()
+    }
+  })
+
+  it('keeps SMS and name lookup permanently unowned', () => {
+    // Both are promises we cannot keep: no board publishes a shortcode on its
+    // own domain, and most boards have no name field at all.
+    const ids = unownableIntents().map((i) => i.id)
+    expect(ids).toContain('method.sms')
+    expect(ids).toContain('method.name')
+  })
+})
+
+describe('board and page lifecycle agreement', () => {
+  it('derives every board page status from its board', () => {
+    for (const page of PAGES) {
+      if (!page.boardId) continue
+      const board = getBoardById(page.boardId)
+      expect(board, page.path + ' references an unregistered board').toBeDefined()
+      expect(page.status, page.path + ' drifted from its board lifecycle').toBe(board!.publishState)
+    }
+  })
+
+  it('builds a route for every board that is not merely planned', () => {
+    const routedSlugs = routedBoards().map((b) => b.slug)
+    for (const slug of routedSlugs) {
+      expect(getPageByPath('/results/' + slug + '/12th-class')).toBeDefined()
+    }
+  })
+
+  it('keeps every board page out of the sitemap until it is published', () => {
+    for (const page of PAGES) {
+      if (!page.boardId) continue
+      if (page.status !== 'published') expect(page.index).toBe(false)
+    }
+  })
+
+  it('uses yearless board paths', () => {
+    // ADR-004. A year-stamped board URL would need annual migration, and the
+    // year-stamped URLs competitors built now 404 while yearless ones resolve.
+    for (const page of PAGES) {
+      if (!page.boardId) continue
+      expect(/\/\d{4}$/.test(page.path), page.path + ' is year-stamped').toBe(false)
+    }
   })
 })

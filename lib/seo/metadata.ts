@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 
+import type { PublishStatus } from '@/lib/content/types'
+
 import {
   SITE_DESCRIPTION,
   SITE_LOCALE,
@@ -131,13 +133,13 @@ export function metadataForPage(page: {
   title: string
   description: string
   index: boolean
-  status: 'published' | 'draft' | 'planned'
+  status: PublishStatus
 }): Metadata {
   return buildMetadata({
     path: page.path,
     title: page.title,
     description: page.description,
-    index: page.index && page.status === 'published',
+    index: page.index && (page.status === 'published' || page.status === 'archived'),
   })
 }
 

@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { JsonLdScript } from '@/components/seo/json-ld'
 import { BOARDS } from '@/lib/board/registry'
 import { requirePage } from '@/lib/content/registry'
-import { capabilityLabel } from '@/lib/result/capability-label'
+import { capabilityLabel } from '@/lib/result/capability'
 import { rollNumberSources } from '@/lib/result-sources/registry'
 import { breadcrumbSchema, webPageSchema } from '@/lib/schema/json-ld'
 import { metadataForPage } from '@/lib/seo/metadata'
@@ -98,9 +98,11 @@ export default function TwelfthClassResultHub() {
                       )}
                     </td>
                     <td className="py-3 pr-4">
-                      {capabilityLabel(portal?.supportsRollNumber ?? null)}
+                      {capabilityLabel(portal?.supportsRollNumber ?? 'unknown')}
                     </td>
-                    <td className="py-3 pr-4">{capabilityLabel(portal?.hasCaptcha ?? null)}</td>
+                    <td className="py-3 pr-4">
+                      {capabilityLabel(portal?.hasCaptcha ?? 'unknown')}
+                    </td>
                   </tr>
                 )
               })}

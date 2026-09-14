@@ -52,9 +52,12 @@ export type SitemapSegment = (typeof SITEMAP_SEGMENTS)[number]
 /**
  *  - `published` live and indexable when `index` is also true
  *  - `draft`     route exists and serves, never indexed, never publicly linked
+ *  - `review`    built and awaiting publication review. Serves, never indexed.
+ *  - `archived`  a past session, still valuable and indexable, no longer on a
+ *                volatile review cadence.
  *  - `planned`   inventory only. No route is built. Never indexable.
  */
-export type PublishStatus = 'published' | 'draft' | 'planned'
+export type PublishStatus = 'published' | 'archived' | 'review' | 'draft' | 'planned'
 
 /**
  * One canonical owner per real intent (section 115). A primary keyword must
@@ -98,6 +101,18 @@ export type PageEntry = {
   /** Normalized path. Must already satisfy `normalizePath`. */
   path: string
   pageType: PageType
+  /**
+   * The canonical intent this page owns, from `lib/content/intents.ts`.
+   *
+   * For entity families (board pages) the intent is scoped by `boardId` and
+   * `year` — see `intentKey()` in the registry. Two published pages may never
+   * share a scoped intent key.
+   */
+  intentId: string
+  /** Set for pages about one board. Scopes the intent key. */
+  boardId?: string
+  /** Set for pages about one session. Scopes the intent key. */
+  year?: number
   sitemapSegment: SitemapSegment
   status: PublishStatus
   /** False means noindex AND excluded from the sitemap. */

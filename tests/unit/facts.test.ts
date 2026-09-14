@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
 import {
+  CAPABILITY_STATUSES,
   capabilityLabel,
   identifierRequirementSentence,
   isAdvertisable,
-} from '@/lib/result/capability-label'
+} from '@/lib/result/capability'
 import {
   factQualifier,
   isConfirmed,
@@ -102,15 +103,31 @@ describe('factQualifier', () => {
 
 describe('capabilityLabel', () => {
   it('renders an unverified capability as "Not verified", never "No"', () => {
-    expect(capabilityLabel(null)).toBe('Not verified')
-    expect(capabilityLabel(false)).toBe('No')
-    expect(capabilityLabel(true)).toBe('Yes')
+    expect(capabilityLabel('unknown')).toBe('Not verified')
+    expect(capabilityLabel('verified-unsupported')).toBe('No')
+    expect(capabilityLabel('verified-supported')).toBe('Yes')
   })
 
-  it('only advertises an explicit true', () => {
-    expect(isAdvertisable(null)).toBe(false)
-    expect(isAdvertisable(false)).toBe(false)
-    expect(isAdvertisable(true)).toBe(true)
+  it('distinguishes being blocked from not having looked', () => {
+    expect(capabilityLabel('blocked')).not.toBe(capabilityLabel('unknown'))
+    expect(capabilityLabel('blocked')).not.toBe('No')
+  })
+
+  it('never produces "No" from anything but a verified absence', () => {
+    for (const status of CAPABILITY_STATUSES) {
+      if (status !== 'verified-unsupported') expect(capabilityLabel(status)).not.toBe('No')
+    }
+  })
+
+  it('gives every status its own distinct wording', () => {
+    const labels = CAPABILITY_STATUSES.map(capabilityLabel)
+    expect(new Set(labels).size).toBe(CAPABILITY_STATUSES.length)
+  })
+
+  it('only advertises an explicit verified-supported', () => {
+    for (const status of CAPABILITY_STATUSES) {
+      expect(isAdvertisable(status)).toBe(status === 'verified-supported')
+    }
   })
 })
 
@@ -118,16 +135,25 @@ describe('identifierRequirementSentence', () => {
   it('says nothing when nothing is verified', () => {
     expect(
       identifierRequirementSentence({
-        requiresAdditionalIdentifier: null,
-        hasCaptcha: null,
+        requiresAdditionalIdentifier: 'unknown',
+        hasCaptcha: 'unknown',
+      }),
+    ).toBeNull()
+  })
+
+  it('says nothing when we are merely blocked from checking', () => {
+    expect(
+      identifierRequirementSentence({
+        requiresAdditionalIdentifier: 'blocked',
+        hasCaptcha: 'blocked',
       }),
     ).toBeNull()
   })
 
   it('warns only about what was actually observed', () => {
     const sentence = identifierRequirementSentence({
-      requiresAdditionalIdentifier: true,
-      hasCaptcha: null,
+      requiresAdditionalIdentifier: 'verified-supported',
+      hasCaptcha: 'unknown',
     })
     expect(sentence).toContain('B-Form')
     expect(sentence).not.toContain('security check')
