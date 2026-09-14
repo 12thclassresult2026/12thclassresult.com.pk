@@ -936,3 +936,22 @@ export function gazetteSources(boardId: string): ResultSource[] {
     (s) => s.sourceType === 'official-gazette' && s.ownershipStatus === 'verified',
   )
 }
+
+/**
+ * Boards with an official RESULT source that was actually loaded.
+ *
+ * Replaces a string match on source ids (`id.includes('result')`), which was a
+ * heuristic being rendered to readers as a verified count. This asks the three
+ * questions the claim actually makes: the source is official, it is a result
+ * source rather than a homepage, and someone or something genuinely fetched it.
+ */
+export function boardsWithObservedResultPortal(): string[] {
+  const boardIds = new Set<string>()
+  for (const source of RESULT_SOURCES) {
+    if (!source.isOfficial) continue
+    if (source.sourceType !== 'official-result') continue
+    if (source.observedVia === 'not-observed') continue
+    boardIds.add(source.boardId)
+  }
+  return [...boardIds]
+}

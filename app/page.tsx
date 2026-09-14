@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import { JsonLdScript } from '@/components/seo/json-ld'
-import { BOARDS } from '@/lib/board/registry'
+import { BOARDS, routedBoards } from '@/lib/board/registry'
+import { boardsWithObservedResultPortal } from '@/lib/result-sources/registry'
 import { requirePage } from '@/lib/content/registry'
 import { breadcrumbSchema, webPageSchema } from '@/lib/schema/json-ld'
 import { metadataForPage } from '@/lib/seo/metadata'
@@ -12,9 +13,14 @@ const PAGE = requirePage('home')
 export const metadata: Metadata = metadataForPage(PAGE)
 
 export default function HomePage() {
-  const verifiedPortalCount = BOARDS.filter((b) =>
-    b.sourceIds.some((id) => id.includes('result') || id.includes('directory')),
-  ).length
+  /*
+   * Derived from the source registry, not from a string match on source ids.
+   * The sentence below claims a portal was "confirmed by loading it", so the
+   * count must actually mean that: official, a result source rather than a
+   * homepage, and genuinely fetched.
+   */
+  const verifiedPortalCount = boardsWithObservedResultPortal().length
+  const routed = new Set(routedBoards().map((board) => board.slug))
 
   return (
     <>
@@ -90,16 +96,36 @@ export default function HomePage() {
             {BOARDS.length} boards are registered, {verifiedPortalCount} with an official result
             portal confirmed by loading it.
           </p>
+          {/*
+            A board links only where its page actually serves. The rest are
+            named honestly rather than linked into a 404 or hidden — a reader
+            looking for Sukkur should see that we know it exists and have not
+            yet verified enough to publish a page for it.
+          */}
           <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {BOARDS.map((board) => (
-              <li
-                key={board.id}
-                className="rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-[var(--surface)] p-4 shadow-[var(--shadow-card)]"
-              >
-                <p className="font-semibold text-[var(--text-strong)]">{board.shortName}</p>
-                <p className="mt-1 text-sm text-[var(--text-muted)]">{board.officialName}</p>
-              </li>
-            ))}
+            {BOARDS.map((board) => {
+              const hasPage = routed.has(board.slug)
+              return (
+                <li
+                  key={board.id}
+                  className="rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-[var(--surface)] p-4 shadow-[var(--shadow-card)]"
+                >
+                  <p className="font-semibold text-[var(--text-strong)]">
+                    {hasPage ? (
+                      <Link
+                        href={`/results/${board.slug}/12th-class`}
+                        className="text-primary-700 underline underline-offset-4"
+                      >
+                        {board.shortName}
+                      </Link>
+                    ) : (
+                      board.shortName
+                    )}
+                  </p>
+                  <p className="mt-1 text-sm text-[var(--text-muted)]">{board.officialName}</p>
+                </li>
+              )
+            })}
           </ul>
           <p className="mt-6">
             <Link

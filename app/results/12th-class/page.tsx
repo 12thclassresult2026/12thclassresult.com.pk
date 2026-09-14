@@ -123,6 +123,25 @@ export default function TwelfthClassResultHub() {
           published here only with a link to the board page that prints it.
         </p>
 
+        {/*
+          The post-result journey starts here. Rechecking is the first thing a
+          disappointed candidate looks for, and it is the surface where the
+          existing answer is worst — searches return Indian board content
+          almost exclusively.
+        */}
+        <h2 className="mt-12 text-2xl font-bold tracking-tight">After your result</h2>
+        <p className="mt-3 max-w-3xl text-[var(--text-body)]">
+          If your marks look wrong, the process you are looking for is{' '}
+          <Link
+            href="/guides/rechecking"
+            className="text-primary-700 font-medium underline underline-offset-4"
+          >
+            rechecking
+          </Link>
+          . It is worth knowing before you pay that no board re-marks a paper: a recheck confirms
+          the totals add up and were copied correctly, and nothing more.
+        </p>
+
         <p className="mt-10">
           <Link
             href="/boards"

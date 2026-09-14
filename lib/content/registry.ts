@@ -104,7 +104,7 @@ const BUILT_PAGES: PageEntry[] = [
     contentUpdatedAt: UPDATED_AT,
     lastVerifiedAt: UPDATED_AT,
     lastReviewedAt: UPDATED_AT,
-    internalLinksOut: ['/boards', '/'],
+    internalLinksOut: ['/boards', '/', '/guides/rechecking'],
   },
   {
     id: 'boards-directory',
@@ -136,6 +136,70 @@ const BUILT_PAGES: PageEntry[] = [
     lastVerifiedAt: UPDATED_AT,
     lastReviewedAt: UPDATED_AT,
     internalLinksOut: ['/results/12th-class'],
+  },
+  {
+    /*
+     * THE HIGHEST-VALUE GAP IN THIS MARKET.
+     *
+     * Searches for Pakistani HSSC rechecking return Indian board content almost
+     * exclusively, while four Pakistani boards publish detailed statutory rules
+     * nobody has collected. This page is buildable today from primary sources
+     * and depends on no result announcement.
+     */
+    id: 'guide-rechecking',
+    path: '/guides/rechecking',
+    pageType: 'guide',
+    intentId: 'post.rechecking',
+    sitemapSegment: 'guides',
+    status: 'published',
+    index: true,
+    title: '12th Class Rechecking in Pakistan — Fees, Rules & Deadlines',
+    h1: 'Rechecking your 12th class result',
+    description:
+      'What rechecking actually checks — and what it never does — with each Punjab board’s published fee, deadline and process, and an honest note on which figures apply to 12th class.',
+    seoTarget: {
+      primaryKeyword: '12th class rechecking',
+      secondaryKeywords: [
+        'hssc rechecking',
+        'rechecking fee pakistan',
+        'result rechecking application',
+      ],
+      semanticEntities: [
+        'HSSC Part-II',
+        'rechecking',
+        're-tallying',
+        'BISE Gujranwala',
+        'BISE Rawalpindi',
+      ],
+      searchIntent:
+        'Informational — understand whether to apply for rechecking, what it costs and what it can change.',
+      queryVariants: [
+        'hssc part 2 rechecking',
+        're-totalling result',
+        'recheck 2nd year result',
+        'result rechecking form',
+      ],
+      parentTopic: '12th class result',
+    },
+    breadcrumb: [
+      { name: 'Home', path: '/' },
+      { name: '12th Class Result', path: '/results/12th-class' },
+      { name: 'Rechecking', path: '/guides/rechecking' },
+    ],
+    // The page owns claims of its own — fees, deadlines, statutory quotes —
+    // rather than rendering them from the board registry.
+    sourceRequirementMode: 'direct',
+    sourceIds: [
+      'gujranwala-rechecking-portal',
+      'rawalpindi-rechecking-portal',
+      'sahiwal-rechecking-instructions',
+      'dg-khan-rechecking-rules',
+    ],
+    freshnessClass: 'B',
+    contentUpdatedAt: UPDATED_AT,
+    lastVerifiedAt: UPDATED_AT,
+    lastReviewedAt: UPDATED_AT,
+    internalLinksOut: ['/results/12th-class', '/boards'],
   },
 ]
 

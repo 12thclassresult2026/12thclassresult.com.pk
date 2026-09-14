@@ -112,7 +112,13 @@ test.describe('the fallback ladder', () => {
 test.describe('no fabricated data reaches the page', () => {
   const CIRCULATING_SHORTCODES = ['5050', '800291', '800299', '8583', '800296']
 
-  for (const path of ['/', '/results/12th-class', '/boards', '/results/karachi-board/12th-class']) {
+  for (const path of [
+    '/',
+    '/results/12th-class',
+    '/boards',
+    '/results/karachi-board/12th-class',
+    '/guides/rechecking',
+  ]) {
     test(`no unverified SMS shortcode on ${path}`, async ({ page }) => {
       await page.goto(path)
       const body = (await page.locator('body').innerText()).replace(/\s+/g, ' ')
@@ -123,6 +129,56 @@ test.describe('no fabricated data reaches the page', () => {
       expect(body).not.toMatch(/\bLIVE\b/)
     })
   }
+})
+
+test.describe('the rechecking guide — the market gap', () => {
+  test('leads with what rechecking is NOT', async ({ page }) => {
+    await page.goto('/guides/rechecking')
+    // The most consequential misunderstanding in the topic, and the thing a
+    // student needs before they spend money. It must be above every fee.
+    const answer = page.getByText(/Rechecking does not mean your paper is marked again/i)
+    await expect(answer).toBeVisible()
+
+    const answerBox = await answer.boundingBox()
+    const table = await page.locator('table').first().boundingBox()
+    expect(answerBox!.y, 'fees appear before the direct answer').toBeLessThan(table!.y)
+  })
+
+  test('never presents a fee as a 12th class fee', async ({ page }) => {
+    await page.goto('/guides/rechecking')
+    // Every figure was read from a matric portal or an undated rulebook. The
+    // caveat is what separates this page from every competitor.
+    await expect(
+      page.getByRole('heading', { name: /No board has published a 12th class rechecking fee/i }),
+    ).toBeVisible()
+
+    const body = (await page.locator('body').innerText()).replace(/\s+/g, ' ')
+    expect(body).toMatch(/an SSC \(matric\) portal/i)
+    expect(body).not.toMatch(/HSSC Part-II \(12th class\)\s*<\/td>/i)
+  })
+
+  test('shows the conflicting official figures rather than picking one', async ({ page }) => {
+    await page.goto('/guides/rechecking')
+    const body = (await page.locator('body').innerText()).replace(/\s+/g, ' ')
+    // All three of Gujranwala's genuine published figures.
+    for (const amount of ['Rs 1,500', 'Rs 1,000', 'Rs 600']) {
+      expect(body, `missing official figure ${amount}`).toContain(amount)
+    }
+    expect(body).toMatch(/shown rather than resolved/i)
+  })
+
+  test('keeps a board’s own terminology', async ({ page }) => {
+    await page.goto('/guides/rechecking')
+    await expect(page.getByText(/calls it “Re-tallying”/i)).toBeVisible()
+  })
+
+  test('is reachable from the result hub', async ({ page }) => {
+    await page.goto('/results/12th-class')
+    const link = page.getByRole('link', { name: /^rechecking$/i })
+    await expect(link).toBeVisible()
+    await link.click()
+    await expect(page).toHaveURL(/\/guides\/rechecking$/)
+  })
 })
 
 test.describe('accessibility and layout', () => {
@@ -140,6 +196,7 @@ test.describe('accessibility and layout', () => {
       '/results/12th-class',
       '/boards',
       '/results/karachi-board/12th-class',
+      '/guides/rechecking',
     ]) {
       await page.goto(path)
       await expect(page.locator('h1')).toHaveCount(1)
@@ -153,6 +210,7 @@ test.describe('accessibility and layout', () => {
       '/results/12th-class',
       '/boards',
       '/results/karachi-board/12th-class',
+      '/guides/rechecking',
     ]) {
       await page.goto(path)
       const overflow = await page.evaluate(
