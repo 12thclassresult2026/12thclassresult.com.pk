@@ -200,6 +200,8 @@ Full evidence, including the QA that did pass, is in
 | Launch report      | [docs/launch-report.md](docs/launch-report.md)                                                      |
 | Incidents          | [docs/incidents/](docs/incidents/)                                                                  |
 | Authority / PR     | [docs/authority/](docs/authority/)                                                                  |
+| Gazette engine     | [docs/architecture/gazette-result-engine.md](docs/architecture/gazette-result-engine.md)            |
+| Admin & roles      | [docs/admin/](docs/admin/)                                                                          |
 | Deployment         | [docs/deployment.md](docs/deployment.md)                                                            |
 | Security · Privacy | [docs/security.md](docs/security.md) · [docs/privacy-architecture.md](docs/privacy-architecture.md) |
 | Research evidence  | [docs/research/](docs/research/)                                                                    |
