@@ -49,7 +49,7 @@ lib/
 └── security/   rate limiting
 
 scripts/stage-prerender-cache.mjs   half of the Error 1102 fix — see deployment.md
-tests/{unit,validation}             95 tests; validation is the content gate
+tests/{unit,validation,e2e}         validation is the content gate
 ```
 
 ---
