@@ -2,7 +2,7 @@
 
 **Phase:** 2 — Architecture
 **Date:** 2026-09-14
-**Today:** 95 tests — 37 unit, 58 validation — all green
+**Implemented:** 155 tests — 41 unit, 76 validation, 38 end-to-end — all green
 
 ---
 
@@ -109,7 +109,16 @@ as `source-unavailable` and never as `not-found` · rate-limit and body-cap enfo
 
 ---
 
-## 6. E2E
+## 6. E2E — implemented
+
+Playwright, desktop-chromium and mobile-chromium (Pixel 7), 19 specs run against both
+projects. The assertions that matter are the honesty invariants checked against RENDERED
+output: that a gazette-only board renders no roll-number input, that each Karachi group
+shows separately including the undeclared one, that no circulating SMS shortcode reaches
+any page, and that a held board page is noindex but still follow.
+
+One of these caught real content duplication on its first run — a board caution repeating
+a fact the access-model component already rendered structurally.
 
 Playwright, `desktop-chromium` + `mobile-chromium` (Pixel 7). Mobile is a project, not an
 afterthought.

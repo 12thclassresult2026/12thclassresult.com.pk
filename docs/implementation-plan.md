@@ -44,7 +44,7 @@ board claims no roll-number support · a per-group board is not flattened · boa
 lifecycle agreement · yearless board paths · no capability coerced to a boolean in
 rendered output · an expanded shortcode blocklist.
 
-**117 tests, all green.**
+**155 tests, all green** — 76 validation, 41 unit, 38 end-to-end.
 
 ---
 

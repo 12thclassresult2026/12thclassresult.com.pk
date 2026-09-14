@@ -25,7 +25,7 @@ Node is pinned to 24.19.0 via `.nvmrc` and `.node-version`; `engines` requires >
 format:check → lint → typecheck → validate → test → build
 ```
 
-**Nothing deploys on a red gate.** Current state: 117 tests — 76 validation, 41 unit.
+**Nothing deploys on a red gate.** Current state: **155 tests** — 76 validation, 41 unit, 38 end-to-end across desktop and mobile.
 
 `validate` is the one to understand. Unit tests check that functions work; **validation
 tests check that the published site is honest.** They import the real registries and

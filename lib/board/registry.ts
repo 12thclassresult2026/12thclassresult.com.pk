@@ -570,7 +570,6 @@ const BOARDS: readonly Board[] = [
       ),
     ],
     studentCautions: [
-      'This board does not have an online roll-number result checker. Results are published as one gazette PDF per group — find your group’s file and search it for your roll number.',
       'Each group is declared on its own date, and they can be several weeks apart. If another group’s result is out, that says nothing about yours.',
     ],
     lastVerifiedAt: VERIFIED_AT,
