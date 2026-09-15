@@ -40,6 +40,27 @@ research/private/
 # local scratch
 scratch/
 
+# Gazette originals and everything derived from them.
+#
+# These directories hold a board's original PDFs and 138,617 named students'
+# results. Nothing in either may ever reach the repository.
+#
+# WHOLE DIRECTORIES, ANCHORED WITH A LEADING SLASH. Two versions of this rule
+# were wrong before this one:
+#
+#   gazette/*.pdf   left a hole — any other file dropped in there (an extracted
+#                   .jsonl, a debug dump, a sample page) would be committed.
+#   gazette/        closed that hole and opened a worse one: a pattern with no
+#                   leading slash matches at EVERY level, so it silently
+#                   excluded scripts/gazette/ — the parser itself — from the
+#                   commit. Caught because the staged file list came up short.
+/gazette/
+/gazette-private/
+__pycache__/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
 # os / editor
 .DS_Store
 Thumbs.db

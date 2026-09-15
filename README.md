@@ -168,9 +168,13 @@ account.
 | Custom domains     | apex + `www` (308 redirect to apex, path preserved)                |
 | Repository         | `12thclassresult2026/12thclassresult.com.pk`                       |
 
-Verified live: every published page 200s, an unknown path 404s, the apex carries **no**
-`X-Robots-Tag` (so it is indexable) while the draft board page is `noindex, follow`, and the
-full security header set is present.
+Verified live after the 2026-09-15 deploy of `6a0f71b`: all 21 published board pages 200,
+all 7 held boards 404, an unknown path 404s, the apex carries **no** `X-Robots-Tag` and
+board pages are `index, follow` with correct canonicals, the sitemap serves 29 URLs that
+all resolve 200, and the full security header set is present.
+
+There is no longer a draft board page. A held board has no page at all, so nothing can
+leak — the earlier `noindex` draft state does not exist any more.
 
 ---
 

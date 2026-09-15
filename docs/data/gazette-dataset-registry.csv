@@ -1,2 +1,2 @@
 dataset_id,region,board,board_id,year,exam,source_url,official_status,format,checksum,acquired_at,parser,parser_version,records_parsed,records_valid,records_rejected,duplicates,qa_status,dataset_status,activated_at,last_verified
-# no rows: no gazette has been ingested. A row appears only after a real import.
+bise-gujranwala-2025-first-annual-v1,Punjab,BISE Gujranwala,bise-gujranwala,2025,first-annual,https://bisegrw.edu.pk/download/GAZETTE/Gz_IA2p25.pdf,official-board-domain,text-pdf,ba35549d7261ed310464548c73c17a5a82e0741a7fde67217abc8cb9448e784a,2026-09-15,two-column-positioned,grw-two-column-2.0.0,138617,138617,0,0,pass-446-of-446,staged,,2026-09-15

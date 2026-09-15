@@ -1,0 +1,20 @@
+{
+  "datasetId": "bise-gujranwala-2025-first-annual-v1",
+  "boardId": "bise-gujranwala",
+  "region": "Punjab",
+  "year": 2025,
+  "examination": "first-annual",
+  "session": "HSSC Part-II First Annual 2025",
+  "examLevel": "hssc-part-2",
+  "sourceOwner": "Board of Intermediate and Secondary Education, Gujranwala",
+  "sourceUrl": "https://bisegrw.edu.pk/download/GAZETTE/Gz_IA2p25.pdf",
+  "provenanceVerified": true,
+  "provenanceNote": "Ordinary HTTPS GET from the official board domain returned a PDF. Cover and candidate-page headers identify Gujranwala, HSSC Part-II, First Annual 2025. No protected form or competitor dataset was used.",
+  "selfIdentifying": true,
+  "acquiredAt": "2026-09-14T19:03:59.549Z",
+  "verifiedAt": "2026-09-14T19:03:59.549Z",
+  "format": "text-pdf",
+  "sizeBytes": 14469020,
+  "checksum": "ba35549d7261ed310464548c73c17a5a82e0741a7fde67217abc8cb9448e784a",
+  "originalBasename": "ba35549d7261ed310464548c73c17a5a82e0741a7fde67217abc8cb9448e784a.pdf"
+}

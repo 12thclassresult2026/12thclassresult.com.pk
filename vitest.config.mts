@@ -11,7 +11,7 @@ export default defineConfig({
   test: {
     environment: 'node',
     // `npm run test` runs tests/unit; `npm run validate` runs tests/validation.
-    include: ['tests/unit/**/*.test.ts', 'tests/validation/**/*.test.ts'],
+    include: ['tests/unit/**/*.test.{ts,tsx}', 'tests/validation/**/*.test.{ts,tsx}'],
   },
   resolve: {
     alias: {
