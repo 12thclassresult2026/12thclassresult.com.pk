@@ -49,6 +49,10 @@ measured from here and would dominate the figure.
 
 Import: 0.3s for 138,617 rows. Parse: 14.6s for the whole 5,920-page PDF.
 
+The production schema in `lib/gazettes/store-sqlite.ts` measures **160.1
+bytes/record** on the real dataset — 35.6 MB before the repeated provenance
+columns were moved to the dataset row, 22.2 MB after. See below.
+
 ### Projection to national scale
 
 **This is a bracket, not a forecast.** One board-year has been parsed. The rows
@@ -98,6 +102,31 @@ _worse_. Moving `rawResultStatus` and the page reference into a side table cost
 206.5 bytes/record against 160 — the duplicated four-column composite key in the
 second table outweighs the text it removes. The audit trail stays inline, where
 it is also easier to keep honest.
+
+### The schema was 60% bigger before it was measured
+
+The first working schema stored `dataset_id`, `parser_version` and
+`normalization_version` **on every result row**. Provenance per record felt
+right. It cost **79 bytes of pure repetition per record** — 10.4 MB on this one
+dataset, 37% of the row — and took the schema from 160 to **257 bytes/record**.
+
+Projected out, that alone was the difference between comfortable and broken:
+
+|                     | 160 B/record | 257 B/record                       |
+| ------------------- | ------------ | ---------------------------------- |
+| 5 years nationwide  | 4.66 GB      | 7.48 GB                            |
+| 10 years nationwide | 9.32 GB      | **14.95 GB — over the D1 ceiling** |
+
+Every row in a partition shares those three values, because **the partition IS
+the dataset**. They live on the `dataset` row and are re-attached when a record
+is read, so `GazetteRecord` is unchanged and nothing is lost.
+
+Reading that row per lookup then cost ~45% of the query (p50 0.032ms against
+0.018ms) to fetch the same three strings each time, so the store memoises it —
+one entry per partition, invalidated on any state change.
+
+This is exactly the class of mistake a projection cannot catch and a measurement
+can: the schema looked careful, and it was wrong by 60%.
 
 ### Schema notes
 

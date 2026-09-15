@@ -53,9 +53,10 @@ async function main() {
   db.exec('PRAGMA journal_mode = OFF')
   db.exec(SCHEMA)
 
-  const insert = db.prepare(`INSERT INTO result VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`)
+  const insert = db.prepare(`INSERT INTO result VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`)
 
   let count = 0
+  let normalizationVersion = ''
   const started = performance.now()
   db.exec('BEGIN')
   const lines = createInterface({
@@ -80,15 +81,13 @@ async function main() {
       r.rawResultStatus,
       r.sourcePage,
       r.sourceColumn,
-      r.sourceDatasetId,
-      r.parserVersion,
-      r.normalizationVersion,
     )
+    normalizationVersion = r.normalizationVersion
     count += 1
   }
   db.exec('COMMIT')
 
-  db.prepare('INSERT INTO dataset VALUES (?,?,?,?,?,?,?,?)').run(
+  db.prepare('INSERT INTO dataset VALUES (?,?,?,?,?,?,?,?,?)').run(
     manifest.datasetId,
     manifest.boardId,
     manifest.year,
@@ -96,6 +95,7 @@ async function main() {
     state,
     manifest.checksum,
     parseReport.parserVersion,
+    normalizationVersion,
     count,
   )
 
@@ -156,6 +156,7 @@ async function main() {
   // Now flip to active IN MEMORY ONLY, to prove the serving path works without
   // publishing anything.
   db.prepare('UPDATE dataset SET state = ? WHERE dataset_id = ?').run('active', manifest.datasetId)
+  store.invalidate()
 
   const checks: { name: string; identity: Record<string, unknown>; expect: string }[] = [
     { name: 'valid roll number', identity: id, expect: 'found' },
@@ -205,6 +206,7 @@ async function main() {
 
   // Leave it as it was found.
   db.prepare('UPDATE dataset SET state = ? WHERE dataset_id = ?').run(state, manifest.datasetId)
+  store.invalidate()
   store.close()
 
   process.exit(failures > 0 ? 1 : 0)
