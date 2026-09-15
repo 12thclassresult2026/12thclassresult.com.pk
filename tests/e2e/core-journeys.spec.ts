@@ -388,3 +388,63 @@ test.describe('crawl surface', () => {
     expect(robots).not.toContain('nofollow')
   })
 })
+
+test.describe('board pages carry board-specific verified content', () => {
+  test('shows each board the portal wording it will actually see', async ({ page }) => {
+    /*
+     * The anti-doorway check. A similarity pass found some board pages 73%
+     * alike before the observations section was added — near-copies with a name
+     * swapped. These assertions pin the facts that make each page genuinely
+     * different, and they come from the board's own screen.
+     */
+    await page.goto('/results/rawalpindi-board/12th-class')
+    const rawalpindi = (await page.locator('body').innerText()).replace(/\s+/g, ' ')
+    expect(rawalpindi).toMatch(/HSSC Second Annual Examination/i)
+    expect(rawalpindi).toMatch(/2015/)
+
+    await page.goto('/results/larkana-board/12th-class')
+    const larkana = (await page.locator('body').innerText()).replace(/\s+/g, ' ')
+    expect(larkana).toMatch(/HSC-II/)
+    // Larkana asks for a group; Rawalpindi does not. Different screens.
+    expect(larkana).not.toMatch(/HSSC Second Annual Examination/i)
+  })
+
+  test('warns before a reader leaves, where the portal needs an extra document', async ({
+    page,
+  }) => {
+    // Sargodha asks for a B-Form. Finding that out on the board's site, without
+    // the document to hand, is a wasted trip.
+    await page.goto('/results/sargodha-board/12th-class')
+    const body = (await page.locator('body').innerText()).replace(/\s+/g, ' ')
+    expect(body).toMatch(/Also asks for/i)
+    expect(body).toMatch(/Have this ready before you open the portal/i)
+  })
+
+  test('a gazette-only board still renders no roll-number input', async ({ page }) => {
+    // The correctness rule has to survive publishing 21 pages at once.
+    for (const slug of ['karachi-board', 'hyderabad-board', 'mirpur-board']) {
+      await page.goto(`/results/${slug}/12th-class`)
+      await expect(page.locator('input'), `${slug} rendered an input`).toHaveCount(0)
+    }
+  })
+
+  test('published board pages are indexable, held ones do not exist', async ({ page }) => {
+    const published = await page.goto('/results/quetta-board/12th-class')
+    expect(published?.status()).toBe(200)
+    const robots = await page.locator('meta[name="robots"]').getAttribute('content')
+    expect(robots).not.toContain('noindex')
+
+    // FBISE is deliberately unpublished — nothing verified enough to say.
+    const held = await page.goto('/results/federal-board/12th-class')
+    expect(held?.status()).toBe(404)
+  })
+
+  test('every published board page names its own board in the H1', async ({ page }) => {
+    for (const slug of ['lahore-board', 'quetta-board', 'aku-eb', 'mirpur-board']) {
+      await page.goto(`/results/${slug}/12th-class`)
+      await expect(page.locator('h1')).toHaveCount(1)
+      const h1 = await page.locator('h1').innerText()
+      expect(h1.length, `${slug} has an empty h1`).toBeGreaterThan(8)
+    }
+  })
+})

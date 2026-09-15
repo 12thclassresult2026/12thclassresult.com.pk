@@ -24,6 +24,37 @@ import { normalizePath } from '@/lib/seo/site'
  * board page is created only when a past session has durable value of its own.
  */
 
+/**
+ * A board page's description, composed from what is actually true of that board.
+ *
+ * NOT a template with the name swapped. The four access models describe
+ * genuinely different situations for a student — a gazette-only board has no
+ * roll-number box to use, a session-rotating portal shows one class at a time —
+ * and the description says which, so a search result is informative before the
+ * click rather than after it.
+ */
+function boardDescription(board: (typeof BOARDS)[number]): string {
+  const name = board.shortName
+  const perGroup = board.declarationModel === 'per-group'
+
+  switch (board.accessModel) {
+    case 'gazette-only':
+      return perGroup
+        ? `${name} has no online roll-number checker, and declares each group on its own date. Where to find your group's gazette, and what has actually been announced.`
+        : `${name} has no online roll-number checker — its HSSC Part-II results are published as gazette files. Where to find yours, and what has been verified.`
+    case 'session-rotating-portal':
+      return `${name} serves one examination session at a time, so a saved link can quietly point at the wrong class. How to reach the right HSSC Part-II result, and what has been verified.`
+    case 'unverified':
+      return `What could and could not be verified about how ${name} publishes its HSSC Part-II result, and the board's own website to check it against.`
+    case 'roll-number-portal':
+      return `Check the ${name} HSSC Part-II result on the board's own portal: what it asks you for, what has actually been announced, and where each fact came from.`
+    default: {
+      const exhaustive: never = board.accessModel
+      return String(exhaustive)
+    }
+  }
+}
+
 const UPDATED_AT = '2026-09-14'
 
 const BUILT_PAGES: PageEntry[] = [
@@ -140,7 +171,17 @@ const BUILT_PAGES: PageEntry[] = [
     contentUpdatedAt: UPDATED_AT,
     lastVerifiedAt: UPDATED_AT,
     lastReviewedAt: UPDATED_AT,
-    internalLinksOut: ['/results/12th-class'],
+    /*
+     * The directory renders a card for every board and links each one that has
+     * a page. Declaring those links here is what makes the graph match the
+     * rendered HTML — without it, 21 published board pages read as orphans.
+     */
+    internalLinksOut: [
+      '/results/12th-class',
+      ...BOARDS.filter((b) => b.publishState === 'published').map(
+        (b) => `/results/${b.slug}/12th-class`,
+      ),
+    ],
   },
   {
     /*
@@ -418,10 +459,15 @@ const PLANNED: PageEntry[] = [
     boardId: board.id,
     sitemapSegment: 'results',
     status: board.publishState,
-    index: false,
+    /*
+     * A board page is indexable when its board says it is published. Previously
+     * hard-coded `false`, which meant promoting a board changed nothing a
+     * reader or a crawler could see.
+     */
+    index: board.publishState === 'published',
     title: `${board.shortName} 12th Class Result`,
     h1: `${board.shortName} 12th Class Result`,
-    description: `${board.officialName}: where its HSSC Part-II result is published, what the official portal asks for, and what has actually been verified.`,
+    description: boardDescription(board),
     seoTarget: {
       primaryKeyword: `${board.shortName.toLowerCase()} 12th class result`,
       secondaryKeywords: [`${board.shortName.toLowerCase()} 2nd year result`],
@@ -439,8 +485,14 @@ const PLANNED: PageEntry[] = [
     sourceIds: board.sourceIds,
     freshnessClass: 'A',
     contentUpdatedAt: UPDATED_AT,
-    lastVerifiedAt: null,
-    lastReviewedAt: null,
+    /*
+     * Derived from the board, not invented for the page. A board page asserts
+     * exactly what its registry entry asserts, so its verification date is the
+     * board's — and a board that has never been verified yields `null`, which
+     * the freshness gate then reports rather than the page hiding it.
+     */
+    lastVerifiedAt: board.lastVerifiedAt ? board.lastVerifiedAt.slice(0, 10) : null,
+    lastReviewedAt: board.lastVerifiedAt ? board.lastVerifiedAt.slice(0, 10) : null,
     internalLinksOut: ['/results/12th-class', '/boards'],
   })),
 ]

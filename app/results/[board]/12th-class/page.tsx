@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { ResultCommandCenter } from '@/components/result/command-center'
+import { SourceObservations } from '@/components/result/source-observations'
 import { Breadcrumbs } from '@/components/seo/breadcrumbs'
 import { JsonLdScript } from '@/components/seo/json-ld'
 import { PerGroupStatus } from '@/components/result/per-group-status'
@@ -106,6 +107,8 @@ export default async function BoardResultPage({ params }: { params: Promise<{ bo
         ) : null}
 
         <PerGroupStatus board={board} year={year} />
+
+        <SourceObservations board={board} />
 
         <section className="mt-10">
           <h2 className="text-2xl font-bold tracking-tight">What this board’s portal offers</h2>

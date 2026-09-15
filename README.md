@@ -202,7 +202,21 @@ full security header set is present.
 
 ## Status
 
-Foundation built; core product and result engine are later phases. Three pages are
-published and one board page is held in draft as the representative implementation.
-Board coverage is 28 registered boards, of which most are `planned` — named and linked,
-with no page, until each one earns one.
+Live, with the result engine and the content layer built. The gazette parser and the admin
+UI are later phases.
+
+**Board coverage: 28 registered, 21 published, 7 held.**
+
+A board earns a page by having something verified to say on it. The 7 held boards do not:
+six are `accessModel: 'unverified'` — nothing about how they publish a result has been
+confirmed on their own site — and ZUEB has no recorded source at all. They stay named and
+linked in the directory, with no page, until that changes. Publishing them would mean
+shipping 7 pages whose only real content is the board's name.
+
+That threshold is enforced rather than trusted. A similarity pass over the rendered board
+pages is what caught the batch at 73% alike — the boards with the least data were
+near-copies of each other with a name swapped. The fix was not rewording; it was rendering
+the board-specific facts already sitting unused in the source registry: the portal's own
+dropdown wording, the years it keeps online, whether it also demands a B-Form. Highest
+pairwise similarity is now 53.9%, and `tests/e2e/core-journeys.spec.ts` pins the facts that
+make the closest pairs different, so the shape cannot quietly return.

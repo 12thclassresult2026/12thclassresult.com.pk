@@ -9,6 +9,7 @@ import { metadata as percentageGuideMetadata } from '@/app/guides/how-percentage
 import { metadata as percentageToolMetadata } from '@/app/tools/percentage-calculator/page'
 import { metadata as aboutMetadata } from '@/app/about/page'
 import { metadata as methodologyMetadata } from '@/app/methodology/page'
+import { generateStaticParams } from '@/app/results/[board]/12th-class/page'
 import { getPageByPath, indexablePages } from '@/lib/content/registry'
 import { canonicalUrl } from '@/lib/seo/site'
 
@@ -60,12 +61,32 @@ describe('route metadata matches the registry', () => {
     expect(notFoundMetadata.alternates?.canonical).toBeUndefined()
   })
 
+  /*
+   * Board pages are served by ONE dynamic route, `/results/[board]/12th-class`,
+   * so they cannot appear in a list of statically imported metadata modules.
+   * They are covered instead by `generateStaticParams` plus the end-to-end
+   * suite, which checks the rendered page rather than the module.
+   */
+  const BOARD_PAGE_PATTERN = new RegExp('^/results/[a-z0-9-]+/12th-class$')
+
   it('covers every indexable page with a built route', () => {
     const covered = ROUTE_MODULES.map((r) => r.path)
     for (const page of indexablePages()) {
+      if (BOARD_PAGE_PATTERN.test(page.path)) continue
       expect(covered, `indexable page ${page.path} has no route in ROUTE_MODULES`).toContain(
         page.path,
       )
+    }
+  })
+
+  it('builds a static param for every indexable board page', () => {
+    // The dynamic route is closed (`dynamicParams = false`), so an indexable
+    // board page missing from generateStaticParams would 404 in production.
+    const params = new Set(generateStaticParams().map((p) => p.board))
+    for (const page of indexablePages()) {
+      const match = page.path.match(new RegExp('^/results/([a-z0-9-]+)/12th-class$'))
+      if (!match) continue
+      expect(params, `${page.path} is indexable but has no static param`).toContain(match[1])
     }
   })
 })
