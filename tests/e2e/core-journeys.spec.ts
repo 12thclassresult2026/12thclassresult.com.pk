@@ -178,7 +178,10 @@ test.describe('the rechecking guide — the market gap', () => {
 
   test('is reachable from the result hub', async ({ page }) => {
     await page.goto('/results/12th-class')
-    const link = page.getByRole('link', { name: /^rechecking$/i })
+    // Scoped to `main`. The header and footer now link the guide too, and an
+    // unscoped lookup would pass on a chrome link while the hub's own body had
+    // lost its route to the guide — the exact thing this test exists to catch.
+    const link = page.locator('main').getByRole('link', { name: /^rechecking$/i })
     await expect(link).toBeVisible()
     await link.click()
     await expect(page).toHaveURL(/\/guides\/rechecking$/)
@@ -293,13 +296,20 @@ test.describe('the trust layer — what makes the site citable', () => {
   })
 
   test('is reachable from every page via the footer', async ({ page }) => {
+    // Scoped to the footer, which is what the test is named for. The header
+    // also carries "How we verify" now, and an unscoped lookup would both
+    // break on the duplicate and stop proving the footer claim.
     for (const path of ['/', '/results/12th-class', '/guides/rechecking']) {
       await page.goto(path)
+      const footer = page.locator('footer')
       await expect(
-        page.getByRole('link', { name: 'How we verify' }),
-        `${path} has no methodology link`,
+        footer.getByRole('link', { name: 'How we verify' }),
+        `${path} has no methodology link in the footer`,
       ).toBeVisible()
-      await expect(page.getByRole('link', { name: 'About', exact: true })).toBeVisible()
+      await expect(
+        footer.getByRole('link', { name: /^About/ }),
+        `${path} has no about link in the footer`,
+      ).toBeVisible()
     }
   })
 })
@@ -371,20 +381,49 @@ test.describe('crawl surface', () => {
     expect(body).toContain('12thclassresult.com.pk')
   })
 
-  test('sitemap index resolves and excludes held pages', async ({ request }) => {
+  test('sitemap index resolves', async ({ request }) => {
     const response = await request.get('/sitemap.xml')
     expect(response.status()).toBe(200)
     const body = await response.text()
     expect(body).toContain('sitemapindex')
-    // A draft board page must never reach the sitemap.
-    expect(body).not.toContain('karachi-board')
   })
 
-  test('a held board page is noindex', async ({ page }) => {
+  /*
+   * This used to assert `not.toContain('karachi-board')` against /sitemap.xml
+   * and passed for the wrong reason: that file is an INDEX listing five segment
+   * URLs, so no page URL appears in it and the assertion could never fail. The
+   * check has to read the segment that actually carries board pages.
+   */
+  test('the sitemap segment lists published boards and no held one', async ({ request }) => {
+    const response = await request.get('/sitemaps/results.xml')
+    expect(response.status()).toBe(200)
+    const body = await response.text()
+
+    expect(body, 'a published board is missing from the sitemap').toContain(
+      '/results/karachi-board/12th-class',
+    )
+    // Held boards have no page at all, so they must not be advertised.
+    for (const slug of ['federal-board', 'zueb']) {
+      expect(body, `${slug} is held but appears in the sitemap`).not.toContain(`/${slug}/`)
+    }
+  })
+
+  /*
+   * Replaces "a held board page is noindex". Karachi was the draft example
+   * when only one board page existed; it is published now, so that test was
+   * asserting the opposite of the intended rule against a stale subject.
+   *
+   * The rule itself still needs covering, and it is stronger than it was: a
+   * held board no longer renders a noindex page, it has no page. Nothing can
+   * leak, because nothing is built.
+   */
+  test('a held board has no page, and a published one is indexable', async ({ page }) => {
+    const held = await page.goto('/results/federal-board/12th-class')
+    expect(held?.status(), 'a held board is serving a page').toBe(404)
+
     await page.goto('/results/karachi-board/12th-class')
     const robots = await page.locator('meta[name="robots"]').getAttribute('content')
-    expect(robots).toContain('noindex')
-    // noindex, but still `follow`: the page links the board's official source.
+    expect(robots).not.toContain('noindex')
     expect(robots).not.toContain('nofollow')
   })
 })
