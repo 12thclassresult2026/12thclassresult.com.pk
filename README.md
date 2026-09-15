@@ -157,30 +157,20 @@ Two things that must not be forgotten, both documented in
 and `routes` must not be declared until the zone is confirmed on the authenticated
 account.
 
-### Launch state — not yet deployed
+### Launch state — LIVE
 
-The site has **never served a page**. The Worker deploys successfully; the domain cannot be
-attached. This is now measured rather than assumed:
+**https://12thclassresult.com.pk** is live as of 2026-09-15.
 
-```
-Uploaded 12thclassresult-com-pk          <- the Worker ships fine
-No targets deployed                       <- routeless, so nothing is public
-Could not find zone for 12thclassresult.com.pk
-```
+|                    |                                                                    |
+| ------------------ | ------------------------------------------------------------------ |
+| Worker             | `12thclassresult-com-pk`                                           |
+| Cloudflare account | `5a391134eba4e881ce7655522afb7710` (12thclassresult2026@gmail.com) |
+| Custom domains     | apex + `www` (308 redirect to apex, path preserved)                |
+| Repository         | `12thclassresult2026/12thclassresult.com.pk`                       |
 
-1. **The zone is not on the authenticated Cloudflare account.** Wrangler is logged in as
-   `11thclassresult@gmail.com`; the domain delegates to Cloudflare nameservers, so a zone
-   exists — on some other account. Fix by adding the zone to this account, or by
-   `wrangler login` against the one that holds it. Then restore the `routes` block recorded
-   verbatim in `wrangler.jsonc` and redeploy.
-2. **The git remote is set but the push is rejected.** `origin` points at the final repository,
-   `12thclassresult2026/12thclassresult.com.pk`. Read access works (`git ls-remote` exits 0);
-   write access does not — the cached credential belongs to GitHub account `SaeedAppDev`, and a
-   push returns `403 … denied to SaeedAppDev`. Grant that account write access, or switch the
-   cached credential to one that has it. This blocks CI, not the deploy.
-
-Full evidence, including the QA that did pass, is in
-[docs/launch-report.md](docs/launch-report.md).
+Verified live: every published page 200s, an unknown path 404s, the apex carries **no**
+`X-Robots-Tag` (so it is indexable) while the draft board page is `noindex, follow`, and the
+full security header set is present.
 
 ---
 

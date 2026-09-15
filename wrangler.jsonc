@@ -25,32 +25,28 @@
   // site in search. Removing the origin is better than suppressing it later.
   "workers_dev": false,
 
-  // NO `routes` ENTRY - AND THIS IS NOW A MEASURED FACT, NOT A PRECAUTION.
+  // PRODUCTION ROUTES — live since 2026-09-15.
   //
-  // Phase 7 attempted it. The Worker deploys fine to the authenticated account
-  // (c085ba412b1289d5950bd55daf501b51, 11thclassresult@gmail.com) and uploads
-  // successfully, but attaching the custom domains fails:
+  // The zone question that blocked this for two days is settled: the zone was
+  // never on the 11thclassresult account wrangler was logged into. It lives on
+  // account 5a391134eba4e881ce7655522afb7710 (12thclassresult2026@gmail.com),
+  // confirmed from the dashboard URL and then by a successful deploy.
   //
-  //     Could not find zone for `12thclassresult.com.pk`.
-  //     Make sure the domain is set up to be proxied by Cloudflare.
+  // Two failed routed deploys proved the failure mode is safe: the Worker
+  // uploads, the route attachment fails with "Could not find zone", and no DNS
+  // record is written. That is why a routeless deploy is the right first step
+  // on any new account.
   //
-  // The domain DOES delegate to Cloudflare nameservers (thea.ns / hasslo.ns),
-  // so a zone exists - just not on this account. Either the zone sits on a
-  // different Cloudflare account, or it was never fully added to one.
-  //
-  // This is why routes were never guessed: the failure is at deploy time, and
-  // the only safe order is a routeless deploy first (which reports "No targets
-  // deployed") to prove account access before touching DNS.
-  //
-  // TO FINISH THE LAUNCH, one of:
-  //   a) add 12thclassresult.com.pk as a zone on the authenticated account, or
-  //   b) `wrangler login` against whichever account already holds the zone.
-  // Then restore the routes block below and redeploy.
-  //
-  //   "routes": [
-  //     { "pattern": "12thclassresult.com.pk", "custom_domain": true },
-  //     { "pattern": "www.12thclassresult.com.pk", "custom_domain": true }
-  //   ]
+  // `www` is attached for exactly ONE purpose: giving the permanent www -> apex
+  // redirect in `next.config.ts` a hostname that resolves. It must never pass
+  // the production-host check in `headers()`, so that if the redirect ever
+  // failed open, www emits noindex plus an apex canonical rather than quietly
+  // duplicating the site. Verified live: www returns 308 to the apex, and the
+  // path is preserved (`/boards` -> `/boards`, not a placeholder).
+  "routes": [
+    { "pattern": "12thclassresult.com.pk", "custom_domain": true },
+    { "pattern": "www.12thclassresult.com.pk", "custom_domain": true },
+  ],
   //
   // `www` is attached for exactly ONE purpose: giving the permanent www -> apex
   // redirect in `next.config.ts` a hostname that resolves. It must never pass
