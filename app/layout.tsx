@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Noto_Nastaliq_Urdu } from 'next/font/google'
+import { Caveat, Inter, Noto_Nastaliq_Urdu } from 'next/font/google'
 
 import './globals.css'
 
@@ -25,6 +25,12 @@ const inter = Inter({
  * is applied to four words in the header and four in the footer. `swap` means
  * it never blocks paint.
  */
+const caveat = Caveat({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-caveat',
+})
+
 const nastaliq = Noto_Nastaliq_Urdu({
   subsets: ['arabic'],
   weight: '400',
@@ -48,7 +54,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-PK" className={`${inter.variable} ${nastaliq.variable}`}>
+    <html lang="en-PK" className={`${inter.variable} ${nastaliq.variable} ${caveat.variable}`}>
       <body className="flex min-h-dvh flex-col font-sans antialiased">
         {/* First tab stop on every page (section 35). */}
         <a

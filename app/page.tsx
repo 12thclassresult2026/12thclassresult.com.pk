@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
@@ -108,8 +109,19 @@ export default function HomePage() {
       />
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section className="on-dark bg-[var(--surface-hero)] py-14 sm:py-20">
-        <div className="container-wide grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+      <section className="on-dark relative overflow-hidden bg-[var(--surface-hero)] py-14 sm:py-20">
+        <div className="pointer-events-none absolute inset-0 z-0 select-none">
+          <Image
+            src="/images/hero-bg-campus.jpg"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center opacity-30"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0b1533]/95 via-[#0b1533]/85 to-[#0b1533]/90" />
+        </div>
+        <div className="container-wide relative z-10 grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <p className="text-accent-300 text-xs font-semibold tracking-[0.08em] uppercase">
               HSSC Part-II · Second Year · Intermediate Part-II
