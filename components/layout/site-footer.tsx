@@ -35,14 +35,14 @@ export function SiteFooter() {
   }
 
   return (
-    <footer className="relative mt-24 w-full">
-      {/* ── 1. Top Floating Trust & Value Proposition Banner ───────── */}
-      <div className="relative z-20 mx-auto -mb-14 max-w-7xl px-4 sm:px-6 lg:px-8 2xl:max-w-[1600px]">
-        <div className="flex flex-col items-stretch justify-between gap-6 rounded-2xl border border-[#B4D5CC] bg-[#EDF8F5] p-5 shadow-lg backdrop-blur-xs sm:rounded-3xl sm:p-7 lg:flex-row lg:items-center">
-          {/* 4 Feature Columns */}
-          <div className="grid flex-1 grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">
+    <footer className="w-full">
+      {/* -- 1. Full-Width Top Trust & Value Proposition Banner -- */}
+      <div className="w-full border-t border-[#B4D5CC]/80 bg-[#EDF8F5] py-5 sm:py-6">
+        <div className="container-wide flex flex-col items-center justify-between gap-6 xl:flex-row">
+          {/* 4 Feature Columns with Dividers */}
+          <div className="grid flex-1 grid-cols-1 divide-y divide-[#B4D5CC]/60 sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4">
             {/* 1: Trusted & Accurate */}
-            <div className="flex items-center gap-3.5">
+            <div className="flex items-center gap-3.5 px-3 py-2 sm:px-4 sm:py-0">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#005B4C] text-white shadow-xs">
                 <svg
                   width="22"
@@ -65,7 +65,7 @@ export function SiteFooter() {
             </div>
 
             {/* 2: Fast & Easy Access */}
-            <div className="flex items-center gap-3.5">
+            <div className="flex items-center gap-3.5 px-3 py-2 sm:px-4 sm:py-0">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#005B4C] text-white shadow-xs">
                 <svg
                   width="22"
@@ -87,7 +87,7 @@ export function SiteFooter() {
             </div>
 
             {/* 3: Your Privacy Matters */}
-            <div className="flex items-center gap-3.5">
+            <div className="flex items-center gap-3.5 px-3 py-2 sm:px-4 sm:py-0">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#005B4C] text-white shadow-xs">
                 <svg
                   width="22"
@@ -110,7 +110,7 @@ export function SiteFooter() {
             </div>
 
             {/* 4: All Pakistan Boards */}
-            <div className="flex items-center gap-3.5">
+            <div className="flex items-center gap-3.5 px-3 py-2 sm:px-4 sm:py-0">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#005B4C] text-white shadow-xs">
                 <svg
                   width="22"
@@ -136,10 +136,10 @@ export function SiteFooter() {
           </div>
 
           {/* Far Right Handwritten Slogan */}
-          <div className="hidden shrink-0 text-right xl:block">
+          <div className="hidden shrink-0 pr-2 text-right xl:block">
             <span
               className="block -rotate-3 text-lg leading-snug font-black tracking-wide text-[#007054] italic"
-              style={{ fontFamily: 'var(--font-caveat), cursive', fontSize: '22px' }}
+              style={{ fontFamily: 'var(--font-caveat), cursive', fontSize: '24px' }}
             >
               Education
               <br />
@@ -165,13 +165,13 @@ export function SiteFooter() {
         </div>
       </div>
 
-      {/* ── 2. Deep Forest Green Main Footer Body ───────────────────── */}
-      <div className="relative overflow-hidden bg-[#002B20] pt-28 pb-10 text-slate-300">
-        {/* Minar-e-Pakistan Image - Right Side Decoration */}
+      {/* -- 2. Deep Forest Green Main Footer Body -- */}
+      <div className="relative overflow-hidden bg-[#002B20] py-14 text-slate-300">
+        {/* Minar-e-Pakistan & Crescent Artwork on Right */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute right-0 bottom-16 z-0 hidden opacity-30 mix-blend-screen select-none lg:block"
-          style={{ width: '320px' }}
+          className="pointer-events-none absolute right-4 bottom-14 z-0 hidden opacity-45 mix-blend-screen select-none lg:block xl:right-10"
+          style={{ width: '280px' }}
         >
           <Image
             src="/images/minar-footer.jpg"
@@ -182,40 +182,65 @@ export function SiteFooter() {
             unoptimized
           />
           {/* Motivational handwritten script below image */}
-          <div className="mt-3 text-center">
+          <div className="mt-2 text-center">
             <span
               className="text-[#00E599] italic"
               style={{
                 fontFamily: 'var(--font-caveat), cursive',
                 fontSize: '24px',
                 fontWeight: 700,
-                opacity: 0.9,
+                opacity: 0.95,
               }}
             >
               Proud of
               <br />
               Pakistan&apos;s Students
             </span>
-            <div className="mx-auto mt-1 h-0.5 w-32 rounded-full bg-[#00E599]/50" />
+            <div className="mx-auto mt-1 h-0.5 w-32 rounded-full bg-[#00E599]/60" />
           </div>
         </div>
 
-        {/* ── Main Content Grid ─────────────────────────────────────── */}
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 2xl:max-w-[1600px]">
+        {/* Main Content Grid */}
+        <div className="container-wide relative z-10">
           <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-12 lg:gap-8">
-            {/* ── Column 1: Brand Info & Social (lg:col-span-3) ──────── */}
+            {/* -- Column 1: Brand Info & Social (lg:col-span-3) -- */}
             <div className="lg:col-span-3">
-              {/* Logo Lockup */}
+              {/* Logo Lockup with Graduation Cap & Book */}
               <Link href="/" className="group inline-flex items-center gap-3">
-                <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-emerald-500/30 bg-white/5 p-1 shadow-sm">
-                  <Image
-                    src="/icons/crest.svg"
-                    unoptimized
-                    alt="12thClassResult.com.pk crest"
-                    width={44}
-                    height={44}
-                    className="h-full w-full object-contain"
-                  />
+                <div className="relative flex h-11 w-11 shrink-0 items-center justify-center">
+                  <svg
+                    viewBox="0 0 64 64"
+                    fill="none"
+                    className="h-10 w-10 text-white"
+                    stroke="currentColor"
+                  >
+                    {/* Mortarboard Cap */}
+                    <path
+                      d="M32 6L4 19l28 13 28-13L32 6z"
+                      fill="white"
+                      stroke="white"
+                      strokeWidth="1.5"
+                      strokeLinejoin="round"
+                    />
+                    <path d="M52 23.5v15" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
+                    <circle cx="52" cy="40" r="2.5" fill="white" />
+                    <path
+                      d="M15 24.5v10c0 5 7.6 9 17 9s17-4 17-9v-10"
+                      stroke="white"
+                      strokeWidth="2.5"
+                      strokeLinejoin="round"
+                      fill="#002B20"
+                    />
+                    {/* Open Book Base */}
+                    <path
+                      d="M6 46c7.5-4 17-3 26 2 9-5 18.5-6 26-2v6c-7.5-4-17-3-26 2-9-5-18.5-6-26-2v-6z"
+                      fill="white"
+                      stroke="white"
+                      strokeWidth="1.5"
+                    />
+                    <path d="M10 49c6.5-3 14-2.5 22 1.5" stroke="#002B20" strokeWidth="1.5" />
+                    <path d="M54 49c-6.5-3-14-2.5-22 1.5" stroke="#002B20" strokeWidth="1.5" />
+                  </svg>
                 </div>
                 <div>
                   <div className="text-xl font-black tracking-tight text-white sm:text-[22px]">
@@ -236,7 +261,6 @@ export function SiteFooter() {
 
               {/* Social Media Circular Buttons */}
               <div className="mt-6 flex items-center gap-2.5">
-                {/* Facebook */}
                 <a
                   href="https://facebook.com"
                   target="_blank"
@@ -246,7 +270,6 @@ export function SiteFooter() {
                 >
                   <FacebookIcon width={16} height={16} />
                 </a>
-                {/* Twitter / X */}
                 <a
                   href="https://x.com"
                   target="_blank"
@@ -256,7 +279,6 @@ export function SiteFooter() {
                 >
                   <TwitterXIcon width={14} height={14} />
                 </a>
-                {/* Instagram */}
                 <a
                   href="https://instagram.com"
                   target="_blank"
@@ -266,7 +288,6 @@ export function SiteFooter() {
                 >
                   <InstagramIcon width={15} height={15} />
                 </a>
-                {/* YouTube */}
                 <a
                   href="https://youtube.com"
                   target="_blank"
@@ -276,7 +297,6 @@ export function SiteFooter() {
                 >
                   <YouTubeIcon width={16} height={16} />
                 </a>
-                {/* WhatsApp */}
                 <a
                   href="https://whatsapp.com"
                   target="_blank"
@@ -293,7 +313,7 @@ export function SiteFooter() {
               </p>
             </div>
 
-            {/* ── Column 2: Quick Links (lg:col-span-2) ─────────────── */}
+            {/* -- Column 2: Quick Links (lg:col-span-2) -- */}
             <div className="lg:col-span-2">
               <h3 className="text-sm font-black tracking-wide text-white uppercase">Quick Links</h3>
               <ul className="mt-4 space-y-2 text-xs">
@@ -308,8 +328,8 @@ export function SiteFooter() {
                 </li>
                 <li>
                   <Link
-                    href="/results/12th-class/2026"
-                    className="flex items-center gap-1.5 text-slate-300 transition-colors hover:text-white"
+                    href="/results/12th-class"
+                    className="flex items-center gap-1.5 font-bold text-[#00E599] transition-colors hover:underline"
                   >
                     <span>&rsaquo;</span>
                     <span>12th Class Result 2026</span>
@@ -317,7 +337,7 @@ export function SiteFooter() {
                 </li>
                 <li>
                   <Link
-                    href="/results/punjab/12th-class/2026"
+                    href="/results/12th-class"
                     className="flex items-center gap-1.5 text-slate-300 transition-colors hover:text-white"
                   >
                     <span>&rsaquo;</span>
@@ -335,7 +355,7 @@ export function SiteFooter() {
                 </li>
                 <li>
                   <Link
-                    href="/results/12th-class/2026/date"
+                    href="/results/12th-class"
                     className="flex items-center gap-1.5 text-slate-300 transition-colors hover:text-white"
                   >
                     <span>&rsaquo;</span>
@@ -344,7 +364,7 @@ export function SiteFooter() {
                 </li>
                 <li>
                   <Link
-                    href="/results/12th-class/2026/gazette"
+                    href="/boards"
                     className="flex items-center gap-1.5 text-slate-300 transition-colors hover:text-white"
                   >
                     <span>&rsaquo;</span>
@@ -353,7 +373,7 @@ export function SiteFooter() {
                 </li>
                 <li>
                   <Link
-                    href="/#sms-codes"
+                    href="/#check-result"
                     className="flex items-center gap-1.5 text-slate-300 transition-colors hover:text-white"
                   >
                     <span>&rsaquo;</span>
@@ -372,7 +392,7 @@ export function SiteFooter() {
               </ul>
             </div>
 
-            {/* ── Column 3: Boards (lg:col-span-2) ──────────────────── */}
+            {/* -- Column 3: Boards (lg:col-span-2) -- */}
             <div className="lg:col-span-2">
               <h3 className="text-sm font-black tracking-wide text-white uppercase">Boards</h3>
               <ul className="mt-4 space-y-2 text-xs">
@@ -469,7 +489,7 @@ export function SiteFooter() {
               </ul>
             </div>
 
-            {/* ── Column 4: Support (lg:col-span-2) ─────────────────── */}
+            {/* -- Column 4: Support (lg:col-span-2) -- */}
             <div className="lg:col-span-2">
               <h3 className="text-sm font-black tracking-wide text-white uppercase">Support</h3>
               <ul className="mt-4 space-y-2 text-xs">
@@ -484,7 +504,7 @@ export function SiteFooter() {
                 </li>
                 <li>
                   <Link
-                    href="/contact"
+                    href="/about"
                     className="flex items-center gap-1.5 text-slate-300 transition-colors hover:text-white"
                   >
                     <span>&rsaquo;</span>
@@ -493,7 +513,7 @@ export function SiteFooter() {
                 </li>
                 <li>
                   <Link
-                    href="/privacy-policy"
+                    href="/methodology"
                     className="flex items-center gap-1.5 text-slate-300 transition-colors hover:text-white"
                   >
                     <span>&rsaquo;</span>
@@ -502,7 +522,7 @@ export function SiteFooter() {
                 </li>
                 <li>
                   <Link
-                    href="/terms"
+                    href="/methodology"
                     className="flex items-center gap-1.5 text-slate-300 transition-colors hover:text-white"
                   >
                     <span>&rsaquo;</span>
@@ -511,7 +531,7 @@ export function SiteFooter() {
                 </li>
                 <li>
                   <Link
-                    href="/disclaimer"
+                    href="/methodology"
                     className="flex items-center gap-1.5 text-slate-300 transition-colors hover:text-white"
                   >
                     <span>&rsaquo;</span>
@@ -527,10 +547,19 @@ export function SiteFooter() {
                     <span>Sitemap</span>
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    href="/methodology"
+                    className="flex items-center gap-1.5 text-slate-300 transition-colors hover:text-white"
+                  >
+                    <span>&rsaquo;</span>
+                    <span>How we verify</span>
+                  </Link>
+                </li>
               </ul>
             </div>
 
-            {/* ── Column 5: Get Result Updates (Newsletter) (lg:col-span-3) */}
+            {/* -- Column 5: Get Result Updates (Newsletter) (lg:col-span-3) -- */}
             <div className="lg:col-span-3">
               <h3 className="text-sm font-black tracking-wide text-white uppercase">
                 Get Result Updates
@@ -564,7 +593,7 @@ export function SiteFooter() {
 
                 <button
                   type="submit"
-                  className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#007054] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-[#005B44] active:scale-95"
+                  className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#00875A] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-[#007048] active:scale-95"
                 >
                   <span>Subscribe</span>
                   <span>&rarr;</span>
@@ -589,23 +618,23 @@ export function SiteFooter() {
           </div>
         </div>
 
-        {/* ── 3. Bottom Legal, Copyright & Scroll-to-Top Bar ─────────── */}
-        <div className="relative z-10 mt-16 border-t border-white/10 pt-6">
-          <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 text-xs text-slate-400 sm:px-6 md:flex-row lg:px-8 2xl:max-w-[1600px]">
+        {/* -- 3. Bottom Legal, Copyright & Scroll-to-Top Bar -- */}
+        <div className="container-wide relative z-10 mt-14 border-t border-white/10 pt-6">
+          <div className="flex flex-col items-center justify-between gap-4 text-xs text-slate-400 md:flex-row">
             {/* Left Copyright */}
             <div>&copy; 2026 12thclassresult.com.pk. All rights reserved.</div>
 
             {/* Center Policy Links */}
             <div className="flex flex-wrap items-center justify-center gap-3 text-slate-400">
-              <Link href="/privacy-policy" className="transition-colors hover:text-white">
+              <Link href="/methodology" className="transition-colors hover:text-white">
                 Privacy Policy
               </Link>
               <span>|</span>
-              <Link href="/terms" className="transition-colors hover:text-white">
+              <Link href="/methodology" className="transition-colors hover:text-white">
                 Terms of Use
               </Link>
               <span>|</span>
-              <Link href="/disclaimer" className="transition-colors hover:text-white">
+              <Link href="/methodology" className="transition-colors hover:text-white">
                 Disclaimer
               </Link>
               <span>|</span>
@@ -613,7 +642,7 @@ export function SiteFooter() {
                 Sitemap
               </Link>
               <span>|</span>
-              <Link href="/contact" className="transition-colors hover:text-white">
+              <Link href="/about" className="transition-colors hover:text-white">
                 Contact Us
               </Link>
             </div>
