@@ -1,105 +1,336 @@
 'use client'
 
-import Image from 'next/image'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 
-import { CalendarIcon, StarIcon } from '@/components/ui/icons'
+import { ResultUpdateTicker } from '@/components/layout/result-update-ticker'
+import {
+  CalendarIcon,
+  ChevronDownIcon,
+  FacebookIcon,
+  InstagramIcon,
+  SearchIcon,
+  StarIcon,
+  TwitterXIcon,
+  YouTubeIcon,
+} from '@/components/ui/icons'
 
-const NAV = [
-  { href: '/', label: 'Home' },
-  { href: '/results/12th-class', label: '12th Result 2026' },
-  { href: '/boards', label: 'All Boards' },
-  { href: '/guides/rechecking', label: 'Rechecking' },
-  { href: '/tools/percentage-calculator', label: 'Percentage Calculator' },
-  { href: '/methodology', label: 'How we verify' },
+const PUNJAB_BOARDS = [
+  { href: '/results/lahore-board/12th-class', label: 'BISE Lahore' },
+  { href: '/results/gujranwala-board/12th-class', label: 'BISE Gujranwala' },
+  { href: '/results/faisalabad-board/12th-class', label: 'BISE Faisalabad' },
+  { href: '/results/multan-board/12th-class', label: 'BISE Multan' },
+  { href: '/results/rawalpindi-board/12th-class', label: 'BISE Rawalpindi' },
+  { href: '/results/sargodha-board/12th-class', label: 'BISE Sargodha' },
+  { href: '/results/sahiwal-board/12th-class', label: 'BISE Sahiwal' },
+  { href: '/results/bahawalpur-board/12th-class', label: 'BISE Bahawalpur' },
+  { href: '/results/dg-khan-board/12th-class', label: 'BISE DG Khan' },
 ]
 
 export function SiteHeader() {
+  const [openDropdown, setOpenDropdown] = useState<'results' | 'punjab' | null>(null)
+  const headerRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const el = headerRef.current
+    if (!el) return
+    const sticks = () => {
+      if (getComputedStyle(el).position !== 'sticky') return false
+      for (let p = el.parentElement; p && p !== document.documentElement; p = p.parentElement) {
+        const o = getComputedStyle(p)
+        if (/auto|scroll|hidden/.test(`${o.overflowX} ${o.overflowY}`)) return false
+      }
+      return true
+    }
+    const publish = () =>
+      document.documentElement.style.setProperty(
+        '--site-header-h',
+        sticks() ? `${Math.ceil(el.getBoundingClientRect().height)}px` : '0px',
+      )
+    publish()
+    const observer = new ResizeObserver(publish)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <header className="sticky top-0 z-50 shadow-sm transition-colors">
+    <header ref={headerRef} className="sticky top-0 z-50 shadow-sm transition-colors">
       {/* Tier 1: Dark Evergreen Top Utility Bar */}
       <div className="border-b border-[#00382E] bg-[#00473B] text-white">
         <div className="container-wide flex h-9 items-center justify-between gap-2 text-[11px] sm:h-10 sm:text-xs">
+          {/* Left: Trust Slogan with Star */}
           <div className="flex items-center gap-1.5 font-medium text-emerald-100">
             <StarIcon width={13} height={13} className="shrink-0 fill-amber-300 text-amber-300" />
             <span className="truncate">Pakistan&apos;s Most Trusted Result Portal</span>
           </div>
 
-          <div className="hidden items-center gap-1.5 rounded-full border border-emerald-400/30 bg-black/20 px-3 py-0.5 font-semibold text-white md:inline-flex">
+          {/* Center: PBCC Official Announcement Date Badge */}
+          <Link
+            href="/results/12th-class"
+            className="hidden items-center gap-1.5 rounded-full border border-emerald-400/30 bg-black/20 px-3 py-1 font-semibold text-white transition-colors hover:bg-black/30 md:inline-flex"
+          >
             <CalendarIcon width={12} height={12} className="shrink-0 text-emerald-300" />
-            <span>12th Class Result 2026 (HSSC Part-II)</span>
-          </div>
+            <span>Official PBCC Date (Tentative): 22 October 2026</span>
+          </Link>
 
-          <div className="text-urdu text-xs text-emerald-200" dir="rtl">
-            تعلیم سے روشن پاکستان
+          {/* Right: Info Links + Social Media Icons */}
+          <div className="flex items-center gap-3">
+            <div className="hidden items-center gap-2 text-emerald-100/90 lg:flex">
+              <Link href="/about" className="transition-colors hover:text-white">
+                About
+              </Link>
+              <span className="text-emerald-500/50">|</span>
+              <Link href="/about" className="transition-colors hover:text-white">
+                Contact
+              </Link>
+              <span className="text-emerald-500/50">|</span>
+              <Link href="/methodology" className="transition-colors hover:text-white">
+                Privacy Policy
+              </Link>
+            </div>
+
+            {/* Social Media Cluster */}
+            <div className="flex items-center gap-1.5">
+              <a
+                href="https://www.facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="flex h-6 w-6 items-center justify-center rounded-full bg-black/25 text-white transition-all hover:scale-110 hover:bg-[#1877F2]"
+              >
+                <FacebookIcon width={11} height={11} />
+              </a>
+              <a
+                href="https://x.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="X / Twitter"
+                className="flex h-6 w-6 items-center justify-center rounded-full bg-black/25 text-white transition-all hover:scale-110 hover:bg-black"
+              >
+                <TwitterXIcon width={11} height={11} />
+              </a>
+              <a
+                href="https://youtube.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="YouTube"
+                className="flex h-6 w-6 items-center justify-center rounded-full bg-black/25 text-white transition-all hover:scale-110 hover:bg-[#FF0000]"
+              >
+                <YouTubeIcon width={11} height={11} />
+              </a>
+              <a
+                href="https://www.instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="flex h-6 w-6 items-center justify-center rounded-full bg-black/25 text-white transition-all hover:scale-110 hover:bg-gradient-to-tr hover:from-[#F58529] hover:via-[#DD2A7B] hover:to-[#8134AF]"
+              >
+                <InstagramIcon width={11} height={11} />
+              </a>
+
+              {/* Search Icon */}
+              <Link
+                href="/boards"
+                aria-label="Search all boards"
+                className="ml-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/25 text-white transition-all hover:scale-110 hover:bg-emerald-600"
+              >
+                <SearchIcon width={12} height={12} />
+              </Link>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Tier 2: Main White Navigation Bar */}
-      <div className="border-b border-slate-200 bg-white">
-        <div className="container-wide flex h-16 items-center justify-between gap-4">
+      {/* Tier 2: Pure White Primary Navigation Bar */}
+      <div className="border-b border-slate-200/80 bg-white">
+        <div className="container-wide flex h-[62px] items-center justify-between gap-4">
+          {/* Brand Logo with Cap Emblem */}
           <Link
             href="/"
-            className="group inline-flex items-center gap-2.5"
-            aria-label="12thClassResult — home"
+            className="group flex shrink-0 items-center gap-2.5 transition-opacity hover:opacity-95"
+            aria-label="12thClassResult.com.pk � Homepage"
           >
-            <div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-emerald-200 bg-emerald-50 p-1">
-              <Image
-                src="/icons/crest.svg"
-                unoptimized
-                alt="12thClassResult.com.pk crest"
-                width={36}
-                height={36}
-                className="h-full w-full object-contain"
-              />
-            </div>
-            <div>
-              <div className="text-lg font-black tracking-tight text-slate-900 sm:text-xl">
-                12thClassResult<span className="text-[#007054]">.com.pk</span>
-              </div>
-              <div className="hidden text-[9px] font-bold tracking-wider text-emerald-800 uppercase sm:block">
-                All Pakistan Education Boards
-              </div>
-            </div>
-          </Link>
-
-          <nav aria-label="Main" className="hidden lg:block">
-            <ul className="flex items-center gap-6 text-sm font-semibold">
-              {NAV.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="text-slate-700 transition-colors hover:text-[#007054]"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <Link
-              href="/results/12th-class"
-              className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#007054] px-4 py-2 text-xs font-bold text-white shadow-xs transition-all hover:bg-[#005a43] hover:shadow-md sm:px-5 sm:py-2.5 sm:text-sm"
-            >
-              <span>Check Result</span>
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#007054] text-white shadow-xs">
               <svg
-                width="14"
-                height="14"
+                xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2.5"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-6 w-6"
+                aria-hidden="true"
               >
-                <path d="M5 12h14" />
-                <path d="m12 5 7 7-7 7" />
+                <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" />
+                <path d="M22 10v6" />
+                <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" />
               </svg>
+            </div>
+            <div className="flex flex-col text-left">
+              <span className="text-[17px] leading-none font-black tracking-tight text-slate-900 sm:text-lg">
+                12thclassresult<span className="text-[#007054]">.com.pk</span>
+              </span>
+              <span className="mt-1 text-[10px] font-medium tracking-tight text-slate-500">
+                Your Guide to Board Results in Pakistan
+              </span>
+            </div>
+          </Link>
+
+          {/* Desktop Navigation Links */}
+          <nav aria-label="Primary" className="hidden items-center gap-0.5 lg:flex xl:gap-1">
+            <ul className="flex items-center gap-0.5 xl:gap-1">
+              {/* Home */}
+              <li>
+                <Link
+                  href="/"
+                  className="relative px-3 py-2 text-[13px] font-bold text-[#007054] transition-colors hover:text-[#00473B]"
+                >
+                  Home
+                  <span className="absolute inset-x-2.5 bottom-0 h-0.5 rounded-full bg-[#007054]" />
+                </Link>
+              </li>
+
+              {/* 12th Result 2026 Dropdown */}
+              <li
+                className="relative"
+                onMouseEnter={() => setOpenDropdown('results')}
+                onMouseLeave={() => setOpenDropdown(null)}
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpenDropdown(openDropdown === 'results' ? null : 'results')}
+                  className="flex items-center gap-1 rounded-md px-3 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
+                >
+                  <span>12th Result 2026</span>
+                  <ChevronDownIcon width={12} height={12} className="text-slate-400" />
+                </button>
+
+                {openDropdown === 'results' && (
+                  <div className="animate-in fade-in slide-in-from-top-1 absolute top-full left-0 z-50 w-60 rounded-xl border border-slate-200 bg-white py-2 shadow-xl">
+                    <Link
+                      href="/results/12th-class"
+                      onClick={() => setOpenDropdown(null)}
+                      className="block px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-emerald-50 hover:text-[#007054]"
+                    >
+                      12th Class Result Hub 2026
+                    </Link>
+                    <Link
+                      href="/#check-result"
+                      onClick={() => setOpenDropdown(null)}
+                      className="block px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-emerald-50 hover:text-[#007054]"
+                    >
+                      Roll Number &amp; SMS Search
+                    </Link>
+                    <Link
+                      href="/boards"
+                      onClick={() => setOpenDropdown(null)}
+                      className="block px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-emerald-50 hover:text-[#007054]"
+                    >
+                      Result Gazette Archives
+                    </Link>
+                  </div>
+                )}
+              </li>
+
+              {/* Punjab Boards Dropdown */}
+              <li
+                className="relative"
+                onMouseEnter={() => setOpenDropdown('punjab')}
+                onMouseLeave={() => setOpenDropdown(null)}
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpenDropdown(openDropdown === 'punjab' ? null : 'punjab')}
+                  className="flex items-center gap-1 rounded-md px-3 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
+                >
+                  <span>Punjab Boards</span>
+                  <ChevronDownIcon width={12} height={12} className="text-slate-400" />
+                </button>
+
+                {openDropdown === 'punjab' && (
+                  <div className="animate-in fade-in slide-in-from-top-1 absolute top-full left-0 z-50 grid w-64 grid-cols-1 rounded-xl border border-slate-200 bg-white py-2 shadow-xl">
+                    {PUNJAB_BOARDS.map((board) => (
+                      <Link
+                        key={board.href}
+                        href={board.href}
+                        onClick={() => setOpenDropdown(null)}
+                        className="block px-4 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:bg-emerald-50 hover:text-[#007054]"
+                      >
+                        {board.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </li>
+
+              {/* All Boards */}
+              <li>
+                <Link
+                  href="/boards"
+                  className="rounded-md px-3 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
+                >
+                  All Boards
+                </Link>
+              </li>
+
+              {/* Date Schedule */}
+              <li>
+                <Link
+                  href="/results/12th-class"
+                  className="rounded-md px-3 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
+                >
+                  Date Schedule
+                </Link>
+              </li>
+
+              {/* Gazette */}
+              <li>
+                <Link
+                  href="/boards"
+                  className="rounded-md px-3 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
+                >
+                  Gazette
+                </Link>
+              </li>
+
+              {/* SMS Codes */}
+              <li>
+                <Link
+                  href="/#check-result"
+                  className="rounded-md px-3 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
+                >
+                  SMS Codes
+                </Link>
+              </li>
+
+              {/* FAQs */}
+              <li>
+                <Link
+                  href="/#faq-section"
+                  className="rounded-md px-3 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
+                >
+                  FAQs
+                </Link>
+              </li>
+            </ul>
+          </nav>
+
+          {/* Right Action Button (Check Result) */}
+          <div className="flex items-center gap-3">
+            <Link
+              href="/#check-result"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-[#005B4C] px-4 py-2 text-xs font-bold text-white shadow-xs transition-all hover:bg-[#00473B] hover:shadow-md active:scale-95"
+            >
+              <span>Check Result</span>
+              <span aria-hidden="true">&rarr;</span>
             </Link>
           </div>
         </div>
       </div>
+
+      {/* Tier 3: Scrolling Result Update Ticker */}
+      <ResultUpdateTicker />
     </header>
   )
 }
