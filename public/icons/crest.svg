@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="22.5 -3.5 207 207" width="100%" height="100%">
+  <!--
+    THE CREST FROM THE WORDMARK, and the only copy of it.
+
+    The footer drew its own crest inline: a different shape, with a crescent and
+    star, no "11" and no graduation cap. That put three marks on one site at
+    once — this one, the wordmark's, and the app icon's — which is what a reader
+    noticed and reported.
+
+    Extracted from logo.svg so the header lockup and the footer render literally
+    the same artwork rather than two drawings somebody has to keep in step. The
+    geometry is untouched; only the viewBox is tightened around it.
+
+    Regenerate with scripts/build-crest.mjs if the wordmark's emblem changes.
+  -->
+<defs>
+    <!-- Background / Shield Gradients -->
+    <linearGradient id="logoShieldLeft" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#006E5B" />
+      <stop offset="100%" stop-color="#005B4C" />
+    </linearGradient>
+
+    <linearGradient id="logoShieldRight" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#004D40" />
+      <stop offset="100%" stop-color="#00332B" />
+    </linearGradient>
+
+    <!-- Luxury Gold Gradient -->
+    <linearGradient id="logoGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF176" />
+      <stop offset="35%" stop-color="#FBC02D" />
+      <stop offset="70%" stop-color="#F57F17" />
+      <stop offset="100%" stop-color="#FFB300" />
+    </linearGradient>
+
+    <!-- Gold Light -->
+    <linearGradient id="logoGoldLight" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFF9C4" />
+      <stop offset="100%" stop-color="#FBC02D" />
+    </linearGradient>
+
+    <!-- Emerald Brand Gradient -->
+    <linearGradient id="logoEmerald" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#005B4C" />
+      <stop offset="100%" stop-color="#008A72" />
+    </linearGradient>
+
+    <!-- Drop Shadow Filter -->
+    <filter id="logoShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#002D25" flood-opacity="0.22" />
+    </filter>
+  </defs>
+  <g transform="translate(20, 16)" filter="url(#logoShadow)">
+    <!-- Laurel Wreath Garland Hugging Shield -->
+    <g fill="#005B4C">
+      <path d="M42 142 C30 134 24 116 26 96 C29 94 33 95 34 98 C33 112 37 124 45 132 Z" />
+      <path d="M28 118 C18 109 14 94 17 80 C19 78 23 80 23 83 C21 94 24 104 30 111 Z" />
+      <path d="M20 94 C12 83 10 69 14 56 C16 55 20 57 20 60 C17 70 19 80 24 87 Z" />
+      <path d="M18 68 C13 57 14 43 21 32 C23 31 26 34 25 37 C21 45 20 55 24 62 Z" />
+      <path d="M23 44 C21 33 23 22 31 13 C33 13 35 16 34 19 C29 26 28 34 30 41 Z" />
+
+      <path d="M136 142 C148 134 154 116 152 96 C149 94 145 95 144 98 C145 112 141 124 133 132 Z" />
+      <path d="M150 118 C160 109 164 94 161 80 C159 78 155 80 155 83 C157 94 154 104 148 111 Z" />
+      <path d="M158 94 C166 83 168 69 164 56 C162 55 158 57 158 60 C161 70 159 80 154 87 Z" />
+      <path d="M160 68 C165 57 164 43 157 32 C155 31 152 34 153 37 C157 45 158 55 154 62 Z" />
+      <path d="M155 44 C157 33 155 22 147 13 C145 13 143 16 144 19 C149 26 150 34 148 41 Z" />
+    </g>
+
+    <!-- Main Shield -->
+    <g>
+      <!-- Shield Left Half -->
+      <path d="M89 48 L46 60 C46 108 66 140 89 155 L89 48 Z" fill="url(#logoShieldLeft)" />
+      
+      <!-- Shield Right Half -->
+      <path d="M89 48 L132 60 C132 108 112 140 89 155 L89 48 Z" fill="url(#logoShieldRight)" />
+      
+      <!-- Shield Gold Trim -->
+      <path d="M89 48 L46 60 C46 108 66 140 89 155 C112 140 132 108 132 60 Z" fill="none" stroke="url(#logoGold)" stroke-width="3.2" stroke-linejoin="round" />
+    </g>
+
+    <!-- Number "11" inside Shield -->
+    <g fill="#FFFFFF">
+      <!-- Left 1 -->
+      <path d="M64 86 L73 78 L77 78 L77 122 L68 122 L68 90 L64 92 Z" />
+      <rect x="63" y="120" width="17" height="4" rx="1.5" />
+
+      <!-- Right 1 -->
+      <path d="M93 86 L102 78 L106 78 L106 122 L97 122 L97 90 L93 92 Z" />
+      <rect x="92" y="120" width="17" height="4" rx="1.5" />
+    </g>
+
+    <!-- Little Gold Star inside shield bottom -->
+    <polygon points="89,134 90.5,138 94.5,138 91.5,140.5 92.5,144.5 89,142 85.5,144.5 86.5,140.5 83.5,138 87.5,138" fill="url(#logoGold)" />
+
+    <!-- Academic Graduation Cap (Mortarboard) atop Shield -->
+    <g>
+      <!-- Skull cap collar -->
+      <path d="M68 37 C68 37 69 48 89 48 C109 48 110 37 110 37 L107 32 L71 32 Z" fill="url(#logoGold)" />
+      
+      <!-- Diamond Top -->
+      <polygon points="89,8 140,26 89,43 38,26" fill="url(#logoGoldLight)" stroke="url(#logoGold)" stroke-width="2" />
+      <polygon points="89,11 133,26 89,40 89,11" fill="#FFF9C4" fill-opacity="0.4" />
+
+      <!-- Cap Center Button -->
+      <ellipse cx="89" cy="25.5" rx="3.5" ry="2.2" fill="#E65100" />
+      <ellipse cx="89" cy="25" rx="2.5" ry="1.5" fill="#FFF176" />
+
+      <!-- Hanging Tassel -->
+      <path d="M89 25.5 Q53 30 51 49" fill="none" stroke="url(#logoGold)" stroke-width="2.8" stroke-linecap="round" />
+      <circle cx="51" cy="51" r="2.5" fill="#E65100" />
+      <polygon points="48,52 54,52 57,65 45,65" fill="url(#logoGoldLight)" />
+    </g>
+  </g>
+</svg>
