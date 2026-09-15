@@ -91,6 +91,10 @@ inherited, so commits here are attributed to the project account.
 `12thclassresult-sys/12thclassresult.com.pk`
 `https://github.com/12thclassresult-sys/12thclassresult.com.pk`
 
+> **SUPERSEDED, 2026-09-15.** The final GitHub target is `12thclassresult2026/12thclassresult.com.pk` (confirmed by the owner, 2026-09-15). The earlier `12thclassresult-sys` plan is superseded; no repository was ever created under it.
+> Read access to the new repo is confirmed; write access is not — a push returned
+> `403 … denied to SaeedAppDev`.
+
 **Current status: existence could not be confirmed.**
 
 Evidence gathered:

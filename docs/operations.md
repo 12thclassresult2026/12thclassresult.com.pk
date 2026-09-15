@@ -195,7 +195,7 @@ an absolute launch blocker under the Phase 7 rules.
 
 1. **Confirm the Cloudflare account** holds the `12thclassresult.com.pk` zone.
    `wrangler whoami` shows the current login; switch with `wrangler login` if it is wrong.
-2. **Configure the remote** and push `main` to `12thclassresult-sys/12thclassresult.com.pk`.
+2. **Configure the remote** and push `main` to `12thclassresult2026/12thclassresult.com.pk`.
    Never force-push; never create a second repository if auth fails.
 3. **Verify CI** on the remote. Local green does not guarantee remote green.
 4. **Add the `routes` entry** to `wrangler.jsonc` — only now, and only with the confirmed zone.

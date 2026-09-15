@@ -33,7 +33,7 @@ in good shape; what is missing is confirmation of _where_ it should be deployed.
 ### BLOCKER 1 — No GitHub remote (§6, §99)
 
 `git remote -v` returns nothing. The intended target is
-`12thclassresult-sys/12thclassresult.com.pk`.
+`12thclassresult2026/12thclassresult.com.pk`.
 
 Git credentials could not be read non-interactively in this environment (Credential Manager
 entries and GCM at system level both failed to satisfy a non-interactive fetch). Per §7, **no
@@ -357,7 +357,7 @@ Two questions must be answered by the owner before any deploy:
 1. **Is `11thclassresult@gmail.com` / account `c085ba412b1289d5950bd55daf501b51` the correct
    Cloudflare account for this site?**
 2. **How should the GitHub remote be authenticated**, so the release candidate can be pushed to
-   `12thclassresult-sys/12thclassresult.com.pk`?
+   `12thclassresult2026/12thclassresult.com.pk`?
 
 With those two answers, the remaining sequence is short: push → verify CI → add the `routes`
 entry → deploy → live smoke test → Search Console.

@@ -173,9 +173,11 @@ Could not find zone for 12thclassresult.com.pk
    exists — on some other account. Fix by adding the zone to this account, or by
    `wrangler login` against the one that holds it. Then restore the `routes` block recorded
    verbatim in `wrangler.jsonc` and redeploy.
-2. **No git remote is configured.** Credentials could not be read non-interactively, and per the
-   git-safety rules no alternative repository was created. Everything is committed locally. This
-   blocks CI only, not the deploy.
+2. **The git remote is set but the push is rejected.** `origin` points at the final repository,
+   `12thclassresult2026/12thclassresult.com.pk`. Read access works (`git ls-remote` exits 0);
+   write access does not — the cached credential belongs to GitHub account `SaeedAppDev`, and a
+   push returns `403 … denied to SaeedAppDev`. Grant that account write access, or switch the
+   cached credential to one that has it. This blocks CI, not the deploy.
 
 Full evidence, including the QA that did pass, is in
 [docs/launch-report.md](docs/launch-report.md).
