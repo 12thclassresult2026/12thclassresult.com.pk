@@ -1,10 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
   ExternalLinkIcon,
   GridIcon,
   HashIcon,
@@ -20,42 +23,46 @@ import {
 } from '@/components/ui/icons'
 import type { BoardOption } from '@/components/result/board-finder'
 
-/* -- Top Boards Quick Access Bar Badges (Matching Reference Screenshot) -- */
+/* -- Top Boards with Authentic Official Logos & Live Slugs -- */
 const BOARD_CHIPS = [
-  { code: 'LHR', name: 'BISE', city: 'Lahore', slug: 'lahore-board', color: 'bg-[#007054]' },
+  { name: 'BISE', city: 'Lahore', slug: 'lahore-board', logo: '/logos/bise-lahore.webp' },
   {
-    code: 'GRW',
     name: 'BISE',
     city: 'Gujranwala',
     slug: 'gujranwala-board',
-    color: 'bg-[#0284C7]',
+    logo: '/logos/bise-gujranwala.webp',
   },
   {
-    code: 'FSD',
     name: 'BISE',
     city: 'Faisalabad',
     slug: 'faisalabad-board',
-    color: 'bg-[#EA580C]',
+    logo: '/logos/bise-faisalabad.webp',
   },
-  { code: 'MUL', name: 'BISE', city: 'Multan', slug: 'multan-board', color: 'bg-[#7C3AED]' },
+  { name: 'BISE', city: 'Multan', slug: 'multan-board', logo: '/logos/bise-multan.webp' },
   {
-    code: 'RWP',
     name: 'BISE',
     city: 'Rawalpindi',
     slug: 'rawalpindi-board',
-    color: 'bg-[#0D9488]',
+    logo: '/logos/bise-rawalpindi.webp',
   },
-  { code: 'SGD', name: 'BISE', city: 'Sargodha', slug: 'sargodha-board', color: 'bg-[#DC2626]' },
-  { code: 'SAW', name: 'BISE', city: 'Sahiwal', slug: 'sahiwal-board', color: 'bg-[#16A34A]' },
+  { name: 'BISE', city: 'Sargodha', slug: 'sargodha-board', logo: '/logos/bise-sargodha.webp' },
+  { name: 'BISE', city: 'Sahiwal', slug: 'sahiwal-board', logo: '/logos/bise-sahiwal.webp' },
   {
-    code: 'BWP',
     name: 'BISE',
     city: 'Bahawalpur',
     slug: 'bahawalpur-board',
-    color: 'bg-[#B45309]',
+    logo: '/logos/bise-bahawalpur.webp',
   },
-  { code: 'DGK', name: 'BISE', city: 'DG Khan', slug: 'dg-khan-board', color: 'bg-[#1D4ED8]' },
-  { code: 'FBI', name: 'FBISE', city: '(Federal)', slug: 'federal-board', color: 'bg-[#1E1B4B]' },
+  { name: 'BISE', city: 'DG Khan', slug: 'dg-khan-board', logo: '/logos/bise-dg-khan.webp' },
+  { name: 'FBISE', city: 'Federal', slug: 'federal-board', logo: '/logos/fbise.png' },
+  { name: 'BISE', city: 'Peshawar', slug: 'peshawar-board', logo: '/logos/bise-peshawar.png' },
+  { name: 'BISE', city: 'Abbottabad', slug: 'abbottabad-board', logo: '/logos/abbottabad.png' },
+  { name: 'BISE', city: 'Swat', slug: 'swat-board', logo: '/logos/swat.jpg' },
+  { name: 'BISE', city: 'Mardan', slug: 'mardan-board', logo: '/logos/mardan.png' },
+  { name: 'BISE', city: 'Kohat', slug: 'kohat-board', logo: '/logos/kohat.png' },
+  { name: 'BISE', city: 'Malakand', slug: 'malakand-board', logo: '/logos/malakand.png' },
+  { name: 'BISE', city: 'Bannu', slug: 'bannu-board', logo: '/logos/bannu.png' },
+  { name: 'BISE', city: 'DI Khan', slug: 'dera-ismail-khan-board', logo: '/logos/dikhan.png' },
 ] as const
 
 type TabType = 'roll' | 'name' | 'sms'
@@ -518,46 +525,146 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
           </div>
         </div>
 
-        {/* -- Bottom Floating Board Chips Ribbon -- */}
-        <div className="relative z-30 mt-8 -mb-22 sm:mt-10 sm:-mb-24 lg:-mb-28">
-          <div className="mx-auto max-w-5xl rounded-2xl border border-slate-200/80 bg-white/95 p-3 shadow-xl backdrop-blur-md sm:rounded-3xl sm:p-4">
-            <div className="flex scrollbar-none items-center justify-between gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-              {BOARD_CHIPS.map((b) => (
-                <Link
-                  key={b.slug}
-                  href={`/results/${b.slug}/12th-class`}
-                  className="group flex shrink-0 flex-col items-center gap-1 rounded-xl px-2 py-1.5 transition-all hover:bg-slate-50"
-                >
-                  <div
-                    className={`flex h-10 w-10 items-center justify-center rounded-full ${b.color} text-xs font-black text-white shadow-xs transition-transform group-hover:scale-105 sm:h-11 sm:w-11`}
-                  >
-                    {b.code}
-                  </div>
-                  <span className="text-[10px] font-bold whitespace-nowrap text-slate-700 transition-colors group-hover:text-[#007054]">
-                    {b.name}
-                  </span>
-                  <span className="text-[9px] whitespace-nowrap text-slate-500">{b.city}</span>
-                </Link>
-              ))}
+        {/* -- Bottom Floating Official Board Logos Scrolling Ribbon -- */}
+        <BoardScrollRibbon />
+      </div>
+    </section>
+  )
+}
 
-              {/* View All Boards CTA */}
+function BoardScrollRibbon() {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const [isHovered, setIsHovered] = useState(false)
+
+  // Continuous buttery-smooth auto-scroll with seamless loop
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+
+    let animId: number
+    let lastTime = performance.now()
+
+    const step = (time: number) => {
+      const delta = time - lastTime
+      lastTime = time
+
+      if (!isHovered && el) {
+        // Smooth ~35px/sec continuous scrolling
+        el.scrollLeft += delta * 0.035
+
+        // When halfway through duplicated items, reset scroll position seamlessly
+        const halfWidth = el.scrollWidth / 2
+        if (el.scrollLeft >= halfWidth) {
+          el.scrollLeft -= halfWidth
+        }
+      }
+      animId = requestAnimationFrame(step)
+    }
+
+    animId = requestAnimationFrame(step)
+    return () => cancelAnimationFrame(animId)
+  }, [isHovered])
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (!scrollRef.current) return
+    const offset = direction === 'left' ? -220 : 220
+    scrollRef.current.scrollBy({ left: offset, behavior: 'smooth' })
+  }
+
+  // Duplicate boards list for continuous infinite looping
+  const displayBoards = [...BOARD_CHIPS, ...BOARD_CHIPS]
+
+  return (
+    <div className="relative z-30 mt-8 -mb-22 sm:mt-10 sm:-mb-24 lg:-mb-28">
+      <div className="mx-auto max-w-5xl rounded-2xl border border-slate-200/80 bg-white/95 p-2.5 shadow-xl backdrop-blur-md sm:rounded-3xl sm:p-3.5">
+        <div className="relative flex items-center">
+          {/* Left Arrow Button (Desktop) */}
+          <button
+            type="button"
+            onClick={() => scroll('left')}
+            aria-label="Scroll boards left"
+            className="absolute -left-2 z-20 hidden h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-md transition-all hover:scale-110 hover:bg-emerald-50 hover:text-[#007054] active:scale-95 sm:-left-3.5 sm:flex"
+          >
+            <ChevronLeftIcon width={15} height={15} />
+          </button>
+
+          {/* Left Fade Gradient Mask */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute top-0 bottom-0 left-0 z-10 w-8 bg-gradient-to-r from-white via-white/80 to-transparent sm:w-12"
+          />
+
+          {/* Scrollable Container with Official Logos */}
+          <div
+            ref={scrollRef}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onTouchStart={() => setIsHovered(true)}
+            onTouchEnd={() => {
+              setTimeout(() => setIsHovered(false), 2000)
+            }}
+            className="flex cursor-grab scrollbar-none items-center gap-1.5 overflow-x-auto px-3 py-1 select-none active:cursor-grabbing sm:px-6"
+            style={{ WebkitOverflowScrolling: 'touch' }}
+          >
+            {displayBoards.map((b, idx) => (
               <Link
-                href="/boards"
-                className="group flex shrink-0 flex-col items-center justify-center gap-1 rounded-2xl border border-sky-100 bg-sky-50/70 px-4 py-2 text-sky-800 shadow-xs transition-all hover:bg-sky-100/80"
+                key={`${b.slug}-${idx}`}
+                href={`/results/${b.slug}/12th-class`}
+                className="group flex shrink-0 flex-col items-center gap-1 rounded-xl px-2 py-1.5 transition-all hover:bg-emerald-50/60 sm:rounded-2xl sm:px-3"
               >
-                <GridIcon
-                  width={18}
-                  height={18}
-                  className="text-sky-600 transition-transform group-hover:scale-110"
-                />
-                <span className="text-[11px] font-bold whitespace-nowrap">
-                  View All Boards &rarr;
+                <div className="relative flex h-11 w-11 items-center justify-center rounded-full border border-slate-200/90 bg-white p-1 shadow-xs transition-all duration-200 group-hover:scale-110 group-hover:border-[#007054] group-hover:shadow-md sm:h-12 sm:w-12">
+                  <Image
+                    src={b.logo}
+                    alt={`${b.name} ${b.city}`}
+                    width={40}
+                    height={40}
+                    className="h-full w-full rounded-full object-contain"
+                  />
+                </div>
+                <span className="text-[10px] font-bold whitespace-nowrap text-slate-800 transition-colors group-hover:text-[#007054] sm:text-[11px]">
+                  {b.name}
+                </span>
+                <span className="text-[9px] font-medium whitespace-nowrap text-slate-500 sm:text-[9.5px]">
+                  {b.city}
                 </span>
               </Link>
-            </div>
+            ))}
+          </div>
+
+          {/* Right Fade Gradient Mask */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute top-0 right-24 bottom-0 z-10 w-8 bg-gradient-to-l from-white via-white/80 to-transparent sm:right-32 sm:w-12"
+          />
+
+          {/* Right Arrow Button (Desktop) */}
+          <button
+            type="button"
+            onClick={() => scroll('right')}
+            aria-label="Scroll boards right"
+            className="absolute right-28 z-20 hidden h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-md transition-all hover:scale-110 hover:bg-emerald-50 hover:text-[#007054] active:scale-95 sm:right-36 sm:flex"
+          >
+            <ChevronRightIcon width={15} height={15} />
+          </button>
+
+          {/* Fixed "View All Boards" CTA on Right */}
+          <div className="relative z-20 shrink-0 border-l border-slate-200/80 pl-2 sm:pl-3">
+            <Link
+              href="/boards"
+              className="group flex flex-col items-center justify-center gap-1 rounded-xl border border-emerald-200/80 bg-emerald-50/90 px-3 py-2 text-[#007054] shadow-xs transition-all hover:bg-[#007054] hover:text-white hover:shadow-md sm:rounded-2xl sm:px-4"
+            >
+              <GridIcon
+                width={17}
+                height={17}
+                className="text-[#007054] transition-transform group-hover:scale-110 group-hover:text-white"
+              />
+              <span className="text-[10px] font-bold whitespace-nowrap sm:text-[11px]">
+                All Boards &rarr;
+              </span>
+            </Link>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   )
 }
