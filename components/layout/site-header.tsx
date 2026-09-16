@@ -3,31 +3,20 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 
+import { HeaderMegaMenu } from '@/components/layout/header-mega-menu'
 import { ResultUpdateTicker } from '@/components/layout/result-update-ticker'
 import {
+  CalendarIcon,
   ChevronDownIcon,
   FacebookIcon,
   InstagramIcon,
   SearchIcon,
-  StarIcon,
   TwitterXIcon,
   YouTubeIcon,
 } from '@/components/ui/icons'
 
-const PUNJAB_BOARDS = [
-  { href: '/results/lahore-board/12th-class', label: 'BISE Lahore' },
-  { href: '/results/gujranwala-board/12th-class', label: 'BISE Gujranwala' },
-  { href: '/results/faisalabad-board/12th-class', label: 'BISE Faisalabad' },
-  { href: '/results/multan-board/12th-class', label: 'BISE Multan' },
-  { href: '/results/rawalpindi-board/12th-class', label: 'BISE Rawalpindi' },
-  { href: '/results/sargodha-board/12th-class', label: 'BISE Sargodha' },
-  { href: '/results/sahiwal-board/12th-class', label: 'BISE Sahiwal' },
-  { href: '/results/bahawalpur-board/12th-class', label: 'BISE Bahawalpur' },
-  { href: '/results/dg-khan-board/12th-class', label: 'BISE DG Khan' },
-]
-
 export function SiteHeader() {
-  const [openDropdown, setOpenDropdown] = useState<'results' | 'punjab' | null>(null)
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const headerRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -57,13 +46,25 @@ export function SiteHeader() {
       {/* Tier 1: Dark Evergreen Top Utility Bar */}
       <div className="border-b border-[#00382E] bg-[#00473B] text-white">
         <div className="container-wide flex h-9 items-center justify-between gap-2 text-[11px] sm:h-10 sm:text-xs">
-          {/* Left: Trust Slogan with Star */}
-          <div className="flex items-center gap-1.5 font-medium text-emerald-100">
-            <StarIcon width={13} height={13} className="shrink-0 fill-amber-300 text-amber-300" />
+          {/* Left: Pakistan Flag & Trust Slogan */}
+          <div className="flex items-center gap-2 font-medium text-emerald-100">
+            <span className="text-base leading-none select-none">🇵🇰</span>
             <span className="truncate">Pakistan&apos;s Most Trusted Result Portal</span>
           </div>
 
-          {/* Right: Info Links */}
+          {/* Center: PBCC Official Announcement Date Badge */}
+          <Link
+            href="/results/12th-class"
+            className="hidden items-center gap-1.5 rounded-full border border-emerald-400/30 bg-black/25 px-3.5 py-1 text-[11px] font-semibold text-white transition-colors hover:bg-black/35 md:inline-flex"
+          >
+            <CalendarIcon width={12} height={12} className="shrink-0 text-emerald-300" />
+            <span>
+              Official PBCC Date (Tentative):{' '}
+              <strong className="font-bold text-emerald-300">22 October 2026</strong>
+            </span>
+          </Link>
+
+          {/* Right: Info Links + Social Icons */}
           <div className="flex items-center gap-3">
             <div className="hidden items-center gap-2.5 text-[11px] font-medium text-emerald-100/90 lg:flex">
               <Link href="/about" className="transition-colors hover:text-white">
@@ -76,10 +77,6 @@ export function SiteHeader() {
               <span className="text-emerald-500/50">|</span>
               <Link href="/methodology" className="transition-colors hover:text-white">
                 Privacy Policy
-              </Link>
-              <span className="text-emerald-500/50">|</span>
-              <Link href="/#faq-section" className="transition-colors hover:text-white">
-                FAQs
               </Link>
             </div>
 
@@ -194,7 +191,11 @@ export function SiteHeader() {
                 <button
                   type="button"
                   onClick={() => setOpenDropdown(openDropdown === 'results' ? null : 'results')}
-                  className="flex items-center gap-1 rounded-md px-3 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
+                  className={`flex items-center gap-1 rounded-md px-3 py-2 text-[13px] font-semibold transition-colors ${
+                    openDropdown === 'results'
+                      ? 'bg-emerald-50 text-[#007054]'
+                      : 'text-slate-700 hover:bg-slate-50 hover:text-[#007054]'
+                  }`}
                 >
                   <span>12th Result 2026</span>
                   <ChevronDownIcon width={12} height={12} className="text-slate-400" />
@@ -227,74 +228,95 @@ export function SiteHeader() {
                 )}
               </li>
 
-              {/* Punjab Boards Dropdown */}
-              <li
-                className="relative"
-                onMouseEnter={() => setOpenDropdown('punjab')}
-                onMouseLeave={() => setOpenDropdown(null)}
-              >
+              {/* Punjab Boards - Triggers Mega Menu */}
+              <li className="relative" onMouseEnter={() => setOpenDropdown('punjab')}>
+                <button
+                  type="button"
+                  onClick={() => setOpenDropdown(openDropdown === 'punjab' ? null : 'punjab')}
+                  className={`flex items-center gap-1 px-3.5 py-2 text-[13px] font-semibold transition-colors ${
+                    openDropdown === 'punjab'
+                      ? 'rounded-t-xl bg-emerald-50 text-[#007054] shadow-xs'
+                      : 'rounded-md text-slate-700 hover:bg-slate-50 hover:text-[#007054]'
+                  }`}
+                >
+                  <span>Punjab Boards</span>
+                  <ChevronDownIcon
+                    width={12}
+                    height={12}
+                    className={openDropdown === 'punjab' ? 'text-[#007054]' : 'text-slate-400'}
+                  />
+                </button>
+              </li>
+
+              {/* All Boards - Also Triggers Mega Menu */}
+              <li className="relative" onMouseEnter={() => setOpenDropdown('punjab')}>
                 <button
                   type="button"
                   onClick={() => setOpenDropdown(openDropdown === 'punjab' ? null : 'punjab')}
                   className="flex items-center gap-1 rounded-md px-3 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
                 >
-                  <span>Punjab Boards</span>
+                  <span>All Boards</span>
                   <ChevronDownIcon width={12} height={12} className="text-slate-400" />
                 </button>
-
-                {openDropdown === 'punjab' && (
-                  <div className="animate-in fade-in slide-in-from-top-1 absolute top-full left-0 z-50 grid w-64 grid-cols-1 rounded-xl border border-slate-200 bg-white py-2 shadow-xl">
-                    {PUNJAB_BOARDS.map((board) => (
-                      <Link
-                        key={board.href}
-                        href={board.href}
-                        onClick={() => setOpenDropdown(null)}
-                        className="block px-4 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:bg-emerald-50 hover:text-[#007054]"
-                      >
-                        {board.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </li>
-
-              {/* All Boards */}
-              <li>
-                <Link
-                  href="/boards"
-                  className="rounded-md px-3 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
-                >
-                  All Boards
-                </Link>
               </li>
 
               {/* Date Schedule */}
-              <li>
+              <li
+                className="relative"
+                onMouseEnter={() => setOpenDropdown('schedule')}
+                onMouseLeave={() => setOpenDropdown(null)}
+              >
                 <Link
                   href="/results/12th-class"
-                  className="rounded-md px-3 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
+                  className="flex items-center gap-1 rounded-md px-3 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
                 >
-                  Date Schedule
+                  <span>Date Schedule</span>
+                  <ChevronDownIcon width={12} height={12} className="text-slate-400" />
                 </Link>
               </li>
 
               {/* Gazette */}
-              <li>
+              <li
+                className="relative"
+                onMouseEnter={() => setOpenDropdown('gazette')}
+                onMouseLeave={() => setOpenDropdown(null)}
+              >
                 <Link
-                  href="/boards"
-                  className="rounded-md px-3 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
+                  href="/#gazette"
+                  className="flex items-center gap-1 rounded-md px-3 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
                 >
-                  Gazette
+                  <span>Gazette</span>
+                  <ChevronDownIcon width={12} height={12} className="text-slate-400" />
                 </Link>
               </li>
 
               {/* SMS Codes */}
-              <li>
+              <li
+                className="relative"
+                onMouseEnter={() => setOpenDropdown('sms')}
+                onMouseLeave={() => setOpenDropdown(null)}
+              >
                 <Link
                   href="/#check-result"
-                  className="rounded-md px-3 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
+                  className="flex items-center gap-1 rounded-md px-3 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
                 >
-                  SMS Codes
+                  <span>SMS Codes</span>
+                  <ChevronDownIcon width={12} height={12} className="text-slate-400" />
+                </Link>
+              </li>
+
+              {/* FAQs */}
+              <li
+                className="relative"
+                onMouseEnter={() => setOpenDropdown('faqs')}
+                onMouseLeave={() => setOpenDropdown(null)}
+              >
+                <Link
+                  href="/#faq-section"
+                  className="flex items-center gap-1 rounded-md px-3 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
+                >
+                  <span>FAQs</span>
+                  <ChevronDownIcon width={12} height={12} className="text-slate-400" />
                 </Link>
               </li>
             </ul>
@@ -310,6 +332,9 @@ export function SiteHeader() {
               <span aria-hidden="true">&rarr;</span>
             </Link>
           </div>
+
+          {/* Full Mega Menu Dropdown */}
+          {openDropdown === 'punjab' && <HeaderMegaMenu onClose={() => setOpenDropdown(null)} />}
         </div>
       </div>
 
