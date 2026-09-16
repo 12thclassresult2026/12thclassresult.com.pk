@@ -5,7 +5,6 @@ import Link from 'next/link'
 
 import { ResultUpdateTicker } from '@/components/layout/result-update-ticker'
 import {
-  CalendarIcon,
   ChevronDownIcon,
   FacebookIcon,
   InstagramIcon,
@@ -64,18 +63,9 @@ export function SiteHeader() {
             <span className="truncate">Pakistan&apos;s Most Trusted Result Portal</span>
           </div>
 
-          {/* Center: PBCC Official Announcement Date Badge */}
-          <Link
-            href="/results/12th-class"
-            className="hidden items-center gap-1.5 rounded-full border border-emerald-400/30 bg-black/20 px-3 py-1 font-semibold text-white transition-colors hover:bg-black/30 md:inline-flex"
-          >
-            <CalendarIcon width={12} height={12} className="shrink-0 text-emerald-300" />
-            <span>Official PBCC Date (Tentative): 22 October 2026</span>
-          </Link>
-
-          {/* Right: Info Links + Social Media Icons */}
+          {/* Right: Info Links */}
           <div className="flex items-center gap-3">
-            <div className="hidden items-center gap-2 text-emerald-100/90 lg:flex">
+            <div className="hidden items-center gap-2.5 text-[11px] font-medium text-emerald-100/90 lg:flex">
               <Link href="/about" className="transition-colors hover:text-white">
                 About
               </Link>
@@ -86,6 +76,10 @@ export function SiteHeader() {
               <span className="text-emerald-500/50">|</span>
               <Link href="/methodology" className="transition-colors hover:text-white">
                 Privacy Policy
+              </Link>
+              <span className="text-emerald-500/50">|</span>
+              <Link href="/#faq-section" className="transition-colors hover:text-white">
+                FAQs
               </Link>
             </div>
 
@@ -301,16 +295,6 @@ export function SiteHeader() {
                   className="rounded-md px-3 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
                 >
                   SMS Codes
-                </Link>
-              </li>
-
-              {/* FAQs */}
-              <li>
-                <Link
-                  href="/#faq-section"
-                  className="rounded-md px-3 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
-                >
-                  FAQs
                 </Link>
               </li>
             </ul>
