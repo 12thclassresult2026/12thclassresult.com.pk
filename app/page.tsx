@@ -9,7 +9,7 @@ import { HeroSection } from '@/components/home/hero-section'
 import { GazetteSection } from '@/components/home/gazette-section'
 import { StepProcessSection } from '@/components/home/step-process-section'
 import { JsonLdScript } from '@/components/seo/json-ld'
-import { FaqAccordion } from '@/components/ui/faq-accordion'
+import { FaqShowcaseSection } from '@/components/home/faq-showcase-section'
 import { BOARDS, routedBoards } from '@/lib/board/registry'
 import { PROVINCE_LABELS } from '@/lib/board/types'
 import { requirePage } from '@/lib/content/registry'
@@ -166,26 +166,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 6. FREQUENTLY ASKED QUESTIONS */}
-      <section id="faq-section" className="w-full scroll-mt-10 bg-white py-16 sm:py-20">
-        <div className="container-wide max-w-4xl">
-          <div className="mx-auto text-center">
-            <span className="rounded-full border border-emerald-200/80 bg-emerald-50 px-3.5 py-1 text-xs font-bold text-[#007054]">
-              HELP &amp; INFORMATION
-            </span>
-            <h2 className="mt-3 text-2xl font-black text-slate-900 sm:text-3xl">
-              Frequently Asked Questions About 12th Class Result 2026
-            </h2>
-            <p className="mt-2 text-sm text-slate-600">
-              Common questions about 12th class results, dates, roll numbers and verification.
-            </p>
-          </div>
-
-          <div className="mt-10">
-            <FaqAccordion items={FAQS} />
-          </div>
-        </div>
-      </section>
+      {/* 6. FREQUENTLY ASKED QUESTIONS (Showcase Design) */}
+      <FaqShowcaseSection />
     </div>
   )
 }
