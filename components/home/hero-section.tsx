@@ -90,7 +90,7 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
   }
 
   return (
-    <section className="relative overflow-hidden bg-[#F8FAF9] bg-[url('/images/hero-bg.webp')] bg-cover bg-bottom bg-no-repeat pt-8 pb-16 sm:pt-10 sm:pb-20 lg:pt-12 lg:pb-24">
+    <section className="relative overflow-hidden bg-[#F8FAF9] bg-[url('/images/hero-bg.webp')] bg-cover bg-center bg-no-repeat pt-8 pb-16 sm:pt-10 sm:pb-20 lg:pt-12 lg:pb-24">
       {/* Soft gradient wash for crisp contrast and readability */}
       <div
         aria-hidden="true"
