@@ -6,6 +6,7 @@ import type { FaqItem } from '@/components/ui/faq-accordion'
 
 import { BoardCardsGrid } from '@/components/home/board-cards-grid'
 import { HeroSection } from '@/components/home/hero-section'
+import { GazetteSection } from '@/components/home/gazette-section'
 import { StepProcessSection } from '@/components/home/step-process-section'
 import { JsonLdScript } from '@/components/seo/json-ld'
 import { FaqAccordion } from '@/components/ui/faq-accordion'
@@ -113,7 +114,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. FREQUENTLY ASKED QUESTIONS */}
+      {/* 5. GAZETTE DOWNLOAD SECTION */}
+      <section className="relative w-full overflow-hidden border-b border-slate-200/60 bg-gradient-to-b from-[#F9FBFA] via-white to-[#F2FAF7] py-16 sm:py-20">
+        <div className="container-wide relative">
+          <GazetteSection />
+        </div>
+      </section>
+
+      {/* 6. FREQUENTLY ASKED QUESTIONS */}
       <section className="w-full bg-white py-16 sm:py-20">
         <div className="container-wide max-w-4xl">
           <div className="mx-auto text-center">
