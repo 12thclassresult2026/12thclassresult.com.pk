@@ -106,11 +106,11 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
           className="block font-serif text-2xl leading-snug font-black text-[#004D3F] xl:text-3xl"
           dir="rtl"
         >
-          ?????
+          تعلیم
           <br />
-          ????
+          سے
           <br />
-          ???? ???????
+          روشن پاکستان
         </span>
       </div>
 
