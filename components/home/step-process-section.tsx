@@ -35,11 +35,11 @@ const STEPS = [
   },
   {
     stepNumber: '02',
-    title: 'Open Its Result Guide',
+    title: 'Choose Year & Exam',
     actionText: 'Official Schedule',
     href: '/results/12th-class',
     description:
-      "View your board's result guide to check the result date, available methods, and latest updates for the 12th class result.",
+      'Select examination year 2026 and choose the Annual or 2nd Annual HSSC Part-II intermediate session.',
     icon: CalendarIcon,
     pillBg: 'bg-[#10B981]',
     iconBg: 'bg-emerald-50',
@@ -58,11 +58,11 @@ const STEPS = [
   },
   {
     stepNumber: '03',
-    title: 'Go To The Official Portal',
-    actionText: 'Verified Direct Link',
-    href: '/boards',
+    title: 'Enter Roll Number',
+    actionText: 'Input Roll No',
+    href: '/#check-result',
     description:
-      "Use the verified direct result link provided in your board's guide to open the official result portal.",
+      'Input your candidate roll number to search matching verified Gazette datasets and board record archives.',
     icon: FileTextIcon,
     pillBg: 'bg-[#8B5CF6]',
     iconBg: 'bg-purple-50',
@@ -81,11 +81,11 @@ const STEPS = [
   },
   {
     stepNumber: '04',
-    title: 'Check Result On Board Website',
-    actionText: 'Official Marksheet',
+    title: 'View Verified Result or Fallback',
+    actionText: 'Verified Marksheet',
     href: '/#check-result',
     description:
-      'Enter your roll number on the official board website and view your 12th class marks. You can also download or print your result.',
+      'Inspect your verified Gazette record marks instantly. If local lookup is unavailable for your board, use the verified official portal fallback.',
     icon: CheckCircleIcon,
     pillBg: 'bg-[#F59E0B]',
     iconBg: 'bg-amber-50',
@@ -273,9 +273,9 @@ export function StepProcessSection() {
             <CheckIcon width={16} height={16} />
           </div>
           <p className="text-xs leading-relaxed text-slate-700 sm:text-sm">
-            <strong className="font-bold text-slate-900">Student Note:</strong> Roll numbers must be
-            entered directly on your respective BISE portal. This ensures 100% official result
-            verification.
+            <strong className="font-bold text-slate-900">Gazette & Verification Note:</strong>{' '}
+            Official gazette records provide independent verification. Where a board only supports
+            direct lookup on its server, we direct you safely to the official board portal fallback.
           </p>
         </div>
 

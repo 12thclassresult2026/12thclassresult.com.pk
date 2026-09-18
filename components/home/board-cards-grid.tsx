@@ -6,6 +6,7 @@ import Link from 'next/link'
 
 import {
   BookOpenIcon,
+  ChevronDownIcon,
   ExternalLinkIcon,
   FileTextIcon,
   MessageSquareIcon,
@@ -261,6 +262,7 @@ const ALL_BOARDS: BoardItem[] = [
 export function BoardCardsGrid({ year = 2026 }: { year?: number }) {
   const [selectedProvince, setSelectedProvince] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState<string>('')
+  const [showAll, setShowAll] = useState<boolean>(false)
 
   const routedSlugs = useMemo(() => new Set(routedBoards().map((b) => b.slug)), [])
 
@@ -279,6 +281,14 @@ export function BoardCardsGrid({ year = 2026 }: { year?: number }) {
       return matchesProvince && matchesSearch
     })
   }, [selectedProvince, searchQuery])
+
+  // Display top 8 priority boards when 'all' is selected and showAll is false
+  const displayedBoards = useMemo(() => {
+    if (!showAll && !searchQuery.trim() && selectedProvince === 'all') {
+      return filteredBoards.slice(0, 8)
+    }
+    return filteredBoards
+  }, [filteredBoards, showAll, searchQuery, selectedProvince])
 
   return (
     <section id="boards" aria-labelledby="boards-grid-heading" className="relative w-full">
@@ -390,7 +400,7 @@ export function BoardCardsGrid({ year = 2026 }: { year?: number }) {
 
       {/* ── 4-Column Board Cards Grid (100% Matching Uploaded Mockup) ─ */}
       <div className="mt-7 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filteredBoards.map((board) => {
+        {displayedBoards.map((board) => {
           const hasPage = routedSlugs.has(board.slug)
           const href = hasPage ? `/results/${board.slug}/12th-class` : '/boards'
           const gazetteHref = hasPage ? `/results/${board.slug}/12th-class#gazette` : '/boards'

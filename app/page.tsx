@@ -5,9 +5,11 @@ import type { BoardOption } from '@/components/result/board-finder'
 import type { FaqItem } from '@/components/ui/faq-accordion'
 
 import { BoardCardsGrid } from '@/components/home/board-cards-grid'
+import { CurrentStatusBlock } from '@/components/home/current-status-block'
 import { HeroSection } from '@/components/home/hero-section'
 import { GazetteSection } from '@/components/home/gazette-section'
 import { StepProcessSection } from '@/components/home/step-process-section'
+import { SemanticContentSections } from '@/components/home/semantic-content-sections'
 import { JsonLdScript } from '@/components/seo/json-ld'
 import { FaqShowcaseSection } from '@/components/home/faq-showcase-section'
 import { BOARDS, routedBoards } from '@/lib/board/registry'
@@ -121,6 +123,9 @@ export default function HomePage() {
       {/* 1. HERO SECTION (Daylight Pakistan Campus Theme) */}
       <HeroSection boards={boardOptions} />
 
+      {/* 2. CURRENT STATUS ANSWER BLOCK (AEO/SEO Structured Facts) */}
+      <CurrentStatusBlock />
+
       {/* 2. THE STATUS STRIP (Latest Update) */}
       <section className="border-y border-emerald-100 bg-[#EDF8F5] py-5">
         <div className="container-wide">
@@ -167,6 +172,10 @@ export default function HomePage() {
       </section>
 
       {/* 6. FREQUENTLY ASKED QUESTIONS (Showcase Design) */}
+      {/* 7. 5 SEMANTIC CONTENT SECTIONS (AEO / Comprehensive Topical Authority) */}
+      <SemanticContentSections />
+
+      {/* 8. FREQUENTLY ASKED QUESTIONS (Showcase Design) */}
       <FaqShowcaseSection />
     </div>
   )

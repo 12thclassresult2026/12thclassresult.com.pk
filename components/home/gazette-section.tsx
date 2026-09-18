@@ -6,6 +6,7 @@ import Link from 'next/link'
 
 import {
   BarChartIcon,
+  ExternalLinkIcon,
   CalendarIcon,
   ClockIcon,
   DownloadIcon,
@@ -17,6 +18,8 @@ import {
 } from '@/components/ui/icons'
 import { routedBoards } from '@/lib/board/registry'
 
+type GazetteStatus = 'available' | 'processing' | 'official-source' | 'not-available'
+
 interface GazetteBoard {
   id: string
   name: string
@@ -25,7 +28,7 @@ interface GazetteBoard {
   province: 'punjab' | 'kpk' | 'sindh' | 'balochistan' | 'federal'
   provinceLabel: string
   logo: string
-  pdfReady: boolean
+  status: GazetteStatus
   fileSize?: string
 }
 
@@ -38,7 +41,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'punjab',
     provinceLabel: 'Punjab',
     logo: '/logos/bise-lahore.webp',
-    pdfReady: true,
+    status: 'available',
     fileSize: '4.2 MB',
   },
   {
@@ -49,7 +52,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'punjab',
     provinceLabel: 'Punjab',
     logo: '/logos/bise-gujranwala.webp',
-    pdfReady: true,
+    status: 'available',
     fileSize: '3.8 MB',
   },
   {
@@ -60,7 +63,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'punjab',
     provinceLabel: 'Punjab',
     logo: '/logos/bise-faisalabad.webp',
-    pdfReady: false,
+    status: 'processing',
   },
   {
     id: 'bise-multan',
@@ -70,7 +73,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'punjab',
     provinceLabel: 'Punjab',
     logo: '/logos/bise-multan.webp',
-    pdfReady: true,
+    status: 'available',
     fileSize: '4.1 MB',
   },
   {
@@ -81,7 +84,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'punjab',
     provinceLabel: 'Punjab',
     logo: '/logos/bise-rawalpindi.webp',
-    pdfReady: false,
+    status: 'processing',
   },
   {
     id: 'bise-sargodha',
@@ -91,7 +94,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'punjab',
     provinceLabel: 'Punjab',
     logo: '/logos/bise-sargodha.webp',
-    pdfReady: true,
+    status: 'available',
     fileSize: '3.9 MB',
   },
   {
@@ -102,7 +105,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'punjab',
     provinceLabel: 'Punjab',
     logo: '/logos/bise-sahiwal.webp',
-    pdfReady: false,
+    status: 'not-available',
   },
   {
     id: 'bise-bahawalpur',
@@ -112,7 +115,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'punjab',
     provinceLabel: 'Punjab',
     logo: '/logos/bise-bahawalpur.webp',
-    pdfReady: true,
+    status: 'available',
     fileSize: '3.6 MB',
   },
   {
@@ -123,7 +126,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'punjab',
     provinceLabel: 'Punjab',
     logo: '/logos/bise-dg-khan.webp',
-    pdfReady: false,
+    status: 'not-available',
   },
   {
     id: 'fbise',
@@ -133,7 +136,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'federal',
     provinceLabel: 'Federal',
     logo: '/logos/fbise.png',
-    pdfReady: true,
+    status: 'available',
     fileSize: '4.5 MB',
   },
   {
@@ -144,7 +147,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'kpk',
     provinceLabel: 'KPK',
     logo: '/logos/bise-peshawar.png',
-    pdfReady: false,
+    status: 'not-available',
   },
   {
     id: 'bise-quetta',
@@ -154,7 +157,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'balochistan',
     provinceLabel: 'Balochistan',
     logo: '/icons/crest.svg',
-    pdfReady: false,
+    status: 'not-available',
   },
   {
     id: 'biek-karachi',
@@ -164,7 +167,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'sindh',
     provinceLabel: 'Sindh',
     logo: '/logos/karachi.img',
-    pdfReady: true,
+    status: 'available',
     fileSize: '5.2 MB',
   },
   {
@@ -175,7 +178,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'sindh',
     provinceLabel: 'Sindh',
     logo: '/icons/crest.svg',
-    pdfReady: false,
+    status: 'not-available',
   },
   {
     id: 'bise-sukkur',
@@ -185,7 +188,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'sindh',
     provinceLabel: 'Sindh',
     logo: '/icons/crest.svg',
-    pdfReady: false,
+    status: 'not-available',
   },
   {
     id: 'bise-larkana',
@@ -195,7 +198,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'sindh',
     provinceLabel: 'Sindh',
     logo: '/icons/crest.svg',
-    pdfReady: false,
+    status: 'not-available',
   },
   {
     id: 'bise-mirpurkhas',
@@ -205,7 +208,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'sindh',
     provinceLabel: 'Sindh',
     logo: '/icons/crest.svg',
-    pdfReady: false,
+    status: 'not-available',
   },
   {
     id: 'bise-abbottabad',
@@ -215,7 +218,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'kpk',
     provinceLabel: 'KPK',
     logo: '/logos/abbottabad.png',
-    pdfReady: true,
+    status: 'available',
     fileSize: '4.0 MB',
   },
   {
@@ -226,7 +229,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'kpk',
     provinceLabel: 'KPK',
     logo: '/logos/mardan.png',
-    pdfReady: false,
+    status: 'not-available',
   },
   {
     id: 'bise-swat',
@@ -236,7 +239,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'kpk',
     provinceLabel: 'KPK',
     logo: '/logos/swat.jpg',
-    pdfReady: false,
+    status: 'not-available',
   },
   {
     id: 'bise-malakand',
@@ -246,7 +249,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'kpk',
     provinceLabel: 'KPK',
     logo: '/logos/malakand.png',
-    pdfReady: false,
+    status: 'not-available',
   },
   {
     id: 'bise-kohat',
@@ -256,7 +259,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'kpk',
     provinceLabel: 'KPK',
     logo: '/logos/kohat.png',
-    pdfReady: false,
+    status: 'not-available',
   },
   {
     id: 'bise-bannu',
@@ -266,7 +269,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'kpk',
     provinceLabel: 'KPK',
     logo: '/logos/bannu.png',
-    pdfReady: false,
+    status: 'not-available',
   },
   {
     id: 'bise-dikhan',
@@ -276,7 +279,7 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'kpk',
     provinceLabel: 'KPK',
     logo: '/logos/dikhan.png',
-    pdfReady: false,
+    status: 'not-available',
   },
 ]
 
@@ -380,13 +383,15 @@ export function GazetteSection() {
           id="gazette-heading"
           className="mt-3.5 text-2xl font-black tracking-tight text-[#0F1736] sm:text-3xl lg:text-[40px] lg:leading-tight"
         >
-          Download 12th Class <span className="text-[#007054]">Gazette 2026</span>
+          12th Class Result Gazette 2026 —{' '}
+          <span className="text-[#007054]">Availability &amp; Downloads</span>
         </h2>
 
         {/* Subtitle */}
         <p className="mx-auto mt-3 max-w-2xl text-xs leading-relaxed text-[#5F6B7A] sm:text-sm">
-          Access separate gazette guides and downloads for each board. Find your board, check
-          availability, and download the relevant HSSC Part-II gazette PDF.
+          Access verified gazette publications and status updates for each intermediate board. We
+          label each board with its real status—Available, Processing, Official Source, or Not
+          Available Yet—without misleading download buttons.
         </p>
       </div>
 
@@ -507,20 +512,33 @@ export function GazetteSection() {
                       12th Class (HSSC Part-II) • Gazette 2026
                     </p>
 
-                    {/* Status Pill */}
-                    {board.pdfReady ? (
+                    {/* Honest Status Chips */}
+                    {board.status === 'available' && (
                       <div className="mt-2 flex items-center gap-1.5 text-[11px] font-bold text-[#007054]">
                         <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#007054] text-[9px] font-black text-white">
                           ✓
                         </span>
-                        <span>PDF Ready</span>
+                        <span>Available</span>
                         <span className="text-slate-300">•</span>
                         <span className="font-medium text-slate-500">PDF • {board.fileSize}</span>
                       </div>
-                    ) : (
-                      <div className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-0.5 text-[11px] font-bold text-amber-700">
+                    )}
+                    {board.status === 'processing' && (
+                      <div className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-0.5 text-[11px] font-bold text-blue-700">
                         <ClockIcon width={11} height={11} />
-                        <span>Available Soon</span>
+                        <span>Processing</span>
+                      </div>
+                    )}
+                    {board.status === 'official-source' && (
+                      <div className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-purple-200 bg-purple-50 px-2.5 py-0.5 text-[11px] font-bold text-purple-700">
+                        <ShieldCheckIcon width={11} height={11} />
+                        <span>Official Source</span>
+                      </div>
+                    )}
+                    {board.status === 'not-available' && (
+                      <div className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-100 px-2.5 py-0.5 text-[11px] font-bold text-slate-600">
+                        <ClockIcon width={11} height={11} />
+                        <span>Not Available Yet</span>
                       </div>
                     )}
                   </div>
@@ -529,16 +547,40 @@ export function GazetteSection() {
 
               {/* Bottom: Action Buttons + Sub-links */}
               <div className="mt-4 border-t border-slate-100 pt-3">
-                {/* 2 Main Action Buttons */}
+                {/* 2 Contextual Action Buttons */}
                 <div className="grid grid-cols-2 gap-2">
-                  {/* Button 1: Download Gazette */}
-                  <Link
-                    href={downloadHref}
-                    className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#007054] px-2.5 py-2 text-center text-xs font-bold text-white shadow-2xs transition-colors hover:bg-[#005a43] active:scale-95"
-                  >
-                    <DownloadIcon width={12} height={12} />
-                    <span>Download Gazette</span>
-                  </Link>
+                  {/* Button 1: Contextual based on true status */}
+                  {board.status === 'available' ? (
+                    <Link
+                      href={downloadHref}
+                      className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#007054] px-2.5 py-2 text-center text-xs font-bold text-white shadow-2xs transition-colors hover:bg-[#005a43] active:scale-95"
+                    >
+                      <DownloadIcon width={12} height={12} />
+                      <span>Download PDF</span>
+                    </Link>
+                  ) : board.status === 'official-source' ? (
+                    <Link
+                      href={guideHref}
+                      className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-2 text-center text-xs font-bold text-indigo-700 shadow-2xs transition-colors hover:bg-indigo-100 active:scale-95"
+                    >
+                      <ExternalLinkIcon width={12} height={12} />
+                      <span>Official Source</span>
+                    </Link>
+                  ) : board.status === 'processing' ? (
+                    <Link
+                      href={guideHref}
+                      className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-2 text-center text-xs font-bold text-blue-700 shadow-2xs transition-colors hover:bg-blue-100 active:scale-95"
+                    >
+                      <span>Processing</span>
+                    </Link>
+                  ) : (
+                    <Link
+                      href={guideHref}
+                      className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-center text-xs font-semibold text-slate-600 shadow-2xs transition-colors hover:bg-slate-50 active:scale-95"
+                    >
+                      <span>Check Schedule</span>
+                    </Link>
+                  )}
 
                   {/* Button 2: View Guide */}
                   <Link

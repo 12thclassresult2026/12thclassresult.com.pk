@@ -189,17 +189,17 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
             12th Class Result <span className="text-[#007054]">2026</span> Pakistan
           </h1>
 
+          {/* 2-line Semantic Intro */}
+          <p className="mx-auto mt-2.5 max-w-2xl text-center text-xs leading-relaxed font-semibold text-slate-700 sm:text-sm md:text-base">
+            Check 12th Class, 2nd Year and HSSC Part-II results across Pakistan by board, roll
+            number and verified Gazette where available.
+          </p>
+
           {/* Sub-heading */}
-          <p className="mt-2 text-center text-lg font-bold text-slate-800 sm:text-2xl">
+          <p className="mt-1.5 text-center text-base font-bold text-slate-800 sm:text-xl">
             Check by <span className="font-black text-[#007054]">Roll Number</span>,{' '}
             <span className="font-black text-[#007054]">Name</span> or{' '}
             <span className="font-black text-[#007054]">SMS</span>
-          </p>
-
-          {/* Subtitle Description */}
-          <p className="mx-auto mt-2.5 max-w-2xl text-center text-xs leading-relaxed text-slate-600 sm:text-sm">
-            Pakistan&apos;s most trusted and independent portal for 12th Class (HSSC Part-II) annual
-            examination results. Find your board, enter your details and get your result quickly.
           </p>
 
           {/* Floating Result Checker Card */}
