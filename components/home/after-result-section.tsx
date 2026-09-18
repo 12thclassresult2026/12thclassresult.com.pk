@@ -155,13 +155,14 @@ export function AfterResultSection() {
 
             {/* Right 5 Cols: Premium University / Future Education Visual */}
             <div className="flex flex-col overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-xs lg:col-span-5">
-              <div className="relative min-h-[260px] flex-1 sm:min-h-[320px]">
+              <div className="relative h-64 w-full sm:h-72 lg:h-full lg:min-h-[360px]">
                 <Image
                   src="/images/future-campus.jpg"
                   alt="Modern higher education university campus architecture and academic library"
                   fill
+                  unoptimized
                   sizes="(max-width: 1024px) 100vw, 40vw"
-                  className="object-cover transition-transform duration-500 hover:scale-105"
+                  className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                 />
               </div>
               <div className="border-t border-slate-100 bg-white p-4 sm:p-5">
