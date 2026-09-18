@@ -9,6 +9,7 @@ import { FaqShowcaseSection } from '@/components/home/faq-showcase-section'
 import { GazetteLookupExplainerSection } from '@/components/home/gazette-lookup-explainer-section'
 import { GazetteSection } from '@/components/home/gazette-section'
 import { HeroSection } from '@/components/home/hero-section'
+import { ResultInformationSection } from '@/components/home/result-information-section'
 import { ResultMethodsSection } from '@/components/home/result-methods-section'
 import { ResultScheduleSection } from '@/components/home/result-schedule-section'
 import { SemanticContentSections } from '@/components/home/semantic-content-sections'
@@ -162,10 +163,13 @@ export default function HomePage() {
       {/* 9. RESULT SCHEDULE (When Will 12th Class Result Be Announced?) */}
       <ResultScheduleSection />
 
-      {/* 10. 5 SEMANTIC CONTENT SECTIONS (AEO / Comprehensive Topical Authority) */}
+      {/* 10. RESULT INFORMATION & DMC COMPARISON */}
+      <ResultInformationSection />
+
+      {/* 11. 5 SEMANTIC CONTENT SECTIONS (AEO / Comprehensive Topical Authority) */}
       <SemanticContentSections />
 
-      {/* 11. FREQUENTLY ASKED QUESTIONS (Showcase Design) */}
+      {/* 12. FREQUENTLY ASKED QUESTIONS (Showcase Design) */}
       <FaqShowcaseSection />
     </div>
   )
