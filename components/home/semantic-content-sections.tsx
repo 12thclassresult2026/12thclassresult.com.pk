@@ -1,6 +1,8 @@
 import Link from 'next/link'
 
 import {
+  ArrowRightIcon,
+  BarChartIcon,
   BookOpenIcon,
   CheckCircle2Icon,
   FileTextIcon,
@@ -9,98 +11,309 @@ import {
   ZapIcon,
 } from '@/components/ui/icons'
 
+function StethoscopeIcon({
+  width = 20,
+  height = 20,
+  className = '',
+}: {
+  width?: number
+  height?: number
+  className?: string
+}) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M4.5 3v5a4.5 4.5 0 0 0 9 0V3" />
+      <path d="M6 3h-3" />
+      <path d="M15 3h-3" />
+      <path d="M9 12.5v2.5a5 5 0 0 0 10 0V11" />
+      <circle cx="19" cy="10" r="2" />
+    </svg>
+  )
+}
+
+function GearIcon({
+  width = 20,
+  height = 20,
+  className = '',
+}: {
+  width?: number
+  height?: number
+  className?: string
+}) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+    </svg>
+  )
+}
+
+function LaptopIcon({
+  width = 20,
+  height = 20,
+  className = '',
+}: {
+  width?: number
+  height?: number
+  className?: string
+}) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <rect x="3" y="4" width="18" height="12" rx="2" />
+      <line x1="2" y1="20" x2="22" y2="20" />
+    </svg>
+  )
+}
+
+function AtomIcon({
+  width = 20,
+  height = 20,
+  className = '',
+}: {
+  width?: number
+  height?: number
+  className?: string
+}) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="2" />
+      <ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(30 12 12)" />
+      <ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(90 12 12)" />
+      <ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(150 12 12)" />
+    </svg>
+  )
+}
+
+function GraduationCapIcon({
+  width = 22,
+  height = 22,
+  className = '',
+}: {
+  width?: number
+  height?: number
+  className?: string
+}) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+      <path d="M6 12v5c3 3 9 3 12 0v-5" />
+    </svg>
+  )
+}
+
+const ACADEMIC_STREAMS = [
+  {
+    name: 'FSc Pre-Medical',
+    icon: StethoscopeIcon,
+    description:
+      'Physics, Chemistry, Biology — Mandatory prerequisite for medical colleges (MBBS/BDS) and allied health sciences via MDCAT.',
+  },
+  {
+    name: 'FSc Pre-Engineering',
+    icon: GearIcon,
+    description:
+      'Physics, Chemistry, Mathematics — Required gateway for engineering universities, computing programs, and technology institutes via ECAT.',
+  },
+  {
+    name: 'ICS (Computer Science)',
+    icon: LaptopIcon,
+    description:
+      'Computer Science, Mathematics, Physics/Statistics — Standard track for software engineering, BS Computer Science, AI, and IT degrees.',
+  },
+  {
+    name: 'I.Com (Commerce)',
+    icon: BarChartIcon,
+    description:
+      'Accounting, Banking, Commercial Geography — Foundation for BBA, BS Accounting & Finance, CA, ACCA, and business management.',
+  },
+  {
+    name: 'FA (Humanities / Arts)',
+    icon: BookOpenIcon,
+    description:
+      'Economics, Political Science, Psychology, Languages — Gateway to Law (LLB), social sciences, public administration, and civil services.',
+  },
+  {
+    name: 'General Science',
+    icon: AtomIcon,
+    description:
+      'Mathematics, Statistics, Economics — Preferred preparation for data science, actuarial science, analytics, and economics.',
+  },
+]
+
 export function SemanticContentSections() {
   return (
     <div className="relative border-b border-slate-200/80 bg-white py-16 sm:py-20">
       <div className="container-wide">
-        <div className="mx-auto max-w-4xl space-y-16 lg:space-y-20">
+        <div className="mx-auto max-w-6xl space-y-16 lg:space-y-20">
           {/* ========================================================================= */}
           {/* SECTION 1: WHAT IS 12TH CLASS / 2ND YEAR / HSSC PART-II?                   */}
           {/* ========================================================================= */}
-          <article id="about-12th-class" aria-labelledby="heading-what-is-12th">
-            <div className="flex items-center gap-2 text-xs font-black tracking-widest text-[#007054] uppercase">
-              <span className="flex h-2 w-2 rounded-full bg-[#007054]" />
-              <span>ACADEMIC FRAMEWORK &amp; EQUIVALENCE</span>
+          <article
+            id="about-12th-class"
+            aria-labelledby="heading-what-is-12th"
+            className="relative"
+          >
+            {/* Right side dot matrix pattern */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute top-4 -right-2 hidden grid-cols-4 gap-2 text-emerald-300/40 select-none lg:grid"
+            >
+              {Array.from({ length: 16 }).map((_, i) => (
+                <span key={i} className="h-1.5 w-1.5 rounded-full bg-emerald-400/30" />
+              ))}
             </div>
 
-            <h2
-              id="heading-what-is-12th"
-              className="mt-3 text-2xl font-black tracking-tight text-slate-900 sm:text-3xl lg:text-[34px] lg:leading-tight"
-            >
-              What is 12th Class, 2nd Year &amp;{' '}
-              <span className="text-[#007054]">HSSC Part-II?</span>
-            </h2>
-
-            <div className="mt-4 space-y-4 text-xs leading-relaxed text-slate-700 sm:text-sm md:text-[15px] md:leading-relaxed">
-              <p>
-                In Pakistan&apos;s national secondary education framework,{' '}
-                <strong>12th Class</strong>, <strong>2nd Year</strong>,{' '}
-                <strong>Intermediate Part-II</strong>, and{' '}
-                <strong>HSSC Part-II (Higher Secondary School Certificate Part-II)</strong> refer to
-                the concluding grade of intermediate schooling. Following the 11th Class (First
-                Year) examinations, 12th Class represents the definitive academic milestone that
-                determines a student&apos;s cumulative intermediate score, division, and eligibility
-                for higher education.
-              </p>
-              <p>
-                All 24+ Boards of Intermediate and Secondary Education (BISE) across Punjab, Khyber
-                Pakhtunkhwa (KPK), Sindh, Balochistan, Azad Jammu &amp; Kashmir (AJK), and the
-                Federal Board (FBISE Islamabad) administer this examination annually across major
-                study streams:
-              </p>
-
-              {/* Stream Breakdown Cards */}
-              <div className="grid grid-cols-1 gap-3 pt-2 sm:grid-cols-2 md:grid-cols-3">
-                <div className="rounded-xl border border-slate-200/80 bg-slate-50/70 p-3.5">
-                  <span className="font-extrabold text-slate-900">FSc Pre-Medical</span>
-                  <p className="mt-1 text-xs text-slate-600">
-                    Physics, Chemistry, Biology — Mandatory prerequisite for medical colleges
-                    (MBBS/BDS) and allied health sciences via MDCAT.
-                  </p>
-                </div>
-                <div className="rounded-xl border border-slate-200/80 bg-slate-50/70 p-3.5">
-                  <span className="font-extrabold text-slate-900">FSc Pre-Engineering</span>
-                  <p className="mt-1 text-xs text-slate-600">
-                    Physics, Chemistry, Mathematics — Required gateway for engineering universities,
-                    computing programs, and technology institutes via ECAT.
-                  </p>
-                </div>
-                <div className="rounded-xl border border-slate-200/80 bg-slate-50/70 p-3.5">
-                  <span className="font-extrabold text-slate-900">ICS (Computer Science)</span>
-                  <p className="mt-1 text-xs text-slate-600">
-                    Computer Science, Mathematics, Physics/Statistics — Standard track for software
-                    engineering, BS Computer Science, AI, and IT degrees.
-                  </p>
-                </div>
-                <div className="rounded-xl border border-slate-200/80 bg-slate-50/70 p-3.5">
-                  <span className="font-extrabold text-slate-900">I.Com (Commerce)</span>
-                  <p className="mt-1 text-xs text-slate-600">
-                    Accounting, Banking, Commercial Geography — Foundation for BBA, BS Accounting
-                    &amp; Finance, CA, ACCA, and business management.
-                  </p>
-                </div>
-                <div className="rounded-xl border border-slate-200/80 bg-slate-50/70 p-3.5">
-                  <span className="font-extrabold text-slate-900">FA (Humanities / Arts)</span>
-                  <p className="mt-1 text-xs text-slate-600">
-                    Economics, Political Science, Psychology, Languages — Gateway to Law (LLB),
-                    social sciences, public administration, and civil services.
-                  </p>
-                </div>
-                <div className="rounded-xl border border-slate-200/80 bg-slate-50/70 p-3.5">
-                  <span className="font-extrabold text-slate-900">General Science</span>
-                  <p className="mt-1 text-xs text-slate-600">
-                    Mathematics, Statistics, Economics — Preferred preparation for data science,
-                    actuarial science, analytics, and economics.
-                  </p>
-                </div>
+            {/* Header Area */}
+            <div className="mx-auto max-w-3xl text-center">
+              {/* Eyebrow */}
+              <div className="inline-flex items-center justify-center gap-2">
+                <span className="flex h-2 w-2 rounded-full bg-[#007054]" />
+                <span className="text-[11px] font-black tracking-widest text-[#007054] uppercase">
+                  ACADEMIC FRAMEWORK &amp; EQUIVALENCE
+                </span>
               </div>
 
-              <p className="pt-2 text-slate-600">
+              {/* Heading */}
+              <h2
+                id="heading-what-is-12th"
+                className="mt-3.5 text-2xl font-black tracking-tight text-slate-900 sm:text-3xl lg:text-[36px] lg:leading-tight"
+              >
+                What is 12th Class, 2nd Year &amp;{' '}
+                <span className="text-[#007054]">HSSC Part-II?</span>
+              </h2>
+
+              {/* Paragraphs */}
+              <div className="mt-4.5 space-y-3.5 text-xs leading-relaxed text-slate-600 sm:text-sm md:text-[14.5px]">
+                <p>
+                  In Pakistan&apos;s national secondary education framework,{' '}
+                  <strong>12th Class</strong>, <strong>2nd Year</strong>,{' '}
+                  <strong>Intermediate Part-II</strong>, and{' '}
+                  <strong>HSSC Part-II (Higher Secondary School Certificate Part-II)</strong> refer
+                  to the concluding grade of intermediate schooling. Following the 11th Class (First
+                  Year) examinations, 12th Class represents the definitive academic milestone that
+                  determines a student&apos;s cumulative intermediate score, division, and
+                  eligibility for higher education.
+                </p>
+                <p>
+                  All 24+ Boards of Intermediate and Secondary Education (BISE) across Punjab,
+                  Khyber Pakhtunkhwa (KPK), Sindh, Balochistan, Azad Jammu &amp; Kashmir (AJK), and
+                  the Federal Board (FBISE Islamabad) administer this examination annually across
+                  major study streams:
+                </p>
+              </div>
+            </div>
+
+            {/* Stream Breakdown Cards (3 columns x 2 rows) */}
+            <div className="mt-9 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {ACADEMIC_STREAMS.map((stream) => {
+                const Icon = stream.icon
+                return (
+                  <div
+                    key={stream.name}
+                    className="group flex flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs transition-all duration-200 hover:border-emerald-300 hover:shadow-xs"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-[#007054] shadow-2xs">
+                            <Icon width={20} height={20} />
+                          </div>
+                          <h3 className="text-base font-extrabold text-slate-900">{stream.name}</h3>
+                        </div>
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-700 transition-colors group-hover:bg-emerald-100">
+                          <ArrowRightIcon width={13} height={13} />
+                        </div>
+                      </div>
+
+                      <p className="mt-3 text-xs leading-relaxed text-slate-600 sm:text-[13px]">
+                        {stream.description}
+                      </p>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* Bottom Callout Banner */}
+            <div className="relative mt-7 flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-emerald-200/90 bg-[#EAF7F1]/80 p-4.5 text-left shadow-2xs sm:flex-row sm:p-5">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-100/90 text-[#007054] shadow-2xs">
+                <GraduationCapIcon width={24} height={24} />
+              </div>
+
+              <div className="hidden h-10 w-px shrink-0 bg-emerald-200 sm:block" />
+
+              <p className="relative z-10 text-xs leading-relaxed font-medium text-slate-700 sm:text-sm">
                 Because 12th Class aggregate marks carry decisive weight in university admissions,
                 entry test merit lists, and overseas degree equivalencies via IBCC (Inter Board
                 Coordination Commission), obtaining authentic, error-free result records is
                 essential for every candidate.
               </p>
+
+              {/* Faint graduation cap watermark on the right */}
+              <svg
+                viewBox="0 0 120 120"
+                fill="currentColor"
+                aria-hidden="true"
+                className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 text-emerald-600/[0.08] select-none"
+              >
+                <path d="M110 50v30M10 50l50-25 50 25-50 25z" />
+                <path d="M30 60v25c15 15 45 15 60 0v-25" />
+              </svg>
             </div>
           </article>
 
