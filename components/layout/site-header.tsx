@@ -214,36 +214,42 @@ export function SiteHeader() {
                 <button
                   type="button"
                   onClick={() => setOpenDropdown(openDropdown === 'results' ? null : 'results')}
-                  className={`flex items-center gap-1 rounded-md px-3 py-2 text-[13px] font-semibold transition-colors ${
+                  className={`flex items-center gap-1 px-3.5 py-2 text-[13px] font-bold transition-all ${
                     openDropdown === 'results'
-                      ? 'bg-emerald-50 text-[#007054]'
-                      : 'text-slate-700 hover:bg-slate-50 hover:text-[#007054]'
+                      ? 'rounded-t-2xl bg-[#EAF7F2] text-[#007054]'
+                      : 'rounded-md text-slate-700 hover:bg-slate-50 hover:text-[#007054]'
                   }`}
                 >
                   <span>12th Result 2026</span>
-                  <ChevronDownIcon width={12} height={12} className="text-slate-400" />
+                  <ChevronDownIcon
+                    width={12}
+                    height={12}
+                    className={`transition-colors ${
+                      openDropdown === 'results' ? 'text-[#007054]' : 'text-slate-400'
+                    }`}
+                  />
                 </button>
 
                 {openDropdown === 'results' && (
-                  <div className="animate-in fade-in slide-in-from-top-1 absolute top-full left-0 z-50 w-60 rounded-xl border border-slate-200 bg-white py-2 shadow-xl">
+                  <div className="animate-in fade-in slide-in-from-top-1 absolute top-full left-0 z-50 min-w-[240px] overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-xl">
                     <Link
                       href="/results/12th-class"
                       onClick={() => setOpenDropdown(null)}
-                      className="block px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-emerald-50 hover:text-[#007054]"
+                      className="block bg-[#EAF7F2] px-4.5 py-3 text-[13px] font-bold text-[#007054] transition-colors hover:bg-emerald-100/60"
                     >
                       12th Class Result Hub 2026
                     </Link>
                     <Link
                       href="/#check-result"
                       onClick={() => setOpenDropdown(null)}
-                      className="block px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-emerald-50 hover:text-[#007054]"
+                      className="block px-4.5 py-2.5 text-[13px] font-bold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
                     >
                       Roll Number &amp; SMS Search
                     </Link>
                     <Link
                       href="/boards"
                       onClick={() => setOpenDropdown(null)}
-                      className="block px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-emerald-50 hover:text-[#007054]"
+                      className="block px-4.5 py-2.5 pb-3.5 text-[13px] font-bold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
                     >
                       Result Gazette Archives
                     </Link>
