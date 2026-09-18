@@ -16,6 +16,7 @@ import { ResultScheduleSection } from '@/components/home/result-schedule-section
 import { ResultTroubleshootingSection } from '@/components/home/result-troubleshooting-section'
 import { SemanticContentSections } from '@/components/home/semantic-content-sections'
 import { StepProcessSection } from '@/components/home/step-process-section'
+import { TrustVerificationSection } from '@/components/home/trust-verification-section'
 import { UnderstandResultSection } from '@/components/home/understand-result-section'
 import { JsonLdScript } from '@/components/seo/json-ld'
 import { BOARDS, routedBoards } from '@/lib/board/registry'
@@ -177,7 +178,10 @@ export default function HomePage() {
       {/* 13. 5 SEMANTIC CONTENT SECTIONS (AEO / Comprehensive Topical Authority) */}
       <SemanticContentSections />
 
-      {/* 14. FREQUENTLY ASKED QUESTIONS (Showcase Design) */}
+      {/* 14. SOURCE TRANSPARENCY & TRUST VERIFICATION */}
+      <TrustVerificationSection />
+
+      {/* 15. FREQUENTLY ASKED QUESTIONS (Showcase Design) */}
       <FaqShowcaseSection />
     </div>
   )
