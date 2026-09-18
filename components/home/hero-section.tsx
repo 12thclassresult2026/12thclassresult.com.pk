@@ -6,7 +6,11 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import {
+  AlertTriangleIcon,
+  ArrowRightIcon,
+  CheckIcon,
   ChevronDownIcon,
+  CopyIcon,
   GridIcon,
   HashIcon,
   LandmarkIcon,
@@ -19,6 +23,7 @@ import {
   ZapIcon,
 } from '@/components/ui/icons'
 import type { BoardOption } from '@/components/result/board-finder'
+import { getBoardSmsInfo, buildSmsHref } from '@/lib/board/sms-directory'
 
 /* -- 9 Popular Punjab Boards Matching Reference Screenshot -- */
 const PUNJAB_TOP_BOARDS = [
@@ -61,25 +66,48 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
   const [selectedSlug, setSelectedSlug] = useState('lahore-board')
   const [rollNumber, setRollNumber] = useState('')
   const [studentName, setStudentName] = useState('')
+  const [smsRollNumber, setSmsRollNumber] = useState('')
+  const [copiedCode, setCopiedCode] = useState(false)
 
   const chosen = boards.find((b) => b.slug === selectedSlug) || boards[0]
+  const targetHref = chosen?.hasPage ? `/results/${chosen.slug}/12th-class` : '/boards'
+  const smsInfo = getBoardSmsInfo(selectedSlug)
 
   function handleRollSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!chosen) return
-    router.push(chosen.hasPage ? `/results/${chosen.slug}/12th-class` : '/boards')
+    router.push(targetHref)
   }
 
   function handleNameSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!chosen) return
-    router.push(chosen.hasPage ? `/results/${chosen.slug}/12th-class` : '/boards')
+    router.push(targetHref)
   }
 
-  function handleSmsSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!chosen) return
-    router.push(chosen.hasPage ? `/results/${chosen.slug}/12th-class` : '/boards')
+  function handleCopyCode(code: string) {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard
+        .writeText(code)
+        .then(() => {
+          setCopiedCode(true)
+          setTimeout(() => setCopiedCode(false), 2000)
+        })
+        .catch(() => {
+          try {
+            const textArea = document.createElement('textarea')
+            textArea.value = code
+            document.body.appendChild(textArea)
+            textArea.select()
+            document.execCommand('copy')
+            document.body.removeChild(textArea)
+            setCopiedCode(true)
+            setTimeout(() => setCopiedCode(false), 2000)
+          } catch {
+            // ignore
+          }
+        })
+    }
   }
 
   return (
@@ -98,53 +126,42 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
         {/* Green Hanging Banner */}
         <div className="flex flex-col items-center rounded-b-xl bg-[#005B44] px-3.5 py-4 text-white shadow-lg">
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
-            <svg
-              className="h-5 w-5 text-white"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
-              <path d="M6 12v5c3 3 9 3 12 0v-5" />
-            </svg>
+            <LandmarkIcon width={16} height={16} />
           </div>
-          <span className="mt-2 text-center text-[10px] leading-tight font-bold tracking-wider text-emerald-100 uppercase">
-            Higher
-            <br />
-            Education
-            <br />
-            Brighter
-            <br />
-            Pakistan
-          </span>
+          <span className="mt-2 text-[10px] font-black tracking-widest uppercase">ESTD</span>
+          <span className="font-mono text-xs font-black">2026</span>
+          <div className="mt-2 h-6 w-px bg-white/30" />
+          <span className="mt-1 text-[9px] font-semibold text-emerald-100">HSSC-II</span>
         </div>
 
-        {/* Engraved wall text */}
-        <div className="mt-4 pl-1 text-[11px] font-black tracking-[0.25em] text-[#004D3F]/75 uppercase">
-          Knowledge
-          <br />
-          Unites
-          <br />
-          Pakistan
+        {/* Traditional Brick Wall Inscription Motif */}
+        <div className="mt-4 rounded-xl border border-[#005B44]/20 bg-white/70 p-3 shadow-xs backdrop-blur-xs">
+          <span className="block text-[10px] font-bold tracking-widest text-[#005B44] uppercase">
+            Official Archives
+          </span>
+          <span className="mt-0.5 block text-xs font-black text-slate-800">24 Pakistan Boards</span>
+          <div className="mt-2 flex items-center gap-1.5 text-[10px] font-semibold text-slate-600">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            <span>Verified Gazette Hub</span>
+          </div>
         </div>
       </div>
 
-      {/* -- Right Flank: Urdu Heritage Calligraphy & Slogan (Desktop) -- */}
+      {/* -- Right Flank: Urdu Slogan & Motivation (Desktop) -- */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute top-14 right-6 z-10 hidden text-right select-none lg:block xl:top-16 xl:right-10 2xl:right-16"
       >
-        {/* Urdu Calligraphy */}
-        <div className="text-right" dir="rtl">
-          <span className="block font-serif text-2xl leading-tight font-black text-[#005B44] xl:text-3xl">
-            تعلیم
+        {/* Urdu Calligraphy Badge: 'علم روشنی ہے' / 'تعلیم روشن مستقبل' */}
+        <div className="inline-block rounded-2xl border border-emerald-600/25 bg-white/85 px-4 py-3 shadow-md backdrop-blur-xs">
+          <span className="block font-serif text-sm leading-tight font-black text-[#007054]">
+            علم
           </span>
           <span className="block font-serif text-xl leading-tight font-black text-[#005B44] xl:text-2xl">
-            سے
+            روشنی
           </span>
           <span className="block font-serif text-2xl leading-tight font-black text-[#005B44] xl:text-3xl">
-            ترقی پاکستان
+            تعلیم روشن پاکستان
           </span>
           <svg
             className="mt-1 inline-block h-2.5 w-24 text-[#007054]"
@@ -294,40 +311,37 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
                       </label>
                       <div className="relative">
                         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
-                          <UserIcon width={16} height={16} />
+                          <HashIcon width={16} height={16} />
                         </div>
                         <input
                           id="roll-number-input"
                           type="text"
-                          inputMode="numeric"
                           value={rollNumber}
                           onChange={(e) => setRollNumber(e.target.value)}
                           placeholder="e.g. 123456"
-                          autoComplete="off"
-                          maxLength={15}
                           className="h-[48px] w-full rounded-xl border border-slate-300 bg-white py-2.5 pr-3 pl-10 text-xs font-medium text-slate-900 shadow-2xs transition-all placeholder:text-slate-400 focus:border-[#007054] focus:ring-2 focus:ring-[#007054]/20 focus:outline-none sm:text-sm"
                         />
                       </div>
                     </div>
 
-                    {/* Field 3: Action Button */}
+                    {/* Field 3: Submit Button */}
                     <div className="sm:col-span-2 md:col-span-1">
                       <button
                         type="submit"
-                        className="flex h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-[#007054] px-7 text-xs font-bold whitespace-nowrap text-white shadow-sm transition-all hover:bg-[#005842] active:scale-[0.98] sm:text-sm md:w-auto"
+                        className="flex h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-[#007054] px-7 text-xs font-bold whitespace-nowrap text-white shadow-sm transition-all hover:bg-[#005842] sm:text-sm md:w-auto"
                       >
                         <SearchIcon width={16} height={16} />
-                        <span>Check Result</span>
+                        <span>Search Result</span>
                       </button>
                     </div>
                   </div>
 
-                  {/* Privacy & Safe Notice */}
+                  {/* Anti-fraud / Trust Notice */}
                   <div className="flex items-center justify-center gap-2 pt-1 text-center text-[11px] text-slate-500 sm:text-xs">
                     <ShieldCheckIcon width={15} height={15} className="shrink-0 text-[#007054]" />
                     <span>
-                      Your details are safe with us. We only use the information you provide to
-                      fetch your result from official board sources.
+                      Direct roll-number matching against verified Gazette datasets and official
+                      sources.
                     </span>
                   </div>
                 </form>
@@ -371,7 +385,7 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
                         htmlFor="student-name-input"
                         className="mb-1.5 block text-xs font-bold text-slate-800"
                       >
-                        Enter Candidate Name
+                        Enter Student Name
                       </label>
                       <div className="relative">
                         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
@@ -408,11 +422,13 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
                 </form>
               )}
 
-              {/* -- Tab 3: By SMS -- */}
+              {/* -- Tab 3: By SMS (Dynamic Shortcode, One-Click Copy & Direct SMS App Launch) -- */}
               {activeTab === 'sms' && (
-                <form onSubmit={handleSmsSubmit} className="mt-6 space-y-4">
-                  <div className="grid grid-cols-1 items-end gap-3 sm:grid-cols-[1fr_auto]">
-                    <div className="text-left">
+                <div className="mt-6 space-y-4 text-left">
+                  {/* Row 1: Board Selector and Optional Roll Number */}
+                  <div className="grid grid-cols-1 items-end gap-3 sm:grid-cols-2">
+                    {/* Field 1: Select Board */}
+                    <div>
                       <label
                         htmlFor="sms-board-select"
                         className="mb-1.5 block text-xs font-bold text-slate-800"
@@ -426,7 +442,10 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
                         <select
                           id="sms-board-select"
                           value={selectedSlug}
-                          onChange={(e) => setSelectedSlug(e.target.value)}
+                          onChange={(e) => {
+                            setSelectedSlug(e.target.value)
+                            setCopiedCode(false)
+                          }}
                           className="h-[48px] w-full appearance-none rounded-xl border border-slate-300 bg-white py-2.5 pr-8 pl-10 text-xs font-semibold text-slate-900 shadow-2xs transition-all focus:border-[#007054] focus:ring-2 focus:ring-[#007054]/20 focus:outline-none sm:text-sm"
                         >
                           {boards.map((b) => (
@@ -441,25 +460,185 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
                       </div>
                     </div>
 
+                    {/* Field 2: Optional Roll Number to Pre-fill SMS */}
                     <div>
-                      <button
-                        type="submit"
-                        className="flex h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-[#007054] px-7 text-xs font-bold whitespace-nowrap text-white shadow-sm transition-all hover:bg-[#005842] sm:text-sm md:w-auto"
+                      <label
+                        htmlFor="sms-roll-input"
+                        className="mb-1.5 block text-xs font-bold text-slate-800"
                       >
-                        <SmartphoneIcon width={16} height={16} />
-                        <span>View Board SMS Guide</span>
-                      </button>
+                        Roll Number{' '}
+                        <span className="font-normal text-slate-400">
+                          (optional &mdash; pre-fills SMS)
+                        </span>
+                      </label>
+                      <div className="relative">
+                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                          <HashIcon width={16} height={16} />
+                        </div>
+                        <input
+                          id="sms-roll-input"
+                          type="text"
+                          value={smsRollNumber}
+                          onChange={(e) => setSmsRollNumber(e.target.value)}
+                          placeholder="e.g. 123456"
+                          className="h-[48px] w-full rounded-xl border border-slate-300 bg-white py-2.5 pr-3 pl-10 text-xs font-medium text-slate-900 shadow-2xs transition-all placeholder:text-slate-400 focus:border-[#007054] focus:ring-2 focus:ring-[#007054]/20 focus:outline-none sm:text-sm"
+                        />
+                      </div>
                     </div>
                   </div>
 
+                  {/* Row 2: Dynamic SMS Result Card for Selected Board */}
+                  {smsInfo.supported && smsInfo.shortcode ? (
+                    <div className="rounded-2xl border border-emerald-200/90 bg-gradient-to-b from-[#F2FAF6] to-white p-4 shadow-sm sm:p-5">
+                      {/* Top Header of Card */}
+                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-emerald-100 pb-3">
+                        <div className="flex items-center gap-2.5">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#007054] text-white shadow-xs">
+                            <SmartphoneIcon width={16} height={16} />
+                          </div>
+                          <div>
+                            <h4 className="text-xs font-extrabold text-slate-900 sm:text-sm">
+                              {smsInfo.boardName} Result SMS Service
+                            </h4>
+                            <p className="text-[11px] font-medium text-slate-500">
+                              {smsInfo.networkCharges}
+                            </p>
+                          </div>
+                        </div>
+                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100/90 px-2.5 py-0.5 text-[11px] font-bold text-emerald-800">
+                          <CheckIcon width={12} height={12} />
+                          Verified Shortcode
+                        </span>
+                      </div>
+
+                      {/* Code Box & Actions Row */}
+                      <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        {/* Shortcode & Format Instruction */}
+                        <div className="flex items-center gap-3">
+                          <div className="flex min-w-[120px] flex-col items-center justify-center rounded-xl border border-emerald-300/80 bg-white px-4 py-2 shadow-xs">
+                            <span className="text-[10px] font-black tracking-wider text-slate-400 uppercase">
+                              Send SMS To
+                            </span>
+                            <span className="font-mono text-xl font-black tracking-widest text-[#007054] sm:text-2xl">
+                              {smsInfo.shortcode}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="block text-xs font-bold text-slate-800">
+                              Message Format:{' '}
+                              <span className="font-mono font-bold text-emerald-800">
+                                {smsRollNumber
+                                  ? `${smsInfo.prefix || ''}${smsRollNumber}`
+                                  : smsInfo.format}
+                              </span>
+                            </span>
+                            <span className="block text-[11px] text-slate-500">
+                              Example: {smsInfo.example}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Two Action Buttons: Copy Code + Direct SMS */}
+                        <div className="flex items-center gap-2">
+                          {/* Button 1: Copy Code */}
+                          <button
+                            type="button"
+                            onClick={() => handleCopyCode(smsInfo.shortcode!)}
+                            className={`flex h-[44px] items-center justify-center gap-1.5 rounded-xl border px-4 text-xs font-bold shadow-xs transition-all ${
+                              copiedCode
+                                ? 'border-emerald-600 bg-emerald-600 text-white shadow-emerald-500/20'
+                                : 'border-slate-300 bg-white text-slate-800 hover:border-emerald-500 hover:bg-emerald-50/50'
+                            }`}
+                            title="Copy SMS Shortcode"
+                          >
+                            {copiedCode ? (
+                              <>
+                                <CheckIcon width={15} height={15} />
+                                <span>Code Copied!</span>
+                              </>
+                            ) : (
+                              <>
+                                <CopyIcon width={15} height={15} />
+                                <span>Copy Code</span>
+                              </>
+                            )}
+                          </button>
+
+                          {/* Button 2: Direct SMS */}
+                          <a
+                            href={buildSmsHref(smsInfo.shortcode, smsInfo.prefix, smsRollNumber)}
+                            className="flex h-[44px] items-center justify-center gap-2 rounded-xl bg-[#007054] px-5 text-xs font-bold text-white shadow-sm transition-all hover:bg-[#005842] active:scale-95"
+                            title="Open in Mobile Messages App"
+                          >
+                            <MessageSquareIcon width={16} height={16} />
+                            <span>Direct SMS</span>
+                          </a>
+                        </div>
+                      </div>
+
+                      {/* Card Footer: Tip & Board Guide Link */}
+                      <div className="mt-3.5 flex flex-wrap items-center justify-between gap-2 border-t border-emerald-100/70 pt-2.5 text-[11px] text-slate-600">
+                        <span className="flex items-center gap-1.5">
+                          <ShieldCheckIcon width={14} height={14} className="text-[#007054]" />
+                          Tap &ldquo;Direct SMS&rdquo; to open your mobile SMS app instantly.
+                        </span>
+                        <Link
+                          href={targetHref}
+                          className="inline-flex items-center gap-1 font-semibold text-[#007054] hover:underline"
+                        >
+                          <span>Full Board Guide</span>
+                          <ArrowRightIcon width={12} height={12} />
+                        </Link>
+                      </div>
+                    </div>
+                  ) : (
+                    /* Fallback for boards without SMS (e.g. Karachi / BIEK) */
+                    <div className="rounded-2xl border border-amber-200 bg-amber-50/80 p-4 sm:p-5">
+                      <div className="flex items-start gap-3">
+                        <AlertTriangleIcon
+                          width={20}
+                          height={20}
+                          className="mt-0.5 shrink-0 text-amber-600"
+                        />
+                        <div className="flex-1">
+                          <h4 className="text-xs font-bold text-amber-900 sm:text-sm">
+                            {smsInfo.boardName} &mdash; Official SMS Service Not Available
+                          </h4>
+                          <p className="mt-1 text-xs leading-relaxed text-amber-800">
+                            {smsInfo.notes ||
+                              'This board does not offer a verified SMS result service. Results are published via online portal and official Gazette.'}
+                          </p>
+                          <div className="mt-3 flex flex-wrap items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setActiveTab('roll')}
+                              className="inline-flex items-center gap-1.5 rounded-xl bg-[#007054] px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-[#005842]"
+                            >
+                              <SearchIcon width={13} height={13} />
+                              Search by Roll Number
+                            </button>
+                            <Link
+                              href={targetHref}
+                              className="inline-flex items-center gap-1.5 rounded-xl border border-amber-300 bg-white px-4 py-2 text-xs font-bold text-amber-900 shadow-xs hover:bg-amber-50"
+                            >
+                              <span>Official Board Portal</span>
+                              <ArrowRightIcon width={12} height={12} />
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Bottom Trust Note */}
                   <div className="flex items-center justify-center gap-2 pt-1 text-center text-[11px] text-slate-500 sm:text-xs">
                     <ShieldCheckIcon width={15} height={15} className="shrink-0 text-[#007054]" />
                     <span>
-                      Official SMS methods and shortcodes are verified directly from board
+                      Official SMS shortcodes and formats are verified directly from board
                       notifications.
                     </span>
                   </div>
-                </form>
+                </div>
               )}
             </div>
           </div>
@@ -560,36 +739,29 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
                         className="h-full w-full rounded-full object-contain"
                       />
                     </div>
-                    <span className="text-[10px] font-bold whitespace-nowrap text-slate-700 transition-colors group-hover:text-[#007054]">
-                      {b.name}
-                    </span>
-                    <span className="text-[9px] whitespace-nowrap text-slate-500">{b.city}</span>
+                    <div className="text-center">
+                      <span className="block text-[11px] font-bold text-slate-800 group-hover:text-[#007054]">
+                        {b.city}
+                      </span>
+                      <span className="block text-[9px] font-semibold text-slate-500">
+                        {b.name}
+                      </span>
+                    </div>
                   </Link>
                 ))}
               </div>
 
-              {/* Right CTA Button: View All Boards */}
-              <div className="shrink-0 pl-2">
+              {/* Right View All Boards Button */}
+              <div className="shrink-0 border-l border-slate-200/80 pl-4">
                 <Link
                   href="/boards"
-                  className="group flex items-center gap-2 rounded-2xl border border-emerald-200/80 bg-emerald-50/70 px-4 py-3 text-xs font-bold whitespace-nowrap text-[#007054] shadow-xs transition-all hover:bg-emerald-100/90 hover:shadow-sm"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-bold whitespace-nowrap text-slate-800 transition-all hover:border-[#007054] hover:bg-[#007054] hover:text-white"
                 >
-                  <GridIcon
-                    width={16}
-                    height={16}
-                    className="text-[#007054] transition-transform group-hover:scale-110"
-                  />
-                  <span>View All Boards &rarr;</span>
+                  <GridIcon width={14} height={14} />
+                  <span>View All Boards</span>
                 </Link>
               </div>
             </div>
-          </div>
-
-          {/* Slogan Underneath */}
-          <div className="mt-6 flex items-center justify-center gap-3 text-[10px] font-bold tracking-[0.25em] text-slate-400 uppercase select-none">
-            <span className="h-px w-10 bg-slate-300 sm:w-16" />
-            <span>EDUCATION TODAY &nbsp; A BRIGHTER PAKISTAN TOMORROW</span>
-            <span className="h-px w-10 bg-slate-300 sm:w-16" />
           </div>
         </div>
       </div>
