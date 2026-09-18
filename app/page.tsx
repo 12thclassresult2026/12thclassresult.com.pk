@@ -5,7 +5,7 @@ import type { BoardOption } from '@/components/result/board-finder'
 import type { FaqItem } from '@/components/ui/faq-accordion'
 
 import { BoardCardsGrid } from '@/components/home/board-cards-grid'
-import { CurrentStatusBlock } from '@/components/home/current-status-block'
+import { CurrentStatusSection } from '@/components/home/current-status-section'
 import { HeroSection } from '@/components/home/hero-section'
 import { GazetteSection } from '@/components/home/gazette-section'
 import { StepProcessSection } from '@/components/home/step-process-section'
@@ -123,32 +123,8 @@ export default function HomePage() {
       {/* 1. HERO SECTION (Daylight Pakistan Campus Theme) */}
       <HeroSection boards={boardOptions} />
 
-      {/* 2. CURRENT STATUS ANSWER BLOCK (AEO/SEO Structured Facts) */}
-      <CurrentStatusBlock />
-
-      {/* 2. THE STATUS STRIP (Latest Update) */}
-      <section className="border-y border-emerald-100 bg-[#EDF8F5] py-5">
-        <div className="container-wide">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-            <span className="inline-flex w-fit shrink-0 items-center rounded-full bg-[#007054] px-3 py-1 text-xs font-bold tracking-wide text-white uppercase">
-              Latest update
-            </span>
-            <p className="text-sm font-bold text-slate-900">
-              No HSSC Part-II 2026 result date has been confirmed by any board we track.
-            </p>
-          </div>
-          <p className="mt-2 text-xs text-slate-600 sm:text-sm">
-            Checked on 14 September 2026 against the boards’ own websites. When a board publishes an
-            official notification, it will appear here with a verified link.{' '}
-            <Link
-              href="/methodology"
-              className="font-bold text-[#007054] underline underline-offset-4"
-            >
-              How we verify
-            </Link>
-          </p>
-        </div>
-      </section>
+      {/* 2. CURRENT RESULT STATUS SECTION */}
+      <CurrentStatusSection lastVerifiedAt={PAGE.lastVerifiedAt} />
 
       {/* 3. BOARD SELECTION GRID (4 Columns with official logos) */}
       <section className="relative w-full overflow-hidden border-b border-slate-200/60 bg-white py-16 sm:py-20">
