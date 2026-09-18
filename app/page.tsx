@@ -12,6 +12,7 @@ import { HeroSection } from '@/components/home/hero-section'
 import { ResultInformationSection } from '@/components/home/result-information-section'
 import { ResultMethodsSection } from '@/components/home/result-methods-section'
 import { ResultScheduleSection } from '@/components/home/result-schedule-section'
+import { ResultTroubleshootingSection } from '@/components/home/result-troubleshooting-section'
 import { SemanticContentSections } from '@/components/home/semantic-content-sections'
 import { StepProcessSection } from '@/components/home/step-process-section'
 import { UnderstandResultSection } from '@/components/home/understand-result-section'
@@ -166,10 +167,13 @@ export default function HomePage() {
       {/* 10. RESULT INFORMATION & DMC COMPARISON */}
       <ResultInformationSection />
 
-      {/* 11. 5 SEMANTIC CONTENT SECTIONS (AEO / Comprehensive Topical Authority) */}
+      {/* 11. COMPACT TROUBLESHOOTING SECTION */}
+      <ResultTroubleshootingSection />
+
+      {/* 12. 5 SEMANTIC CONTENT SECTIONS (AEO / Comprehensive Topical Authority) */}
       <SemanticContentSections />
 
-      {/* 12. FREQUENTLY ASKED QUESTIONS (Showcase Design) */}
+      {/* 13. FREQUENTLY ASKED QUESTIONS (Showcase Design) */}
       <FaqShowcaseSection />
     </div>
   )
