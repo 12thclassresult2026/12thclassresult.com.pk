@@ -71,8 +71,8 @@ function GearIcon({
 }
 
 function LaptopIcon({
-  width = 20,
-  height = 20,
+  width = 24,
+  height = 24,
   className = '',
 }: {
   width?: number
@@ -86,7 +86,7 @@ function LaptopIcon({
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.9"
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
@@ -152,6 +152,154 @@ function GraduationCapIcon({
     >
       <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
       <path d="M6 12v5c3 3 9 3 12 0v-5" />
+    </svg>
+  )
+}
+
+function MessageChatIcon({
+  width = 24,
+  height = 24,
+  className = '',
+}: {
+  width?: number
+  height?: number
+  className?: string
+}) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.9"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+      <line x1="8" y1="9" x2="16" y2="9" />
+      <line x1="8" y1="13" x2="13" y2="13" />
+    </svg>
+  )
+}
+
+function PhoneHandsetIcon({
+  width = 11,
+  height = 11,
+  className = '',
+}: {
+  width?: number
+  height?: number
+  className?: string
+}) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+    </svg>
+  )
+}
+
+function PdfDocumentIcon({
+  width = 24,
+  height = 24,
+  className = '',
+}: {
+  width?: number
+  height?: number
+  className?: string
+}) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.9"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <polyline points="14 2 14 8 20 8" />
+      <text
+        x="6.5"
+        y="17"
+        fontSize="6.2"
+        fontWeight="800"
+        fontFamily="sans-serif"
+        fill="currentColor"
+        stroke="none"
+        letterSpacing="-0.2px"
+      >
+        PDF
+      </text>
+    </svg>
+  )
+}
+
+function CertificateSealIcon({
+  width = 24,
+  height = 24,
+  className = '',
+}: {
+  width?: number
+  height?: number
+  className?: string
+}) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.9"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <rect x="4" y="2" width="16" height="15" rx="2" />
+      <line x1="8" y1="6" x2="16" y2="6" />
+      <line x1="8" y1="10" x2="13" y2="10" />
+      <circle cx="16" cy="18" r="3.2" />
+      <path d="M14.5 20.8L13 23l1.2-3" />
+      <path d="M17.5 20.8L19 23l-1.2-3" />
+    </svg>
+  )
+}
+
+function CurvedDoodleArrow() {
+  return (
+    <svg
+      width="34"
+      height="26"
+      viewBox="0 0 40 32"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="mt-0.5 text-emerald-600/70"
+      aria-hidden="true"
+    >
+      <path d="M4 6 C 14 24, 24 26, 33 19" />
+      <path d="M26 18 L33 19 L32 26" />
     </svg>
   )
 }
@@ -320,51 +468,128 @@ export function SemanticContentSections() {
           {/* ========================================================================= */}
           {/* SECTION 2: HOW TO CHECK 12TH CLASS RESULT 2026 ACROSS PAKISTAN              */}
           {/* ========================================================================= */}
-          <article id="how-to-check" aria-labelledby="heading-how-to-check">
-            <div className="flex items-center gap-2 text-xs font-black tracking-widest text-[#007054] uppercase">
-              <span className="flex h-2 w-2 rounded-full bg-[#007054]" />
-              <span>STEP-BY-STEP EXAMINATION ACCESS</span>
+          <article
+            id="how-to-check"
+            aria-labelledby="heading-how-to-check"
+            className="relative px-2 pt-12 pb-6"
+          >
+            {/* Top-Left Corner: Cursive Hand-lettered Note with Curved Doodle Arrow */}
+            <div className="pointer-events-none absolute top-1 left-1 hidden flex-col items-start select-none md:flex lg:left-4">
+              <span
+                className="inline-block -rotate-12 text-base font-bold text-emerald-700/85 sm:text-lg"
+                style={{ fontFamily: 'var(--font-caveat), cursive' }}
+              >
+                Your Result
+                <br />
+                Made Simple
+              </span>
+              <CurvedDoodleArrow />
             </div>
 
-            <h2
-              id="heading-how-to-check"
-              className="mt-3 text-2xl font-black tracking-tight text-slate-900 sm:text-3xl lg:text-[34px] lg:leading-tight"
-            >
-              How to Check <span className="text-[#007054]">12th Class Result 2026</span> Across
-              Pakistan
-            </h2>
+            {/* Top-Right Corner: Graduation Cap in Mint Circle + Cursive Motto */}
+            <div className="pointer-events-none absolute top-1 right-2 hidden flex-col items-center select-none md:flex lg:right-6">
+              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#e8f6f0] text-[#007054] shadow-xs">
+                <GraduationCapIcon width={22} height={22} />
+              </div>
+              <span
+                className="mt-1.5 inline-block -rotate-6 text-center text-sm font-bold text-emerald-700/85 sm:text-base"
+                style={{ fontFamily: 'var(--font-caveat), cursive' }}
+              >
+                Students
+                <br />
+                Brighter Tomorrow
+              </span>
+            </div>
 
-            <div className="mt-4 space-y-4 text-xs leading-relaxed text-slate-700 sm:text-sm md:text-[15px] md:leading-relaxed">
-              <p>
+            {/* Left & Right Flanking 4x4 Dot Matrices */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute top-1/2 -left-2 hidden -translate-y-1/2 grid-cols-4 gap-2.5 text-emerald-400/40 select-none lg:grid"
+            >
+              {Array.from({ length: 16 }).map((_, i) => (
+                <span key={i} className="h-1.5 w-1.5 rounded-full bg-emerald-400/35" />
+              ))}
+            </div>
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute top-1/2 -right-2 hidden -translate-y-1/2 grid-cols-4 gap-2.5 text-emerald-400/40 select-none lg:grid"
+            >
+              {Array.from({ length: 16 }).map((_, i) => (
+                <span key={i} className="h-1.5 w-1.5 rounded-full bg-emerald-400/35" />
+              ))}
+            </div>
+
+            {/* Centered Section Header */}
+            <div className="mx-auto max-w-4xl text-center">
+              {/* Eyebrow flanked by horizontal lines */}
+              <div className="inline-flex items-center justify-center gap-3">
+                <span className="h-px w-8 bg-emerald-600/40 sm:w-14" />
+                <span className="flex h-2 w-2 rounded-full bg-[#007054]" />
+                <span className="text-[11px] font-black tracking-widest text-[#007054] uppercase sm:text-xs">
+                  STEP-BY-STEP EXAMINATION ACCESS
+                </span>
+                <span className="h-px w-8 bg-emerald-600/40 sm:w-14" />
+              </div>
+
+              {/* Main Heading H2 */}
+              <h2
+                id="heading-how-to-check"
+                className="mt-3.5 text-2xl font-black tracking-tight text-slate-900 sm:text-3xl lg:text-[34px] lg:leading-snug"
+              >
+                How to Check <span className="text-[#007054]">12th Class Result 2026</span> Across
+                Pakistan
+              </h2>
+
+              {/* Subtitle / Intro paragraph */}
+              <p className="mx-auto mt-3.5 max-w-3xl text-xs leading-relaxed text-slate-600 sm:text-sm md:text-[14px]">
                 Intermediate students in Pakistan can access their 2nd year results through four
                 primary channels. Depending on whether your board has published a complete digital
                 Gazette or relies on an online database server, use the method best suited to your
                 needs:
               </p>
+            </div>
 
-              <div className="space-y-4 pt-2">
-                {/* Method 1 */}
-                <div className="rounded-2xl border border-slate-200/90 bg-[#F9FBFA] p-4 sm:p-5">
-                  <div className="flex items-center gap-2.5">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#007054] text-xs font-black text-white">
-                      1
+            {/* 4 Numbered Cards in a 2x2 Grid */}
+            <div className="mt-8 grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2">
+              {/* Card 1: Online Roll Number Lookup (Web & Verified Gazette) */}
+              <div className="group relative flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-6 shadow-2xs transition-all duration-200 hover:border-emerald-300 hover:shadow-xs">
+                <div>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      {/* Number badge */}
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#dcfce7] text-sm font-black text-emerald-800">
+                        1
+                      </div>
+                      {/* Squircle Icon */}
+                      <div className="flex h-13 w-13 shrink-0 items-center justify-center rounded-2xl bg-[#e8f6f0] text-[#007054] shadow-2xs">
+                        <LaptopIcon width={24} height={24} />
+                      </div>
                     </div>
-                    <h3 className="text-base font-extrabold text-slate-900">
-                      Online Roll Number Lookup (Web &amp; Verified Gazette)
-                    </h3>
+
+                    {/* Method Tag */}
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-800">
+                      <ZapIcon width={11} height={11} className="text-[#007054]" />
+                      Fastest Method
+                    </span>
                   </div>
-                  <p className="mt-2 text-xs text-slate-600 sm:text-sm">
+
+                  <h3 className="mt-4 text-base font-extrabold text-slate-900 sm:text-lg">
+                    Online Roll Number Lookup
+                    <br className="hidden sm:inline" /> (Web &amp; Verified Gazette)
+                  </h3>
+
+                  <p className="mt-2.5 text-xs leading-relaxed text-slate-600 sm:text-[13.5px]">
                     The most rapid and accurate method. Select your respective board (e.g.{' '}
                     <Link
                       href="/results/lahore-board/12th-class"
-                      className="font-semibold text-[#007054] underline"
+                      className="font-semibold text-[#007054] hover:underline"
                     >
                       BISE Lahore
                     </Link>{' '}
                     or{' '}
                     <Link
                       href="/results/federal-board/12th-class"
-                      className="font-semibold text-[#007054] underline"
+                      className="font-semibold text-[#007054] hover:underline"
                     >
                       FBISE Federal
                     </Link>
@@ -375,17 +600,41 @@ export function SemanticContentSections() {
                   </p>
                 </div>
 
-                {/* Method 2 */}
-                <div className="rounded-2xl border border-slate-200/90 bg-[#F9FBFA] p-4 sm:p-5">
-                  <div className="flex items-center gap-2.5">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#007054] text-xs font-black text-white">
-                      2
+                <div className="mt-5 pt-1">
+                  <Link
+                    href="#check-result"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#007054] transition-colors group-hover:gap-2 hover:text-[#005a43] hover:underline"
+                  >
+                    <span>Check Result Online</span>
+                    <ArrowRightIcon width={13} height={13} />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Card 2: Official Board SMS Shortcode Service */}
+              <div className="group relative flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-6 shadow-2xs transition-all duration-200 hover:border-emerald-300 hover:shadow-xs">
+                <div>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#dcfce7] text-sm font-black text-emerald-800">
+                        2
+                      </div>
+                      <div className="flex h-13 w-13 shrink-0 items-center justify-center rounded-2xl bg-[#e8f6f0] text-[#007054] shadow-2xs">
+                        <MessageChatIcon width={24} height={24} />
+                      </div>
                     </div>
-                    <h3 className="text-base font-extrabold text-slate-900">
-                      Official Board SMS Shortcode Service
-                    </h3>
+
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-800">
+                      <PhoneHandsetIcon width={11} height={11} className="text-[#007054]" />
+                      Via Mobile
+                    </span>
                   </div>
-                  <p className="mt-2 text-xs text-slate-600 sm:text-sm">
+
+                  <h3 className="mt-4 text-base font-extrabold text-slate-900 sm:text-lg">
+                    Official Board SMS Shortcode Service
+                  </h3>
+
+                  <p className="mt-2.5 text-xs leading-relaxed text-slate-600 sm:text-[13.5px]">
                     For students in remote areas without stable internet connections on result
                     morning, each intermediate board operates a designated SMS gateway. Type your
                     roll number in an SMS message and send it to your board&apos;s verified SMS code
@@ -395,45 +644,129 @@ export function SemanticContentSections() {
                   </p>
                 </div>
 
-                {/* Method 3 */}
-                <div className="rounded-2xl border border-slate-200/90 bg-[#F9FBFA] p-4 sm:p-5">
-                  <div className="flex items-center gap-2.5">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#007054] text-xs font-black text-white">
-                      3
+                <div className="mt-5 pt-1">
+                  <Link
+                    href="#check-result"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#007054] transition-colors group-hover:gap-2 hover:text-[#005a43] hover:underline"
+                  >
+                    <span>View SMS Codes</span>
+                    <ArrowRightIcon width={13} height={13} />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Card 3: Downloadable Official Gazette (PDF Archive) */}
+              <div className="group relative flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-6 shadow-2xs transition-all duration-200 hover:border-emerald-300 hover:shadow-xs">
+                <div>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#dcfce7] text-sm font-black text-emerald-800">
+                        3
+                      </div>
+                      <div className="flex h-13 w-13 shrink-0 items-center justify-center rounded-2xl bg-[#e8f6f0] text-[#007054] shadow-2xs">
+                        <PdfDocumentIcon width={24} height={24} />
+                      </div>
                     </div>
-                    <h3 className="text-base font-extrabold text-slate-900">
-                      Downloadable Official Gazette (PDF Archive)
-                    </h3>
+
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-800">
+                      <FileTextIcon width={11} height={11} className="text-[#007054]" />
+                      Offline Option
+                    </span>
                   </div>
-                  <p className="mt-2 text-xs text-slate-600 sm:text-sm">
+
+                  <h3 className="mt-4 text-base font-extrabold text-slate-900 sm:text-lg">
+                    Downloadable Official Gazette
+                    <br className="hidden sm:inline" /> (PDF Archive)
+                  </h3>
+
+                  <p className="mt-2.5 text-xs leading-relaxed text-slate-600 sm:text-[13.5px]">
                     The Gazette is the official comprehensive document released on CD and PDF format
                     by each board&apos;s Controller of Examinations. It catalogues all candidate
                     roll numbers, student names, subject marks, and pass/fail standings. You can
                     search within the Gazette by pressing{' '}
-                    <kbd className="rounded bg-slate-200 px-1 py-0.5 font-mono text-xs text-slate-800">
+                    <kbd className="rounded bg-slate-200/80 px-1.5 py-0.5 font-mono text-xs font-semibold text-slate-700 ring-1 ring-slate-300/60">
                       Ctrl + F
                     </kbd>{' '}
                     on desktop or using the PDF viewer search bar on mobile.
                   </p>
                 </div>
 
-                {/* Method 4 */}
-                <div className="rounded-2xl border border-slate-200/90 bg-[#F9FBFA] p-4 sm:p-5">
-                  <div className="flex items-center gap-2.5">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#007054] text-xs font-black text-white">
-                      4
+                <div className="mt-5 pt-1">
+                  <Link
+                    href="/boards"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#007054] transition-colors group-hover:gap-2 hover:text-[#005a43] hover:underline"
+                  >
+                    <span>Browse Gazette</span>
+                    <ArrowRightIcon width={13} height={13} />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Card 4: Official Board Portal & Detailed Marks Certificate (DMC) */}
+              <div className="group relative flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-6 shadow-2xs transition-all duration-200 hover:border-emerald-300 hover:shadow-xs">
+                <div>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#dcfce7] text-sm font-black text-emerald-800">
+                        4
+                      </div>
+                      <div className="flex h-13 w-13 shrink-0 items-center justify-center rounded-2xl bg-[#e8f6f0] text-[#007054] shadow-2xs">
+                        <CertificateSealIcon width={24} height={24} />
+                      </div>
                     </div>
-                    <h3 className="text-base font-extrabold text-slate-900">
-                      Official Board Portal &amp; Detailed Marks Certificate (DMC)
-                    </h3>
+
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-800">
+                      <ShieldCheckIcon width={11} height={11} className="text-[#007054]" />
+                      Official Document
+                    </span>
                   </div>
-                  <p className="mt-2 text-xs text-slate-600 sm:text-sm">
+
+                  <h3 className="mt-4 text-base font-extrabold text-slate-900 sm:text-lg">
+                    Official Board Portal &amp; Detailed Marks Certificate (DMC)
+                  </h3>
+
+                  <p className="mt-2.5 text-xs leading-relaxed text-slate-600 sm:text-[13.5px]">
                     While gazette entries confirm pass/fail marks and grade breakdowns, students who
                     require an authenticated physical DMC or e-result card for university admissions
                     must download it directly from the board&apos;s official portal using the
                     verified direct links provided across our board directories.
                   </p>
                 </div>
+
+                <div className="mt-5 pt-1">
+                  <Link
+                    href="/boards"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#007054] transition-colors group-hover:gap-2 hover:text-[#005a43] hover:underline"
+                  >
+                    <span>Get Your DMC</span>
+                    <ArrowRightIcon width={13} height={13} />
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Footer Banner & Corner Motto */}
+            <div className="relative mt-9 flex flex-col items-center justify-center pt-2">
+              {/* Centered Horizontal Badge */}
+              <div className="flex items-center gap-3 select-none">
+                <span className="h-px w-10 bg-slate-300 sm:w-16" />
+                <GraduationCapIcon width={18} height={18} className="text-[#007054]" />
+                <span className="text-[10px] font-black tracking-widest text-slate-500 uppercase sm:text-[11px]">
+                  EDUCATION TODAY &nbsp; A BRIGHTER PAKISTAN TOMORROW
+                </span>
+                <span className="h-px w-10 bg-slate-300 sm:w-16" />
+              </div>
+
+              {/* Bottom Right Corner Motto */}
+              <div className="pointer-events-none absolute right-2 bottom-0 hidden text-right select-none md:block">
+                <span
+                  className="inline-block -rotate-6 text-sm font-bold text-emerald-700/80 sm:text-base"
+                  style={{ fontFamily: 'var(--font-caveat), cursive' }}
+                >
+                  Same Boards
+                  <br />
+                  Stronger Futures
+                </span>
               </div>
             </div>
           </article>
