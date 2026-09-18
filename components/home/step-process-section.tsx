@@ -15,8 +15,7 @@ const STEPS = [
     title: 'Select Your Board',
     actionText: 'Board Finder',
     href: '#boards',
-    description:
-      'Choose your intermediate board (e.g. BISE Lahore, Gujranwala, Rawalpindi or Multan) from the list.',
+    description: 'Choose the education board under which you appeared in the examination.',
     icon: SearchIcon,
     pillBg: 'bg-[#2F80ED]',
     iconBg: 'bg-sky-50',
@@ -35,11 +34,11 @@ const STEPS = [
   },
   {
     stepNumber: '02',
-    title: 'Choose Year & Exam',
+    title: 'Choose Year & Examination',
     actionText: 'Official Schedule',
     href: '/results/12th-class',
     description:
-      'Select examination year 2026 and choose the Annual or 2nd Annual HSSC Part-II intermediate session.',
+      'Select the correct result year and examination session, such as First Annual or Second Annual where applicable.',
     icon: CalendarIcon,
     pillBg: 'bg-[#10B981]',
     iconBg: 'bg-emerald-50',
@@ -62,7 +61,7 @@ const STEPS = [
     actionText: 'Input Roll No',
     href: '/#check-result',
     description:
-      'Input your candidate roll number to search matching verified Gazette datasets and board record archives.',
+      'Enter the roll number issued for that examination and check it carefully before submitting.',
     icon: FileTextIcon,
     pillBg: 'bg-[#8B5CF6]',
     iconBg: 'bg-purple-50',
@@ -81,11 +80,11 @@ const STEPS = [
   },
   {
     stepNumber: '04',
-    title: 'View Verified Result or Fallback',
+    title: 'View the Available Result',
     actionText: 'Verified Marksheet',
     href: '/#check-result',
     description:
-      'Inspect your verified Gazette record marks instantly. If local lookup is unavailable for your board, use the verified official portal fallback.',
+      'If a validated Gazette dataset is active, we can search for the exact matching record. Otherwise, we show the best verified result method available for your board.',
     icon: CheckCircleIcon,
     pillBg: 'bg-[#F59E0B]',
     iconBg: 'bg-amber-50',
@@ -187,8 +186,8 @@ export function StepProcessSection() {
 
         {/* Subtitle */}
         <p className="mx-auto mt-4 max-w-2xl text-xs leading-relaxed text-[#5F6B7A] sm:text-sm">
-          Follow this simple and official procedure to check your 12th class marks quickly, safely,
-          and accurately.
+          Checking your result should take only a few steps. The exact method depends on your board
+          and whether a validated Gazette dataset is available.
         </p>
       </div>
 
@@ -273,9 +272,8 @@ export function StepProcessSection() {
             <CheckIcon width={16} height={16} />
           </div>
           <p className="text-xs leading-relaxed text-slate-700 sm:text-sm">
-            <strong className="font-bold text-slate-900">Gazette & Verification Note:</strong>{' '}
-            Official gazette records provide independent verification. Where a board only supports
-            direct lookup on its server, we direct you safely to the official board portal fallback.
+            A result method is shown as available only when the underlying board source or validated
+            dataset supports it.
           </p>
         </div>
 
