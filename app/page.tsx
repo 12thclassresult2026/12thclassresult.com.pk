@@ -33,72 +33,52 @@ const FAQS: FaqItem[] = [
   {
     question: 'How can I check my 12th Class Result 2026 by roll number?',
     answer:
-      'Select your education board, choose the correct year and examination, and enter your roll number in the result checker. Where a verified Gazette dataset is available, the system can search the matching Gazette record. If local lookup is unavailable, use the verified official board result method shown on the page.',
+      'Select your education board, choose the correct year and examination, and enter your roll number. Where a validated Gazette dataset is available, the system can search for the matching result record. Otherwise, use the verified result method provided for your board.',
   },
   {
-    question: 'Is 12th Class Result the same as 2nd Year Result or HSSC Part-II Result?',
+    question: 'Is 12th Class Result the same as 2nd Year or HSSC Part-II?',
     answer:
-      'Yes. In Pakistan, 12th Class Result, 2nd Year Result, HSSC Part-II Result, Inter Part-II Result, and Second Year Result commonly refer to the final year of Intermediate education. The exact terminology may differ slightly between education boards.',
+      'Yes. In many Pakistani education systems, 12th Class, 2nd Year, HSSC Part-II and Intermediate Part-II describe the same stage of education. The exact terminology can vary between boards.',
   },
   {
-    question: 'Can I check the 12th Class Result 2026 for all Pakistan boards?',
+    question: 'Can I check results for all Pakistan education boards?',
     answer:
-      '12thClassResult.com.pk is designed for Pakistan-wide HSSC Part-II result coverage. Board availability varies according to verified result sources, Gazettes, official portals, and board-specific result methods. Check the board directory to see the current status of your board.',
+      'The platform is designed for Pakistan-wide board coverage, but result functionality depends on verified board sources and available Gazette datasets. Some boards may provide local lookup while others currently use an official portal or another verified fallback.',
   },
   {
-    question: 'Can I check my result from the 12th Class Result Gazette?',
+    question: 'Can I check my result using a Gazette?',
     answer:
-      'Yes, where a verified board Gazette is available and supported. Gazette-based lookup searches the relevant board, year, examination, and roll number to find the corresponding result record. The information displayed depends on what the original Gazette contains.',
+      'Yes, where a validated Gazette dataset is available. The lookup uses the selected board, year, examination and roll number to find the corresponding Gazette record.',
   },
   {
-    question: 'Does a Gazette result show subject-wise marks?',
+    question: 'Can I check the 12th Class Result by name?',
     answer:
-      'Not always. Some Gazettes may contain detailed marks, while others may only include a roll number, candidate name, total marks, result status, or limited information. We only display fields supported by the verified source and do not invent missing marks or details.',
+      'Name search is only appropriate when the board or Gazette legitimately supports it. Roll-number search is usually more precise because multiple candidates may share the same or similar names.',
   },
   {
-    question: 'Can I check my 12th Class Result 2026 by name?',
+    question: 'Can I check my 2nd Year Result by SMS?',
     answer:
-      'Name-based result search is only available where the relevant board or verified Gazette legitimately supports it. Roll-number lookup is generally more precise because multiple candidates can have the same or similar names.',
-  },
-  {
-    question: 'Can I check the 2nd Year Result 2026 by SMS?',
-    answer:
-      'Some education boards provide an SMS result service. SMS availability, codes, and message formats can differ by board and result cycle. Use only the SMS method shown as verified for your board rather than assuming one code works across Pakistan.',
+      'Some education boards provide an SMS result service. SMS codes and formats can differ between boards, so only use a code that has been verified for your board and result cycle.',
   },
   {
     question: 'Why is my roll number not showing a result?',
     answer:
-      'First check that you selected the correct board, year, examination, and roll number. A record may also be unavailable if the result has not been announced, the Gazette has not yet been processed, or that board currently supports only an official-portal fallback. A missing record should not automatically be interpreted as a failed result.',
+      'Check your board, year, examination and roll number first. The result may also be unavailable because it has not been announced, the Gazette dataset is still processing, or the board currently supports another result method.',
   },
   {
-    question: 'Are 12th Class result dates the same for every board in Pakistan?',
+    question: 'Are result dates the same for every board in Pakistan?',
     answer:
-      'No. Result schedules can vary by board, province, region, examination, and session. For this reason, board-specific confirmed, tentative, expected, and announced statuses should be checked separately rather than applying one date to every Pakistan board.',
+      'No. Result schedules can differ between boards, provinces, regions and examination sessions. Board-specific result status should be checked separately.',
   },
   {
-    question: 'Is the result shown on this website an official DMC?',
+    question: 'Is a Gazette result an official DMC?',
     answer:
-      'No. A result generated from Gazette data should be treated as a Gazette result record, not automatically as an official Detailed Marks Certificate (DMC). For an official DMC, result card, or certificate, follow the procedure provided by the relevant education board.',
+      'No. A Gazette-derived result record is not automatically an official Detailed Marks Certificate. Official DMCs and certificates are issued according to the procedures of the relevant education board.',
   },
   {
-    question: 'What should I do after checking my 12th Class Result?',
+    question: 'Is 12thClassResult.com.pk an official board website?',
     answer:
-      'Depending on your result and board rules, your next step may involve rechecking, second annual examinations, improvement, calculating your percentage, or preparing for university admissions and entry tests. Board-specific guidance should always be checked against current official information.',
-  },
-  {
-    question: 'Where does 12thClassResult.com.pk get result information from?',
-    answer:
-      'The platform prioritizes verified board Gazettes, official board websites, official result portals, notifications, and other approved primary sources. Source status and verification information should be shown wherever it materially affects the result or guidance.',
-  },
-  {
-    question: 'Is 12thClassResult.com.pk an official education board website?',
-    answer:
-      'No. 12thClassResult.com.pk is an independent education result platform. It is not a government department or an official education board website. Official board sources are used for verification and are linked where appropriate.',
-  },
-  {
-    question: 'What if the official board website is not working on result day?',
-    answer:
-      "If a verified Gazette dataset is already available on the platform, Gazette-based lookup may still work independently of the board's overloaded website. Where local lookup is unavailable, the page should provide other verified options such as the official portal, SMS method, Gazette source, or retry guidance.",
+      'No. 12thClassResult.com.pk is an independent education result platform. It is not an official government or education board website.',
   },
 ]
 
