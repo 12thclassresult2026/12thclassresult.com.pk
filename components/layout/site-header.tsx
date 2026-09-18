@@ -8,10 +8,13 @@ import { ResultUpdateTicker } from '@/components/layout/result-update-ticker'
 import {
   CalendarIcon,
   ChevronDownIcon,
+  ChevronRightIcon,
   FacebookIcon,
+  FileTextIcon,
   InstagramIcon,
   SearchIcon,
   TwitterXIcon,
+  UsersIcon,
   YouTubeIcon,
 } from '@/components/ui/icons'
 
@@ -231,28 +234,122 @@ export function SiteHeader() {
                 </button>
 
                 {openDropdown === 'results' && (
-                  <div className="animate-in fade-in slide-in-from-top-1 absolute top-full left-0 z-50 min-w-[240px] overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-xl">
-                    <Link
-                      href="/results/12th-class"
-                      onClick={() => setOpenDropdown(null)}
-                      className="block bg-[#EAF7F2] px-4.5 py-3 text-[13px] font-bold text-[#007054] transition-colors hover:bg-emerald-100/60"
-                    >
-                      12th Class Result Hub 2026
-                    </Link>
-                    <Link
-                      href="/#check-result"
-                      onClick={() => setOpenDropdown(null)}
-                      className="block px-4.5 py-2.5 text-[13px] font-bold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
-                    >
-                      Roll Number &amp; SMS Search
-                    </Link>
-                    <Link
-                      href="/boards"
-                      onClick={() => setOpenDropdown(null)}
-                      className="block px-4.5 py-2.5 pb-3.5 text-[13px] font-bold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
-                    >
-                      Result Gazette Archives
-                    </Link>
+                  <div className="animate-in fade-in slide-in-from-top-1 absolute top-full left-0 z-50 w-[340px] rounded-2xl border border-slate-200/80 bg-white p-3.5 shadow-2xl">
+                    {/* Header: Quick Access & Find Your Result Faster */}
+                    <div className="mb-2.5 flex items-center justify-between px-1.5 pt-0.5">
+                      <span className="text-xs font-bold text-slate-800">Quick Access</span>
+                      <span className="text-[11px] font-medium text-slate-400 italic">
+                        Find Your Result Faster
+                      </span>
+                    </div>
+
+                    {/* 5 Result Quick Navigation Items */}
+                    <div className="space-y-1">
+                      {/* Item 1: 12th Class Result Hub 2026 (Active style) */}
+                      <Link
+                        href="/results/12th-class"
+                        onClick={() => setOpenDropdown(null)}
+                        className="group flex items-center justify-between rounded-xl border-l-4 border-[#007054] bg-[#EBF7F2] p-2.5 transition-all"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100 text-[#007054]">
+                            <FileTextIcon width={16} height={16} />
+                          </div>
+                          <span className="text-xs font-bold text-[#007054]">
+                            12th Class Result Hub 2026
+                          </span>
+                        </div>
+                        <ChevronRightIcon
+                          width={14}
+                          height={14}
+                          className="text-[#007054] transition-transform group-hover:translate-x-0.5"
+                        />
+                      </Link>
+
+                      {/* Item 2: Roll Number & SMS Search */}
+                      <Link
+                        href="/#check-result"
+                        onClick={() => setOpenDropdown(null)}
+                        className="group flex items-center justify-between rounded-xl p-2.5 transition-all hover:bg-slate-50"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#007054]">
+                            <SearchIcon width={16} height={16} />
+                          </div>
+                          <span className="text-xs font-bold text-slate-800 transition-colors group-hover:text-[#007054]">
+                            Roll Number &amp; SMS Search
+                          </span>
+                        </div>
+                        <ChevronRightIcon
+                          width={14}
+                          height={14}
+                          className="text-slate-400 transition-transform group-hover:translate-x-0.5 group-hover:text-[#007054]"
+                        />
+                      </Link>
+
+                      {/* Item 3: Result Date Schedule */}
+                      <Link
+                        href="/results/12th-class"
+                        onClick={() => setOpenDropdown(null)}
+                        className="group flex items-center justify-between rounded-xl p-2.5 transition-all hover:bg-slate-50"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#007054]">
+                            <CalendarIcon width={16} height={16} />
+                          </div>
+                          <span className="text-xs font-bold text-slate-800 transition-colors group-hover:text-[#007054]">
+                            Result Date Schedule
+                          </span>
+                        </div>
+                        <ChevronRightIcon
+                          width={14}
+                          height={14}
+                          className="text-slate-400 transition-transform group-hover:translate-x-0.5 group-hover:text-[#007054]"
+                        />
+                      </Link>
+
+                      {/* Item 4: Board-wise Result Guides */}
+                      <Link
+                        href="/boards"
+                        onClick={() => setOpenDropdown(null)}
+                        className="group flex items-center justify-between rounded-xl p-2.5 transition-all hover:bg-slate-50"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#007054]">
+                            <UsersIcon width={16} height={16} />
+                          </div>
+                          <span className="text-xs font-bold text-slate-800 transition-colors group-hover:text-[#007054]">
+                            Board-wise Result Guides
+                          </span>
+                        </div>
+                        <ChevronRightIcon
+                          width={14}
+                          height={14}
+                          className="text-slate-400 transition-transform group-hover:translate-x-0.5 group-hover:text-[#007054]"
+                        />
+                      </Link>
+
+                      {/* Item 5: Result Gazette Archives */}
+                      <Link
+                        href="/#gazette"
+                        onClick={() => setOpenDropdown(null)}
+                        className="group flex items-center justify-between rounded-xl p-2.5 transition-all hover:bg-slate-50"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#007054]">
+                            <FileTextIcon width={16} height={16} />
+                          </div>
+                          <span className="text-xs font-bold text-slate-800 transition-colors group-hover:text-[#007054]">
+                            Result Gazette Archives
+                          </span>
+                        </div>
+                        <ChevronRightIcon
+                          width={14}
+                          height={14}
+                          className="text-slate-400 transition-transform group-hover:translate-x-0.5 group-hover:text-[#007054]"
+                        />
+                      </Link>
+                    </div>
                   </div>
                 )}
               </li>
