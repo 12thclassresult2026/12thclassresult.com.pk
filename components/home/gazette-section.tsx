@@ -5,20 +5,20 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import {
-  BarChartIcon,
-  ExternalLinkIcon,
+  ArrowRightIcon,
   CalendarIcon,
   ClockIcon,
   DownloadIcon,
+  ExternalLinkIcon,
   FileTextIcon,
-  MessageSquareIcon,
   SearchIcon,
   ShieldCheckIcon,
   ZapIcon,
 } from '@/components/ui/icons'
 import { routedBoards } from '@/lib/board/registry'
 
-type GazetteStatus = 'available' | 'processing' | 'official-source' | 'not-available'
+export type GazetteState =
+  'gazette-available' | 'lookup-active' | 'processing' | 'official-source-only' | 'not-yet-verified'
 
 interface GazetteBoard {
   id: string
@@ -28,7 +28,11 @@ interface GazetteBoard {
   province: 'punjab' | 'kpk' | 'sindh' | 'balochistan' | 'federal'
   provinceLabel: string
   logo: string
-  status: GazetteStatus
+  recordRef: string
+  status: GazetteState
+  formatLabel: string
+  capabilityLabel: string
+  hasVerifiedDownload?: boolean
   fileSize?: string
 }
 
@@ -41,8 +45,10 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'punjab',
     provinceLabel: 'Punjab',
     logo: '/logos/bise-lahore.webp',
-    status: 'available',
-    fileSize: '4.2 MB',
+    recordRef: 'GZ-LHR-26',
+    status: 'processing',
+    formatLabel: 'Gazette PDF',
+    capabilityLabel: 'Extraction Pipeline',
   },
   {
     id: 'bise-gujranwala',
@@ -52,8 +58,10 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'punjab',
     provinceLabel: 'Punjab',
     logo: '/logos/bise-gujranwala.webp',
-    status: 'available',
-    fileSize: '3.8 MB',
+    recordRef: 'GZ-GRW-26',
+    status: 'processing',
+    formatLabel: 'Gazette PDF',
+    capabilityLabel: 'Extraction Pipeline',
   },
   {
     id: 'bise-faisalabad',
@@ -63,7 +71,10 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'punjab',
     provinceLabel: 'Punjab',
     logo: '/logos/bise-faisalabad.webp',
-    status: 'processing',
+    recordRef: 'GZ-FSD-26',
+    status: 'not-yet-verified',
+    formatLabel: 'Gazette Document',
+    capabilityLabel: 'Awaiting Release',
   },
   {
     id: 'bise-multan',
@@ -73,8 +84,10 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'punjab',
     provinceLabel: 'Punjab',
     logo: '/logos/bise-multan.webp',
-    status: 'available',
-    fileSize: '4.1 MB',
+    recordRef: 'GZ-MLN-26',
+    status: 'official-source-only',
+    formatLabel: 'Official Portal',
+    capabilityLabel: 'Board Portal Only',
   },
   {
     id: 'bise-rawalpindi',
@@ -84,7 +97,10 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'punjab',
     provinceLabel: 'Punjab',
     logo: '/logos/bise-rawalpindi.webp',
-    status: 'processing',
+    recordRef: 'GZ-RWP-26',
+    status: 'not-yet-verified',
+    formatLabel: 'Gazette Document',
+    capabilityLabel: 'Awaiting Release',
   },
   {
     id: 'bise-sargodha',
@@ -94,8 +110,10 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'punjab',
     provinceLabel: 'Punjab',
     logo: '/logos/bise-sargodha.webp',
-    status: 'available',
-    fileSize: '3.9 MB',
+    recordRef: 'GZ-SGD-26',
+    status: 'not-yet-verified',
+    formatLabel: 'Gazette Document',
+    capabilityLabel: 'Awaiting Release',
   },
   {
     id: 'bise-sahiwal',
@@ -105,7 +123,10 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'punjab',
     provinceLabel: 'Punjab',
     logo: '/logos/bise-sahiwal.webp',
-    status: 'not-available',
+    recordRef: 'GZ-SWL-26',
+    status: 'not-yet-verified',
+    formatLabel: 'Gazette Document',
+    capabilityLabel: 'Awaiting Release',
   },
   {
     id: 'bise-bahawalpur',
@@ -115,8 +136,10 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'punjab',
     provinceLabel: 'Punjab',
     logo: '/logos/bise-bahawalpur.webp',
-    status: 'available',
-    fileSize: '3.6 MB',
+    recordRef: 'GZ-BWP-26',
+    status: 'not-yet-verified',
+    formatLabel: 'Gazette Document',
+    capabilityLabel: 'Awaiting Release',
   },
   {
     id: 'bise-dg-khan',
@@ -126,7 +149,10 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'punjab',
     provinceLabel: 'Punjab',
     logo: '/logos/bise-dg-khan.webp',
-    status: 'not-available',
+    recordRef: 'GZ-DGK-26',
+    status: 'not-yet-verified',
+    formatLabel: 'Gazette Document',
+    capabilityLabel: 'Awaiting Release',
   },
   {
     id: 'fbise',
@@ -136,28 +162,10 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'federal',
     provinceLabel: 'Federal',
     logo: '/logos/fbise.png',
-    status: 'available',
-    fileSize: '4.5 MB',
-  },
-  {
-    id: 'bise-peshawar',
-    name: 'BISE Peshawar',
-    shortName: 'BISE Peshawar',
-    slug: 'peshawar-board',
-    province: 'kpk',
-    provinceLabel: 'KPK',
-    logo: '/logos/bise-peshawar.png',
-    status: 'not-available',
-  },
-  {
-    id: 'bise-quetta',
-    name: 'BISE Quetta',
-    shortName: 'BISE Quetta',
-    slug: 'quetta-board',
-    province: 'balochistan',
-    provinceLabel: 'Balochistan',
-    logo: '/icons/crest.svg',
-    status: 'not-available',
+    recordRef: 'GZ-ISL-26',
+    status: 'official-source-only',
+    formatLabel: 'FBISE Online System',
+    capabilityLabel: 'Official Source Only',
   },
   {
     id: 'biek-karachi',
@@ -167,8 +175,10 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'sindh',
     provinceLabel: 'Sindh',
     logo: '/logos/karachi.img',
-    status: 'available',
-    fileSize: '5.2 MB',
+    recordRef: 'GZ-KHI-26',
+    status: 'official-source-only',
+    formatLabel: 'BIEK Portal',
+    capabilityLabel: 'Official Source Only',
   },
   {
     id: 'bise-hyderabad',
@@ -178,7 +188,10 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'sindh',
     provinceLabel: 'Sindh',
     logo: '/icons/crest.svg',
-    status: 'not-available',
+    recordRef: 'GZ-HYD-26',
+    status: 'not-yet-verified',
+    formatLabel: 'Gazette Document',
+    capabilityLabel: 'Awaiting Release',
   },
   {
     id: 'bise-sukkur',
@@ -188,7 +201,10 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'sindh',
     provinceLabel: 'Sindh',
     logo: '/icons/crest.svg',
-    status: 'not-available',
+    recordRef: 'GZ-SKR-26',
+    status: 'not-yet-verified',
+    formatLabel: 'Gazette Document',
+    capabilityLabel: 'Awaiting Release',
   },
   {
     id: 'bise-larkana',
@@ -198,7 +214,10 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'sindh',
     provinceLabel: 'Sindh',
     logo: '/icons/crest.svg',
-    status: 'not-available',
+    recordRef: 'GZ-LRK-26',
+    status: 'not-yet-verified',
+    formatLabel: 'Gazette Document',
+    capabilityLabel: 'Awaiting Release',
   },
   {
     id: 'bise-mirpurkhas',
@@ -208,7 +227,23 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'sindh',
     provinceLabel: 'Sindh',
     logo: '/icons/crest.svg',
-    status: 'not-available',
+    recordRef: 'GZ-MPK-26',
+    status: 'not-yet-verified',
+    formatLabel: 'Gazette Document',
+    capabilityLabel: 'Awaiting Release',
+  },
+  {
+    id: 'bise-peshawar',
+    name: 'BISE Peshawar',
+    shortName: 'BISE Peshawar',
+    slug: 'peshawar-board',
+    province: 'kpk',
+    provinceLabel: 'KPK',
+    logo: '/logos/bise-peshawar.png',
+    recordRef: 'GZ-PEW-26',
+    status: 'official-source-only',
+    formatLabel: 'Official Portal',
+    capabilityLabel: 'Official Source Only',
   },
   {
     id: 'bise-abbottabad',
@@ -218,8 +253,10 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'kpk',
     provinceLabel: 'KPK',
     logo: '/logos/abbottabad.png',
-    status: 'available',
-    fileSize: '4.0 MB',
+    recordRef: 'GZ-ATD-26',
+    status: 'official-source-only',
+    formatLabel: 'Official Portal',
+    capabilityLabel: 'Official Source Only',
   },
   {
     id: 'bise-mardan',
@@ -229,7 +266,10 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'kpk',
     provinceLabel: 'KPK',
     logo: '/logos/mardan.png',
-    status: 'not-available',
+    recordRef: 'GZ-MDN-26',
+    status: 'not-yet-verified',
+    formatLabel: 'Gazette Document',
+    capabilityLabel: 'Awaiting Release',
   },
   {
     id: 'bise-swat',
@@ -239,7 +279,10 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'kpk',
     provinceLabel: 'KPK',
     logo: '/logos/swat.jpg',
-    status: 'not-available',
+    recordRef: 'GZ-SWT-26',
+    status: 'not-yet-verified',
+    formatLabel: 'Gazette Document',
+    capabilityLabel: 'Awaiting Release',
   },
   {
     id: 'bise-malakand',
@@ -249,7 +292,10 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'kpk',
     provinceLabel: 'KPK',
     logo: '/logos/malakand.png',
-    status: 'not-available',
+    recordRef: 'GZ-MKD-26',
+    status: 'not-yet-verified',
+    formatLabel: 'Gazette Document',
+    capabilityLabel: 'Awaiting Release',
   },
   {
     id: 'bise-kohat',
@@ -259,7 +305,10 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'kpk',
     provinceLabel: 'KPK',
     logo: '/logos/kohat.png',
-    status: 'not-available',
+    recordRef: 'GZ-KHT-26',
+    status: 'not-yet-verified',
+    formatLabel: 'Gazette Document',
+    capabilityLabel: 'Awaiting Release',
   },
   {
     id: 'bise-bannu',
@@ -269,7 +318,10 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'kpk',
     provinceLabel: 'KPK',
     logo: '/logos/bannu.png',
-    status: 'not-available',
+    recordRef: 'GZ-BNU-26',
+    status: 'not-yet-verified',
+    formatLabel: 'Gazette Document',
+    capabilityLabel: 'Awaiting Release',
   },
   {
     id: 'bise-dikhan',
@@ -279,7 +331,23 @@ const GAZETTE_BOARDS: GazetteBoard[] = [
     province: 'kpk',
     provinceLabel: 'KPK',
     logo: '/logos/dikhan.png',
-    status: 'not-available',
+    recordRef: 'GZ-DIK-26',
+    status: 'not-yet-verified',
+    formatLabel: 'Gazette Document',
+    capabilityLabel: 'Awaiting Release',
+  },
+  {
+    id: 'bise-quetta',
+    name: 'BISE Quetta',
+    shortName: 'BISE Quetta',
+    slug: 'quetta-board',
+    province: 'balochistan',
+    provinceLabel: 'Balochistan',
+    logo: '/icons/crest.svg',
+    recordRef: 'GZ-QTA-26',
+    status: 'not-yet-verified',
+    formatLabel: 'Gazette Document',
+    capabilityLabel: 'Awaiting Release',
   },
 ]
 
@@ -310,9 +378,50 @@ export function GazetteSection() {
     return list
   }, [selectedProvince, searchQuery, sortOrder])
 
+  function renderStatusBadge(status: GazetteState) {
+    switch (status) {
+      case 'gazette-available':
+        return (
+          <span className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-[10.5px] font-bold text-[#007054]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#007054]" />
+            Gazette Available
+          </span>
+        )
+      case 'lookup-active':
+        return (
+          <span className="inline-flex items-center gap-1 rounded-full border border-teal-200 bg-teal-50 px-2.5 py-0.5 text-[10.5px] font-bold text-teal-800">
+            <span className="h-1.5 w-1.5 rounded-full bg-teal-600" />
+            Lookup Active
+          </span>
+        )
+      case 'processing':
+        return (
+          <span className="inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-0.5 text-[10.5px] font-bold text-blue-700">
+            <ClockIcon width={11} height={11} />
+            Processing
+          </span>
+        )
+      case 'official-source-only':
+        return (
+          <span className="inline-flex items-center gap-1 rounded-full border border-purple-200 bg-purple-50 px-2.5 py-0.5 text-[10.5px] font-bold text-purple-700">
+            <ShieldCheckIcon width={11} height={11} />
+            Official Source Only
+          </span>
+        )
+      case 'not-yet-verified':
+      default:
+        return (
+          <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-100 px-2.5 py-0.5 text-[10.5px] font-bold text-slate-600">
+            <ClockIcon width={11} height={11} />
+            Not Yet Verified
+          </span>
+        )
+    }
+  }
+
   return (
     <section id="gazette" aria-labelledby="gazette-heading" className="relative w-full">
-      {/* ── Background Subtle Watermark (Left Arches & Right Minar) ── */}
+      {/* Background Watermarks */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -top-12 left-0 h-44 w-52 opacity-[0.08] select-none"
@@ -341,41 +450,12 @@ export function GazetteSection() {
         </svg>
       </div>
 
-      {/* ── Top Floating Handwritten Calligraphy ────────────────────── */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-4 left-2 hidden -rotate-6 select-none md:block"
-      >
-        <span className="font-serif text-base font-bold tracking-wide text-[#3B7E67]/80 italic lg:text-lg">
-          Education
-          <br />
-          Builds a Stronger
-          <br />
-          Pakistan
-        </span>
-      </div>
-
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-2 right-4 hidden rotate-6 select-none md:block"
-      >
-        <span className="font-serif text-base font-bold tracking-wide text-[#3B7E67]/80 italic lg:text-lg">
-          Higher
-          <br />
-          Education
-          <br />
-          Brighter
-          <br />
-          Pakistan
-        </span>
-      </div>
-
-      {/* ── Section Header ─────────────────────────────────────────── */}
+      {/* Section Header */}
       <div className="relative mx-auto max-w-3xl text-center">
         {/* Top Pill Badge */}
         <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200/90 bg-[#E6F8F3] px-4 py-1.5 text-xs font-black tracking-widest text-[#007054] uppercase shadow-xs">
           <FileTextIcon width={13} height={13} />
-          <span>BOARD-WISE GAZETTE DOWNLOADS</span>
+          <span>OFFICIAL GAZETTE DIRECTORY</span>
         </div>
 
         {/* Heading */}
@@ -383,19 +463,26 @@ export function GazetteSection() {
           id="gazette-heading"
           className="mt-3.5 text-2xl font-black tracking-tight text-[#0F1736] sm:text-3xl lg:text-[40px] lg:leading-tight"
         >
-          12th Class Result Gazette 2026 —{' '}
-          <span className="text-[#007054]">Availability &amp; Downloads</span>
+          12th Class Result Gazette 2026
         </h2>
 
-        {/* Subtitle */}
-        <p className="mx-auto mt-3 max-w-2xl text-xs leading-relaxed text-[#5F6B7A] sm:text-sm">
-          Access verified gazette publications and status updates for each intermediate board. We
-          label each board with its real status—Available, Processing, Official Source, or Not
-          Available Yet—without misleading download buttons.
-        </p>
+        {/* Intro */}
+        <div className="mx-auto mt-4 max-w-3xl space-y-2.5 text-center text-xs leading-relaxed text-[#5F6B7A] sm:text-sm">
+          <p>
+            A 12th Class Result Gazette is a board result document that may contain candidate
+            records for a particular examination. Depending on the board and Gazette format, it may
+            include roll numbers, candidate names, total marks, result status and other examination
+            information.
+          </p>
+          <p>
+            Use this platform to check Gazette availability by board, year and examination. A
+            Gazette should only be shown as searchable when its dataset has been successfully
+            processed and validated.
+          </p>
+        </div>
       </div>
 
-      {/* ── Filter Tabs & Search / Sort Controls Row ─────────────────── */}
+      {/* Filter Tabs & Search / Sort Controls Row */}
       <div className="mt-8 flex flex-col items-center justify-between gap-4 lg:flex-row">
         {/* Left: Filter Tabs */}
         <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5">
@@ -458,8 +545,8 @@ export function GazetteSection() {
               onChange={(e) => setSortOrder(e.target.value as 'latest' | 'az')}
               className="w-full appearance-none rounded-full border border-slate-200 bg-white py-2.5 pr-8 pl-4 text-xs font-bold text-slate-700 shadow-xs transition-all hover:border-slate-300 focus:border-[#007054] focus:outline-none sm:w-auto"
             >
-              <option value="latest">⚡ Latest / Featured</option>
-              <option value="az">🔤 Board Name (A-Z)</option>
+              <option value="latest">Latest / Featured</option>
+              <option value="az">Board Name (A-Z)</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400">
               <span className="text-[10px]">▼</span>
@@ -468,144 +555,121 @@ export function GazetteSection() {
         </div>
       </div>
 
-      {/* ── 4-Column Board Gazette Cards Grid ───────────────────────── */}
+      {/* Gazette Cards Grid (Document / Data Records Aesthetic) */}
       <div className="mt-7 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {filteredBoards.map((board) => {
           const hasPage = routedSlugs.has(board.slug)
-          const downloadHref = hasPage ? `/results/${board.slug}/12th-class#gazette` : '/boards'
+          const targetHref = hasPage ? `/results/${board.slug}/12th-class#gazette` : '/boards'
+          const officialHref = hasPage
+            ? `/results/${board.slug}/12th-class#official-source`
+            : '/boards'
           const guideHref = hasPage ? `/results/${board.slug}/12th-class` : '/boards'
-          const smsHref = hasPage ? `/results/${board.slug}/12th-class#sms` : '/#check-result'
-          const resultHref = hasPage ? `/results/${board.slug}/12th-class` : '/#check-result'
+
+          const isOfficialSource = board.status === 'official-source-only'
+          const hasVerifiedDownload = Boolean(board.hasVerifiedDownload)
+          const primaryHref = isOfficialSource ? officialHref : targetHref
 
           return (
             <div
               key={board.id}
-              className="group flex flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-4 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
+              className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-md"
             >
-              <div>
-                {/* Top Row: Circular Logo + Info */}
-                <div className="flex items-start gap-3">
-                  {/* Circular Board Logo */}
-                  <div className="relative flex h-13 w-13 shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-200/80 bg-white p-1 shadow-2xs">
+              {/* Document Dossier Top Strip */}
+              <div className="flex items-center justify-between border-b border-slate-100 bg-[#F8FAF9] px-4 py-2.5 text-[11px]">
+                <div className="flex items-center gap-1.5 font-mono font-bold text-slate-700">
+                  <FileTextIcon width={13} height={13} className="text-[#007054]" />
+                  <span>{board.recordRef}</span>
+                </div>
+                <span className="rounded-md border border-slate-200/70 bg-white px-2 py-0.5 text-[10px] font-bold text-slate-600">
+                  {board.provinceLabel}
+                </span>
+              </div>
+
+              {/* Document Body */}
+              <div className="p-4">
+                {/* Publishing Authority */}
+                <div className="flex items-center gap-3">
+                  <div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200/80 bg-white p-1 shadow-2xs">
                     <Image
                       src={board.logo}
                       alt={`${board.shortName} official logo`}
-                      width={44}
-                      height={44}
+                      width={36}
+                      height={36}
                       unoptimized
                       className="h-full w-full object-contain"
                     />
                   </div>
-
-                  {/* Title + Province */}
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-1.5">
-                      <h3 className="truncate text-sm font-black text-slate-900 transition-colors group-hover:text-[#007054]">
-                        {board.shortName}
-                      </h3>
-                      <span className="shrink-0 rounded-full border border-emerald-100 bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
-                        {board.provinceLabel}
-                      </span>
-                    </div>
-
-                    <p className="mt-1 text-[11px] leading-tight text-slate-500">
-                      12th Class (HSSC Part-II) • Gazette 2026
+                    <h3 className="truncate text-sm font-black text-slate-900 transition-colors group-hover:text-[#007054]">
+                      {board.shortName}
+                    </h3>
+                    <p className="text-[11px] font-medium text-slate-500">
+                      12th Class • HSSC Part-II • 2026
                     </p>
+                  </div>
+                </div>
 
-                    {/* Honest Status Chips */}
-                    {board.status === 'available' && (
-                      <div className="mt-2 flex items-center gap-1.5 text-[11px] font-bold text-[#007054]">
-                        <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#007054] text-[9px] font-black text-white">
-                          ✓
-                        </span>
-                        <span>Available</span>
-                        <span className="text-slate-300">•</span>
-                        <span className="font-medium text-slate-500">PDF • {board.fileSize}</span>
-                      </div>
-                    )}
-                    {board.status === 'processing' && (
-                      <div className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-0.5 text-[11px] font-bold text-blue-700">
-                        <ClockIcon width={11} height={11} />
-                        <span>Processing</span>
-                      </div>
-                    )}
-                    {board.status === 'official-source' && (
-                      <div className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-purple-200 bg-purple-50 px-2.5 py-0.5 text-[11px] font-bold text-purple-700">
-                        <ShieldCheckIcon width={11} height={11} />
-                        <span>Official Source</span>
-                      </div>
-                    )}
-                    {board.status === 'not-available' && (
-                      <div className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-100 px-2.5 py-0.5 text-[11px] font-bold text-slate-600">
-                        <ClockIcon width={11} height={11} />
-                        <span>Not Available Yet</span>
-                      </div>
-                    )}
+                {/* Document Specification Ledger Box */}
+                <div className="mt-3.5 space-y-2 rounded-xl border border-slate-100 bg-[#F9FBFA] p-3 text-xs">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-medium text-slate-500">Document Status</span>
+                    {renderStatusBadge(board.status)}
+                  </div>
+
+                  <div className="flex items-center justify-between border-t border-slate-200/40 pt-1.5">
+                    <span className="text-[11px] font-medium text-slate-500">Dataset Format</span>
+                    <span className="text-[11px] font-bold text-slate-700">
+                      {board.formatLabel}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between border-t border-slate-200/40 pt-1.5">
+                    <span className="text-[11px] font-medium text-slate-500">
+                      Lookup Capability
+                    </span>
+                    <span className="text-[11px] font-medium text-slate-600">
+                      {board.capabilityLabel}
+                    </span>
                   </div>
                 </div>
               </div>
 
-              {/* Bottom: Action Buttons + Sub-links */}
-              <div className="mt-4 border-t border-slate-100 pt-3">
-                {/* 2 Contextual Action Buttons */}
-                <div className="grid grid-cols-2 gap-2">
-                  {/* Button 1: Contextual based on true status */}
-                  {board.status === 'available' ? (
+              {/* Bottom Action Area */}
+              <div className="border-t border-slate-100 bg-[#FAFCFB] px-4 py-3">
+                <div className="flex items-center gap-2">
+                  {/* Primary Action Button */}
+                  {hasVerifiedDownload ? (
                     <Link
-                      href={downloadHref}
-                      className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#007054] px-2.5 py-2 text-center text-xs font-bold text-white shadow-2xs transition-colors hover:bg-[#005a43] active:scale-95"
+                      href={primaryHref}
+                      className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-[#007054] px-3 py-2 text-center text-xs font-bold text-white shadow-2xs transition-colors hover:bg-[#005a43] active:scale-95"
                     >
-                      <DownloadIcon width={12} height={12} />
-                      <span>Download PDF</span>
+                      <DownloadIcon width={13} height={13} />
+                      <span>Download Gazette</span>
                     </Link>
-                  ) : board.status === 'official-source' ? (
+                  ) : isOfficialSource ? (
                     <Link
-                      href={guideHref}
-                      className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-2 text-center text-xs font-bold text-indigo-700 shadow-2xs transition-colors hover:bg-indigo-100 active:scale-95"
+                      href={primaryHref}
+                      className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-purple-200 bg-purple-50 px-3 py-2 text-center text-xs font-bold text-purple-700 shadow-2xs transition-colors hover:bg-purple-100 active:scale-95"
                     >
-                      <ExternalLinkIcon width={12} height={12} />
-                      <span>Official Source</span>
-                    </Link>
-                  ) : board.status === 'processing' ? (
-                    <Link
-                      href={guideHref}
-                      className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-2 text-center text-xs font-bold text-blue-700 shadow-2xs transition-colors hover:bg-blue-100 active:scale-95"
-                    >
-                      <span>Processing</span>
+                      <ExternalLinkIcon width={13} height={13} />
+                      <span>View Official Source</span>
                     </Link>
                   ) : (
                     <Link
-                      href={guideHref}
-                      className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-center text-xs font-semibold text-slate-600 shadow-2xs transition-colors hover:bg-slate-50 active:scale-95"
+                      href={primaryHref}
+                      className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-center text-xs font-bold text-slate-700 shadow-2xs transition-colors hover:border-[#007054] hover:bg-slate-50 hover:text-[#007054] active:scale-95"
                     >
-                      <span>Check Schedule</span>
+                      <ArrowRightIcon width={13} height={13} />
+                      <span>View Gazette Status</span>
                     </Link>
                   )}
 
-                  {/* Button 2: View Guide */}
+                  {/* Secondary Action Link */}
                   <Link
                     href={guideHref}
-                    className="inline-flex items-center justify-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-center text-xs font-semibold text-slate-700 shadow-2xs transition-colors hover:border-slate-300 hover:bg-slate-50 active:scale-95"
+                    className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-3 py-2 text-center text-xs font-semibold text-slate-700 shadow-2xs transition-colors hover:border-slate-300 hover:bg-slate-50 active:scale-95"
                   >
-                    <span>View Guide</span>
-                  </Link>
-                </div>
-
-                {/* Sub-links Row: SMS & Result */}
-                <div className="mt-2.5 flex items-center justify-center gap-6 text-[11px] font-medium text-slate-500">
-                  <Link
-                    href={smsHref}
-                    className="inline-flex items-center gap-1 transition-colors hover:text-[#007054]"
-                  >
-                    <MessageSquareIcon width={12} height={12} className="text-slate-400" />
-                    <span>SMS</span>
-                  </Link>
-                  <Link
-                    href={resultHref}
-                    className="inline-flex items-center gap-1 transition-colors hover:text-[#007054]"
-                  >
-                    <BarChartIcon width={12} height={12} className="text-slate-400" />
-                    <span>Result</span>
+                    <span>Board Guide</span>
                   </Link>
                 </div>
               </div>
@@ -621,7 +685,7 @@ export function GazetteSection() {
         </div>
       )}
 
-      {/* ── Bottom Section: Callout Card + Features Strip ─────────── */}
+      {/* Bottom Callout & Features Strip */}
       <div className="mt-10 flex flex-col items-center justify-between gap-4 lg:flex-row">
         {/* Left: Can't Find Your Gazette Card */}
         <div className="flex w-full flex-1 flex-col items-start justify-between gap-4 rounded-2xl border border-emerald-100 bg-[#E8F8F3]/70 p-4 shadow-xs backdrop-blur-xs sm:flex-row sm:items-center sm:p-5">
@@ -664,8 +728,8 @@ export function GazetteSection() {
               <FileTextIcon width={16} height={16} />
             </div>
             <div>
-              <div className="text-xs font-black text-slate-900">Board-wise PDFs</div>
-              <div className="text-[10px] text-slate-500">Separate gazette for each board</div>
+              <div className="text-xs font-black text-slate-900">Board Gazettes</div>
+              <div className="text-[10px] text-slate-500">Separate records per board</div>
             </div>
           </div>
 
@@ -674,8 +738,8 @@ export function GazetteSection() {
               <ZapIcon width={16} height={16} />
             </div>
             <div>
-              <div className="text-xs font-black text-slate-900">Fast Access</div>
-              <div className="text-[10px] text-slate-500">Quick &amp; easy downloads</div>
+              <div className="text-xs font-black text-slate-900">Verified Pipeline</div>
+              <div className="text-[10px] text-slate-500">Accurate status tracking</div>
             </div>
           </div>
 
@@ -685,7 +749,7 @@ export function GazetteSection() {
             </div>
             <div>
               <div className="text-xs font-black text-slate-900">Updated Regularly</div>
-              <div className="text-[10px] text-slate-500">Get the latest updates</div>
+              <div className="text-[10px] text-slate-500">Latest examination data</div>
             </div>
           </div>
         </div>
