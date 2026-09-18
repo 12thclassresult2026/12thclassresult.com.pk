@@ -69,12 +69,12 @@ const STATUS_DEFINITIONS = [
 ]
 
 export function ResultScheduleSection() {
-  // Select 5 highlighted preview boards across different regions
+  // 5 highlighted preview boards across different provinces / regions
   const previewBoardSlugs = [
-    'fbise',
-    'bise-lahore',
+    'federal-board',
+    'lahore-board',
     'karachi-board',
-    'bise-peshawar',
+    'peshawar-board',
     'quetta-board',
   ]
   const previewBoards = previewBoardSlugs
@@ -82,10 +82,10 @@ export function ResultScheduleSection() {
     .filter(Boolean)
 
   const boardLogos: Record<string, string> = {
-    fbise: '/logos/fbise.png',
-    'bise-lahore': '/logos/bise-lahore.webp',
+    'federal-board': '/logos/fbise.png',
+    'lahore-board': '/logos/bise-lahore.webp',
     'karachi-board': '/logos/karachi.img',
-    'bise-peshawar': '/logos/bise-peshawar.png',
+    'peshawar-board': '/logos/bise-peshawar.png',
     'quetta-board': '/icons/crest.svg',
   }
 
