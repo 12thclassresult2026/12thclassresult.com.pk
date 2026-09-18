@@ -204,53 +204,56 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
 
           {/* Floating Result Checker Card */}
           <div id="check-result" className="mx-auto mt-6 max-w-3xl sm:mt-7">
-            <div className="rounded-3xl border border-slate-200/90 bg-white p-5 shadow-xl transition-all sm:p-7">
+            <div className="rounded-3xl border border-slate-200/90 bg-white p-4 shadow-xl transition-all sm:p-6 md:p-7">
               {/* 3-Tab Pill Bar */}
-              <div className="mx-auto flex max-w-md items-center justify-center gap-1.5 rounded-2xl bg-slate-100/90 p-1.5">
+              <div className="mx-auto grid w-full max-w-lg grid-cols-3 gap-1 rounded-2xl bg-slate-100/90 p-1 sm:gap-1.5 sm:p-1.5">
                 <button
                   type="button"
                   onClick={() => setActiveTab('roll')}
-                  className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-3.5 py-2.5 text-xs font-bold transition-all sm:text-sm ${
+                  className={`flex items-center justify-center gap-1.5 rounded-xl px-2 py-2.5 text-xs font-bold whitespace-nowrap transition-all sm:gap-2 sm:px-3.5 sm:text-sm ${
                     activeTab === 'roll'
                       ? 'bg-[#007054] text-white shadow-sm'
                       : 'text-slate-700 hover:text-slate-900'
                   }`}
                 >
-                  <HashIcon width={15} height={15} />
-                  <span>By Roll Number</span>
+                  <HashIcon width={15} height={15} className="shrink-0" />
+                  <span className="hidden sm:inline">By Roll Number</span>
+                  <span className="sm:hidden">Roll No</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setActiveTab('name')}
-                  className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-3.5 py-2.5 text-xs font-bold transition-all sm:text-sm ${
+                  className={`flex items-center justify-center gap-1.5 rounded-xl px-2 py-2.5 text-xs font-bold whitespace-nowrap transition-all sm:gap-2 sm:px-3.5 sm:text-sm ${
                     activeTab === 'name'
                       ? 'bg-[#007054] text-white shadow-sm'
                       : 'text-slate-700 hover:text-slate-900'
                   }`}
                 >
-                  <UserIcon width={15} height={15} />
-                  <span>By Name</span>
+                  <UserIcon width={15} height={15} className="shrink-0" />
+                  <span className="hidden sm:inline">By Name</span>
+                  <span className="sm:hidden">By Name</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setActiveTab('sms')}
-                  className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-3.5 py-2.5 text-xs font-bold transition-all sm:text-sm ${
+                  className={`flex items-center justify-center gap-1.5 rounded-xl px-2 py-2.5 text-xs font-bold whitespace-nowrap transition-all sm:gap-2 sm:px-3.5 sm:text-sm ${
                     activeTab === 'sms'
                       ? 'bg-[#007054] text-white shadow-sm'
                       : 'text-slate-700 hover:text-slate-900'
                   }`}
                 >
-                  <MessageSquareIcon width={15} height={15} />
-                  <span>By SMS</span>
+                  <MessageSquareIcon width={15} height={15} className="shrink-0" />
+                  <span className="hidden sm:inline">By SMS</span>
+                  <span className="sm:hidden">By SMS</span>
                 </button>
               </div>
 
               {/* -- Tab 1: By Roll Number -- */}
               {activeTab === 'roll' && (
                 <form onSubmit={handleRollSubmit} className="mt-6 space-y-4">
-                  <div className="grid grid-cols-1 items-end gap-3.5 md:grid-cols-[1.15fr_1.15fr_auto]">
+                  <div className="grid grid-cols-1 items-end gap-3 sm:grid-cols-2 md:grid-cols-[1.2fr_1.2fr_auto]">
                     {/* Field 1: Select Board */}
                     <div className="text-left">
                       <label
@@ -308,7 +311,7 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
                     </div>
 
                     {/* Field 3: Action Button */}
-                    <div>
+                    <div className="sm:col-span-2 md:col-span-1">
                       <button
                         type="submit"
                         className="flex h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-[#007054] px-7 text-xs font-bold whitespace-nowrap text-white shadow-sm transition-all hover:bg-[#005842] active:scale-[0.98] sm:text-sm md:w-auto"
@@ -333,7 +336,7 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
               {/* -- Tab 2: By Name -- */}
               {activeTab === 'name' && (
                 <form onSubmit={handleNameSubmit} className="mt-6 space-y-4">
-                  <div className="grid grid-cols-1 items-end gap-3.5 md:grid-cols-[1.15fr_1.15fr_auto]">
+                  <div className="grid grid-cols-1 items-end gap-3 sm:grid-cols-2 md:grid-cols-[1.2fr_1.2fr_auto]">
                     <div className="text-left">
                       <label
                         htmlFor="name-board-select"
@@ -385,7 +388,7 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
                       </div>
                     </div>
 
-                    <div>
+                    <div className="sm:col-span-2 md:col-span-1">
                       <button
                         type="submit"
                         className="flex h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-[#007054] px-7 text-xs font-bold whitespace-nowrap text-white shadow-sm transition-all hover:bg-[#005842] sm:text-sm md:w-auto"
@@ -408,7 +411,7 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
               {/* -- Tab 3: By SMS -- */}
               {activeTab === 'sms' && (
                 <form onSubmit={handleSmsSubmit} className="mt-6 space-y-4">
-                  <div className="grid grid-cols-1 items-end gap-3.5 md:grid-cols-[1.5fr_auto]">
+                  <div className="grid grid-cols-1 items-end gap-3 sm:grid-cols-[1fr_auto]">
                     <div className="text-left">
                       <label
                         htmlFor="sms-board-select"
