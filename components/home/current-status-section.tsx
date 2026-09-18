@@ -75,9 +75,9 @@ export function CurrentStatusSection({ lastVerifiedAt = '2026-09-14' }: CurrentS
           {/* Content Paragraphs */}
           <div className="mt-4 space-y-3 text-sm leading-relaxed text-slate-700 sm:text-base">
             <p>
-              The 12th Class Result 2026 is announced separately by education boards and
-              examination authorities across Pakistan. There is no single result date or
-              availability status that automatically applies to every board.
+              The 12th Class Result 2026 is announced separately by education boards and examination
+              authorities across Pakistan. There is no single result date or availability status
+              that automatically applies to every board.
             </p>
             <p>
               Select your board to see its latest available status, result method and Gazette
@@ -107,7 +107,7 @@ export function CurrentStatusSection({ lastVerifiedAt = '2026-09-14' }: CurrentS
               {/* Verified Status Badge Cell */}
               <div className="flex items-center justify-between rounded-xl border border-emerald-200/70 bg-emerald-50/50 p-3 sm:p-3.5">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2Icon width={16} height={16} className="text-[#007054] shrink-0" />
+                  <CheckCircle2Icon width={16} height={16} className="shrink-0 text-[#007054]" />
                   <span className="text-xs font-bold text-[#007054]">
                     Official Primary Sources Only
                   </span>

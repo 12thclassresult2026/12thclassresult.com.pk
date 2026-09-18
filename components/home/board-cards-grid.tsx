@@ -262,7 +262,7 @@ const ALL_BOARDS: BoardItem[] = [
 export function BoardCardsGrid({ year = 2026 }: { year?: number }) {
   const [selectedProvince, setSelectedProvince] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState<string>('')
-  const [showAll, setShowAll] = useState<boolean>(false)
+  const [showAll, setShowAll] = useState(false)
 
   const routedSlugs = useMemo(() => new Set(routedBoards().map((b) => b.slug)), [])
 
@@ -475,6 +475,26 @@ export function BoardCardsGrid({ year = 2026 }: { year?: number }) {
           )
         })}
       </div>
+
+      {/* Expand / Collapse Toggle for "All" Tab */}
+      {selectedProvince === 'all' && !searchQuery.trim() && filteredBoards.length > 8 && (
+        <div className="mt-8 flex justify-center">
+          <button
+            type="button"
+            onClick={() => setShowAll((prev) => !prev)}
+            className="inline-flex items-center gap-2 rounded-xl border border-emerald-600/30 bg-white px-6 py-2.5 text-xs font-bold text-[#007054] shadow-xs transition-all hover:border-emerald-600/50 hover:bg-emerald-50 active:scale-95 sm:text-sm"
+          >
+            <span>
+              {showAll ? 'Show Fewer Boards' : `View All ${filteredBoards.length} Pakistan Boards`}
+            </span>
+            <ChevronDownIcon
+              width={16}
+              height={16}
+              className={`transition-transform duration-200 ${showAll ? 'rotate-180' : ''}`}
+            />
+          </button>
+        </div>
+      )}
 
       {filteredBoards.length === 0 && (
         <div className="mt-10 rounded-2xl border border-dashed border-slate-200 p-8 text-center text-slate-500">

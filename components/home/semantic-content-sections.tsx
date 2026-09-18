@@ -2,12 +2,9 @@ import Link from 'next/link'
 
 import {
   BookOpenIcon,
-  CalendarIcon,
   CheckCircle2Icon,
   FileTextIcon,
   LandmarkIcon,
-  MessageSquareIcon,
-  SearchIcon,
   ShieldCheckIcon,
   ZapIcon,
 } from '@/components/ui/icons'

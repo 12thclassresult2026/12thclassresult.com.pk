@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 
 import type { BoardOption } from '@/components/result/board-finder'
 import type { FaqItem } from '@/components/ui/faq-accordion'
