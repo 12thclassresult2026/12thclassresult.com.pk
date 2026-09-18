@@ -2,6 +2,9 @@ import Link from 'next/link'
 
 import {
   ArrowRightIcon,
+  UsersIcon,
+  MapPinIcon,
+  CalendarIcon,
   BarChartIcon,
   BookOpenIcon,
   CheckCircle2Icon,
@@ -310,6 +313,182 @@ function MinarSkyline() {
       <circle cx="71" cy="4" r="1.5" />
       <path d="M85 38v-9c0-3 3-4 6-4s6 1 6 4v9" />
       <path d="M102 38v-6c0-2 2-3 4-3s4 1 4 3v6" />
+    </svg>
+  )
+}
+
+function MegaphoneIcon({
+  width = 16,
+  height = 16,
+  className = '',
+}: {
+  width?: number
+  height?: number
+  className?: string
+}) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M3 11l14-5v12L3 13v-2z" />
+      <path d="M17 9v6" />
+      <path d="M11 13v4a2 2 0 0 1-2 2H8" />
+      <path d="M21 9a3 3 0 0 1 0 6" />
+    </svg>
+  )
+}
+
+function MinarIcon({
+  width = 24,
+  height = 24,
+  className = '',
+}: {
+  width?: number
+  height?: number
+  className?: string
+}) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M11 20l1-15h0l1 15" />
+      <path d="M10 14h4" />
+      <path d="M9 18h6" />
+      <path d="M7 21h10" />
+      <circle cx="12" cy="3.5" r="1.5" />
+    </svg>
+  )
+}
+
+function FederalBuildingsIcon({
+  width = 24,
+  height = 24,
+  className = '',
+}: {
+  width?: number
+  height?: number
+  className?: string
+}) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M4 21V10l4-2v13" />
+      <path d="M8 8l8-4v17" />
+      <path d="M16 11l4 2v8" />
+      <line x1="2" y1="21" x2="22" y2="21" />
+    </svg>
+  )
+}
+
+function MountainsIcon({
+  width = 24,
+  height = 24,
+  className = '',
+}: {
+  width?: number
+  height?: number
+  className?: string
+}) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M3 20l7-12 5 8 2-3 4 7H3z" />
+      <path d="M7.5 12.3l3 2.7 4-4.5" />
+    </svg>
+  )
+}
+
+function SindhArchIcon({
+  width = 24,
+  height = 24,
+  className = '',
+}: {
+  width?: number
+  height?: number
+  className?: string
+}) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M4 21V9a8 8 0 0 1 16 0v12" />
+      <path d="M8 21v-7a4 4 0 0 1 8 0v7" />
+      <line x1="2" y1="21" x2="22" y2="21" />
+    </svg>
+  )
+}
+
+function BalochistanRidgeIcon({
+  width = 24,
+  height = 24,
+  className = '',
+}: {
+  width?: number
+  height?: number
+  className?: string
+}) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M2 20l5-8 4 5 5-9 6 12H2z" />
+      <path d="M12 12l2.5 3" />
     </svg>
   )
 }
@@ -829,99 +1008,406 @@ export function SemanticContentSections() {
           {/* ========================================================================= */}
           {/* SECTION 4: RESULT DATE SCHEDULE & BOARD STATUS 2026                       */}
           {/* ========================================================================= */}
-          <article id="date-schedule" aria-labelledby="heading-date-schedule">
-            <div className="flex items-center gap-2 text-xs font-black tracking-widest text-[#007054] uppercase">
-              <span className="flex h-2 w-2 rounded-full bg-[#007054]" />
-              <span>TIMELINE &amp; PROVINCIAL COORDINATION</span>
+          <article
+            id="date-schedule"
+            aria-labelledby="heading-date-schedule"
+            className="relative pt-6"
+          >
+            {/* Top Row: Eyebrow, Heading, Intro & 3D Calendar Graphic */}
+            <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
+              {/* Left Column: Eyebrow + Heading + Intro */}
+              <div className="max-w-3xl flex-1">
+                <div className="flex items-center gap-2 text-xs font-black tracking-widest text-[#007054] uppercase">
+                  <span className="flex h-2.5 w-2.5 rounded-full bg-[#007054]" />
+                  <span>TIMELINE &amp; PROVINCIAL COORDINATION</span>
+                </div>
+
+                <h2
+                  id="heading-date-schedule"
+                  className="mt-3 text-2xl font-black tracking-tight text-slate-900 sm:text-3xl lg:text-[32px] lg:leading-tight xl:text-[34px]"
+                >
+                  12th Class Result Date &amp; Board Schedule 2026
+                </h2>
+
+                <p className="mt-3 text-xs leading-relaxed text-slate-600 sm:text-sm md:text-[14px]">
+                  A common misconception among students is that all education boards in Pakistan
+                  announce their 12th class results on the exact same date. In reality, announcement
+                  dates are determined by provincial coordination committees and board autonomy.
+                </p>
+              </div>
+
+              {/* Right Column: 3D Calendar Illustration + Pakistan Map Silhouette + Cursive Motto */}
+              <div className="relative flex shrink-0 items-center gap-3 self-center pr-2 select-none lg:self-center">
+                {/* Pakistan Map Silhouette & Calendar Card */}
+                <div className="relative flex items-center justify-center">
+                  {/* Subtle Pakistan Map Silhouette */}
+                  <svg
+                    width="140"
+                    height="115"
+                    viewBox="0 0 100 85"
+                    fill="currentColor"
+                    className="pointer-events-none absolute -top-5 -left-8 text-emerald-100/80"
+                    aria-hidden="true"
+                  >
+                    <path d="M28 72 L36 65 L46 62 L54 50 L66 42 L72 28 L78 16 L66 14 L56 18 L48 30 L42 40 L34 50 L24 56 L16 62 L20 70 Z" />
+                  </svg>
+
+                  {/* 3D Calendar Desk Card */}
+                  <div className="relative z-10 w-26 overflow-hidden rounded-2xl border border-emerald-200/90 bg-white shadow-md sm:w-28">
+                    {/* Top Green Bar with Spiral Rings */}
+                    <div className="relative flex h-7 items-center justify-around bg-[#007054] px-3">
+                      <span className="h-2.5 w-1.5 rounded-full bg-white shadow-2xs" />
+                      <span className="h-2.5 w-1.5 rounded-full bg-white shadow-2xs" />
+                      <span className="h-2.5 w-1.5 rounded-full bg-white shadow-2xs" />
+                    </div>
+                    {/* Calendar Body */}
+                    <div className="flex flex-col items-center justify-center p-2.5">
+                      {/* Grid placeholder marks */}
+                      <div className="flex w-full justify-between px-1">
+                        <span className="h-1.5 w-3.5 rounded-sm bg-slate-200" />
+                        <span className="h-1.5 w-3.5 rounded-sm bg-slate-200" />
+                        <span className="h-1.5 w-3.5 rounded-sm bg-slate-200" />
+                      </div>
+                      {/* Big Bold Year */}
+                      <span className="mt-1.5 text-2xl font-black tracking-tight text-[#007054] sm:text-[26px]">
+                        2026
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tilted Cursive Motto with Underline Doodle */}
+                <div className="flex flex-col items-start select-none">
+                  <span
+                    className="inline-block -rotate-12 text-sm leading-tight font-bold text-emerald-700/85 sm:text-base"
+                    style={{ fontFamily: 'var(--font-caveat), cursive' }}
+                  >
+                    Brighter
+                    <br />
+                    Futures
+                    <br />
+                    Together
+                  </span>
+                  <svg
+                    width="44"
+                    height="10"
+                    viewBox="0 0 50 12"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    className="mt-0.5 text-emerald-600/70"
+                    aria-hidden="true"
+                  >
+                    <path d="M2 4 C 18 11, 34 11, 48 3" />
+                  </svg>
+                </div>
+              </div>
             </div>
 
-            <h2
-              id="heading-date-schedule"
-              className="mt-3 text-2xl font-black tracking-tight text-slate-900 sm:text-3xl lg:text-[34px] lg:leading-tight"
-            >
-              12th Class Result Date &amp;{' '}
-              <span className="text-[#007054]">Board Schedule 2026</span>
-            </h2>
+            {/* Quick Stats Strip (3 Cards) */}
+            <div className="mt-7 grid grid-cols-1 gap-4 sm:grid-cols-3">
+              {/* Stat 1 */}
+              <div className="flex items-center gap-3.5 rounded-2xl border border-slate-200/80 bg-[#f8fbf9] p-3.5 shadow-2xs sm:p-4">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#e8f6f0] text-[#007054]">
+                  <UsersIcon width={20} height={20} />
+                </div>
+                <div className="flex items-center gap-3">
+                  <div>
+                    <span className="block text-2xl leading-none font-black text-slate-900 sm:text-3xl">
+                      5
+                    </span>
+                    <span className="text-[11px] font-bold text-slate-600 sm:text-xs">
+                      Board Groups
+                    </span>
+                  </div>
+                  <span className="h-8 w-px bg-slate-200/90" />
+                  <span className="text-[11px] leading-snug font-medium text-slate-500 sm:text-xs">
+                    All provinces
+                    <br />
+                    covered
+                  </span>
+                </div>
+              </div>
 
-            <div className="mt-4 space-y-4 text-xs leading-relaxed text-slate-700 sm:text-sm md:text-[15px] md:leading-relaxed">
-              <p>
-                A common misconception among students is that all education boards in Pakistan
-                announce their 12th class results on the exact same date. In reality, announcement
-                dates are determined by provincial coordination committees and board autonomy:
-              </p>
+              {/* Stat 2 */}
+              <div className="flex items-center gap-3.5 rounded-2xl border border-slate-200/80 bg-[#f8fbf9] p-3.5 shadow-2xs sm:p-4">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#e8f6f0] text-[#007054]">
+                  <GraduationCapIcon width={22} height={22} />
+                </div>
+                <div className="flex items-center gap-3">
+                  <div>
+                    <span className="block text-2xl leading-none font-black text-slate-900 sm:text-3xl">
+                      24+
+                    </span>
+                    <span className="text-[11px] font-bold text-slate-600 sm:text-xs">Boards</span>
+                  </div>
+                  <span className="h-8 w-px bg-slate-200/90" />
+                  <span className="text-[11px] leading-snug font-medium text-slate-500 sm:text-xs">
+                    Including major
+                    <br />
+                    and regional boards
+                  </span>
+                </div>
+              </div>
 
-              {/* Provincial Coordination Table */}
-              <div className="overflow-x-auto rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
-                <table className="w-full min-w-[540px] text-left text-xs sm:text-sm">
-                  <thead className="border-b border-slate-200 bg-slate-50 font-extrabold text-slate-900">
+              {/* Stat 3 */}
+              <div className="flex items-center gap-3.5 rounded-2xl border border-slate-200/80 bg-[#f8fbf9] p-3.5 shadow-2xs sm:p-4">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#e8f6f0] text-[#007054]">
+                  <FileTextIcon width={20} height={20} />
+                </div>
+                <div>
+                  <span className="block text-xs font-extrabold text-slate-900 sm:text-sm">
+                    Source-Monitored Updates
+                  </span>
+                  <span className="text-[11px] font-medium text-slate-500 sm:text-xs">
+                    Based on official notifications
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Main Provincial Coordination Table Card */}
+            <div className="mt-6 overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-2xs">
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[760px] text-left text-xs sm:text-[13.5px]">
+                  {/* Table Header */}
+                  <thead className="border-b border-slate-200/90 bg-[#f8fbf9] text-xs font-extrabold text-slate-900">
                     <tr>
-                      <th className="p-3.5 sm:p-4">Province / Board Group</th>
-                      <th className="p-3.5 sm:p-4">Key Boards Included</th>
-                      <th className="p-3.5 sm:p-4">Announcement Protocol</th>
-                      <th className="p-3.5 sm:p-4">Expected Date</th>
+                      <th className="py-4 pr-3 pl-5 sm:pl-6">
+                        <div className="flex items-center gap-2">
+                          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#e8f6f0] text-[#007054]">
+                            <MapPinIcon width={13} height={13} />
+                          </div>
+                          <span>Province / Board Group</span>
+                        </div>
+                      </th>
+                      <th className="px-3 py-4">
+                        <div className="flex items-center gap-2">
+                          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#e8f6f0] text-[#007054]">
+                            <UsersIcon width={13} height={13} />
+                          </div>
+                          <span>Key Boards Included</span>
+                        </div>
+                      </th>
+                      <th className="px-3 py-4">
+                        <div className="flex items-center gap-2">
+                          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#e8f6f0] text-[#007054]">
+                            <FileTextIcon width={13} height={13} />
+                          </div>
+                          <span>Announcement Protocol</span>
+                        </div>
+                      </th>
+                      <th className="py-4 pr-5 pl-3 sm:pr-6">
+                        <div className="flex items-center gap-2">
+                          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#e8f6f0] text-[#007054]">
+                            <CalendarIcon width={13} height={13} />
+                          </div>
+                          <span>Expected Date</span>
+                        </div>
+                      </th>
                     </tr>
                   </thead>
+
+                  {/* Table Body */}
                   <tbody className="divide-y divide-slate-100 text-slate-700">
-                    <tr className="hover:bg-slate-50/70">
-                      <td className="p-3.5 font-bold text-slate-900 sm:p-4">Punjab Boards</td>
-                      <td className="p-3.5 sm:p-4">
+                    {/* Row 1: Punjab Boards */}
+                    <tr className="transition-colors hover:bg-slate-50/70">
+                      <td className="py-4 pr-3 pl-5 sm:pl-6">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#e8f6f0] text-[#007054]">
+                            <MinarIcon width={22} height={22} />
+                          </div>
+                          <div>
+                            <span className="block font-bold text-slate-900 sm:text-sm">
+                              Punjab Boards
+                            </span>
+                            <span className="text-xs text-slate-400">9 boards</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-3 py-4 leading-relaxed text-slate-600">
                         Lahore, Gujranwala, Rawalpindi, Multan, Faisalabad, Sargodha, Sahiwal,
                         Bahawalpur, DG Khan
                       </td>
-                      <td className="p-3.5 sm:p-4">
-                        Unified PBCC Decision (Simultaneous 10:00 AM)
+                      <td className="px-3 py-4">
+                        <div className="flex items-center gap-2.5">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500">
+                            <MegaphoneIcon width={15} height={15} />
+                          </div>
+                          <span className="text-xs font-medium text-slate-700 sm:text-[13px]">
+                            Unified PBCC Decision
+                            <br />
+                            (Simultaneous 10:00 AM)
+                          </span>
+                        </div>
                       </td>
-                      <td className="p-3.5 font-bold text-[#007054] sm:p-4">
-                        Tentative: October 2026
+                      <td className="py-4 pr-5 pl-3 sm:pr-6">
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-[#e8f6f0] px-3 py-1.5 text-xs font-bold text-[#007054]">
+                          <CalendarIcon width={13} height={13} />
+                          Tentative: October 2026
+                        </span>
                       </td>
                     </tr>
-                    <tr className="hover:bg-slate-50/70">
-                      <td className="p-3.5 font-bold text-slate-900 sm:p-4">
-                        Federal Board (FBISE)
+
+                    {/* Row 2: Federal Board (FBISE) */}
+                    <tr className="transition-colors hover:bg-slate-50/70">
+                      <td className="py-4 pr-3 pl-5 sm:pl-6">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#e8f6f0] text-[#007054]">
+                            <FederalBuildingsIcon width={22} height={22} />
+                          </div>
+                          <div>
+                            <span className="block font-bold text-slate-900 sm:text-sm">
+                              Federal Board (FBISE)
+                            </span>
+                            <span className="text-xs text-slate-400">3 boards</span>
+                          </div>
+                        </div>
                       </td>
-                      <td className="p-3.5 sm:p-4">
+                      <td className="px-3 py-4 leading-relaxed text-slate-600">
                         Islamabad, Cantonments, Overseas Pakistan Schools
                       </td>
-                      <td className="p-3.5 sm:p-4">Autonomous Federal Ministry Notification</td>
-                      <td className="p-3.5 font-bold text-[#007054] sm:p-4">
-                        Tentative: August / September 2026
+                      <td className="px-3 py-4">
+                        <div className="flex items-center gap-2.5">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500">
+                            <FileTextIcon width={15} height={15} />
+                          </div>
+                          <span className="text-xs font-medium text-slate-700 sm:text-[13px]">
+                            Autonomous Federal Ministry
+                            <br />
+                            Notification
+                          </span>
+                        </div>
+                      </td>
+                      <td className="py-4 pr-5 pl-3 sm:pr-6">
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-[#e8f6f0] px-3 py-1.5 text-xs font-bold text-[#007054]">
+                          <CalendarIcon width={13} height={13} />
+                          Tentative: August / September 2026
+                        </span>
                       </td>
                     </tr>
-                    <tr className="hover:bg-slate-50/70">
-                      <td className="p-3.5 font-bold text-slate-900 sm:p-4">KPK Boards</td>
-                      <td className="p-3.5 sm:p-4">
+
+                    {/* Row 3: KPK Boards */}
+                    <tr className="transition-colors hover:bg-slate-50/70">
+                      <td className="py-4 pr-3 pl-5 sm:pl-6">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#e8f6f0] text-[#007054]">
+                            <MountainsIcon width={22} height={22} />
+                          </div>
+                          <div>
+                            <span className="block font-bold text-slate-900 sm:text-sm">
+                              KPK Boards
+                            </span>
+                            <span className="text-xs text-slate-400">8 boards</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-3 py-4 leading-relaxed text-slate-600">
                         Peshawar, Abbottabad, Mardan, Swat, Malakand, Kohat, Bannu, DI Khan
                       </td>
-                      <td className="p-3.5 sm:p-4">KPK Boards Committee Unified or Staggered</td>
-                      <td className="p-3.5 font-bold text-[#007054] sm:p-4">
-                        Tentative: September 2026
+                      <td className="px-3 py-4">
+                        <div className="flex items-center gap-2.5">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500">
+                            <UsersIcon width={15} height={15} />
+                          </div>
+                          <span className="text-xs font-medium text-slate-700 sm:text-[13px]">
+                            KPK Boards Committee
+                            <br />
+                            Unified or Staggered
+                          </span>
+                        </div>
+                      </td>
+                      <td className="py-4 pr-5 pl-3 sm:pr-6">
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-[#e8f6f0] px-3 py-1.5 text-xs font-bold text-[#007054]">
+                          <CalendarIcon width={13} height={13} />
+                          Tentative: September 2026
+                        </span>
                       </td>
                     </tr>
-                    <tr className="hover:bg-slate-50/70">
-                      <td className="p-3.5 font-bold text-slate-900 sm:p-4">Sindh Boards</td>
-                      <td className="p-3.5 sm:p-4">
+
+                    {/* Row 4: Sindh Boards */}
+                    <tr className="transition-colors hover:bg-slate-50/70">
+                      <td className="py-4 pr-3 pl-5 sm:pl-6">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#e8f6f0] text-[#007054]">
+                            <SindhArchIcon width={22} height={22} />
+                          </div>
+                          <div>
+                            <span className="block font-bold text-slate-900 sm:text-sm">
+                              Sindh Boards
+                            </span>
+                            <span className="text-xs text-slate-400">6 boards</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-3 py-4 leading-relaxed text-slate-600">
                         BIEK Karachi, Hyderabad, Sukkur, Larkana, Mirpurkhas, SBA Nawabshah
                       </td>
-                      <td className="p-3.5 sm:p-4">
-                        Stream-wise (Pre-Medical &amp; Pre-Engineering first)
+                      <td className="px-3 py-4">
+                        <div className="flex items-center gap-2.5">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500">
+                            <BarChartIcon width={15} height={15} />
+                          </div>
+                          <span className="text-xs font-medium text-slate-700 sm:text-[13px]">
+                            Stream-wise (Pre-Medical &amp;
+                            <br />
+                            Pre-Engineering first)
+                          </span>
+                        </div>
                       </td>
-                      <td className="p-3.5 font-bold text-[#007054] sm:p-4">
-                        Tentative: September – October 2026
+                      <td className="py-4 pr-5 pl-3 sm:pr-6">
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-[#e8f6f0] px-3 py-1.5 text-xs font-bold text-[#007054]">
+                          <CalendarIcon width={13} height={13} />
+                          Tentative: September – October 2026
+                        </span>
                       </td>
                     </tr>
-                    <tr className="hover:bg-slate-50/70">
-                      <td className="p-3.5 font-bold text-slate-900 sm:p-4">Balochistan Board</td>
-                      <td className="p-3.5 sm:p-4">BISE Quetta</td>
-                      <td className="p-3.5 sm:p-4">Provincial Notification</td>
-                      <td className="p-3.5 font-bold text-[#007054] sm:p-4">
-                        Tentative: September 2026
+
+                    {/* Row 5: Balochistan Board */}
+                    <tr className="transition-colors hover:bg-slate-50/70">
+                      <td className="py-4 pr-3 pl-5 sm:pl-6">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#e8f6f0] text-[#007054]">
+                            <BalochistanRidgeIcon width={22} height={22} />
+                          </div>
+                          <div>
+                            <span className="block font-bold text-slate-900 sm:text-sm">
+                              Balochistan Board
+                            </span>
+                            <span className="text-xs text-slate-400">1 board</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-3 py-4 leading-relaxed text-slate-600">BISE Quetta</td>
+                      <td className="px-3 py-4">
+                        <div className="flex items-center gap-2.5">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500">
+                            <FileTextIcon width={15} height={15} />
+                          </div>
+                          <span className="text-xs font-medium text-slate-700 sm:text-[13px]">
+                            Provincial Notification
+                          </span>
+                        </div>
+                      </td>
+                      <td className="py-4 pr-5 pl-3 sm:pr-6">
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-[#e8f6f0] px-3 py-1.5 text-xs font-bold text-[#007054]">
+                          <CalendarIcon width={13} height={13} />
+                          Tentative: September 2026
+                        </span>
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
+            </div>
 
-              <p className="text-xs text-slate-600">
+            {/* Bottom Alert Pill Banner */}
+            <div className="mt-5 flex items-center gap-3 rounded-2xl border border-emerald-100/90 bg-[#f0f9f5] p-3.5 text-xs text-slate-600 sm:p-4">
+              <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#007054] text-[11px] font-black text-white">
+                i
+              </div>
+              <p className="leading-relaxed">
                 We monitor official gazettes and controller press releases continuously. Confirmed
                 dates are published strictly with direct citations to official board notifications.
               </p>
