@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import type { BoardOption } from '@/components/result/board-finder'
 import type { FaqItem } from '@/components/ui/faq-accordion'
 
+import { AfterResultSection } from '@/components/home/after-result-section'
 import { BoardCardsGrid } from '@/components/home/board-cards-grid'
 import { CurrentStatusSection } from '@/components/home/current-status-section'
 import { FaqShowcaseSection } from '@/components/home/faq-showcase-section'
@@ -170,10 +171,13 @@ export default function HomePage() {
       {/* 11. COMPACT TROUBLESHOOTING SECTION */}
       <ResultTroubleshootingSection />
 
-      {/* 12. 5 SEMANTIC CONTENT SECTIONS (AEO / Comprehensive Topical Authority) */}
+      {/* 12. AFTER YOUR RESULT (Actionable Post-Result Steps & University Pathways) */}
+      <AfterResultSection />
+
+      {/* 13. 5 SEMANTIC CONTENT SECTIONS (AEO / Comprehensive Topical Authority) */}
       <SemanticContentSections />
 
-      {/* 13. FREQUENTLY ASKED QUESTIONS (Showcase Design) */}
+      {/* 14. FREQUENTLY ASKED QUESTIONS (Showcase Design) */}
       <FaqShowcaseSection />
     </div>
   )
