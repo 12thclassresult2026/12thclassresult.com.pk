@@ -58,7 +58,20 @@ export function SiteHeader() {
         <div className="container-wide flex h-9 items-center justify-between gap-2 text-[11px] sm:h-10 sm:text-xs">
           {/* Left: Pakistan Flag & Trust Slogan */}
           <div className="flex items-center gap-2 font-medium text-emerald-100">
-            <span className="text-base leading-none select-none">🇵🇰</span>
+            <svg
+              className="h-3.5 w-5 shrink-0 rounded-xs shadow-2xs"
+              viewBox="0 0 900 600"
+              aria-hidden="true"
+            >
+              <rect width="900" height="600" fill="#01411C" />
+              <rect width="225" height="600" fill="#ffffff" />
+              <circle cx="562.5" cy="300" r="180" fill="#ffffff" />
+              <circle cx="612.5" cy="275" r="165" fill="#01411C" />
+              <polygon
+                points="630,225 640,255 670,255 645,275 655,305 630,285 605,305 615,275 590,255 620,255"
+                fill="#ffffff"
+              />
+            </svg>
             <span className="truncate">Pakistan&apos;s Most Trusted Result Portal</span>
           </div>
 

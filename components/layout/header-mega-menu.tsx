@@ -40,7 +40,7 @@ const PROVINCES: ProvinceData[] = [
     iconBg: 'bg-slate-100',
     iconColor: 'text-slate-700',
     allLink: '/boards',
-    allLabel: 'View All Pakistan Boards â†’',
+    allLabel: 'View All Pakistan Boards',
     boards: [
       { name: 'BISE Lahore', href: '/results/lahore-board/12th-class' },
       { name: 'BISE Karachi', href: '/results/karachi-board/12th-class' },
@@ -63,7 +63,7 @@ const PROVINCES: ProvinceData[] = [
     iconBg: 'bg-emerald-50',
     iconColor: 'text-[#007054]',
     allLink: '/boards',
-    allLabel: 'View All Punjab Boards â†’',
+    allLabel: 'View All Punjab Boards',
     boards: [
       { name: 'BISE Lahore', href: '/results/lahore-board/12th-class' },
       { name: 'BISE Sahiwal', href: '/results/sahiwal-board/12th-class' },
@@ -86,7 +86,7 @@ const PROVINCES: ProvinceData[] = [
     iconBg: 'bg-blue-50',
     iconColor: 'text-blue-700',
     allLink: '/boards',
-    allLabel: 'View All KPK Boards â†’',
+    allLabel: 'View All KPK Boards',
     boards: [
       { name: 'BISE Peshawar', href: '/results/peshawar-board/12th-class' },
       { name: 'BISE Kohat', href: '/results/kohat-board/12th-class' },
@@ -105,7 +105,7 @@ const PROVINCES: ProvinceData[] = [
     iconBg: 'bg-amber-50',
     iconColor: 'text-amber-700',
     allLink: '/boards',
-    allLabel: 'View All Sindh Boards â†’',
+    allLabel: 'View All Sindh Boards',
     boards: [
       { name: 'BIEK Karachi', href: '/results/karachi-board/12th-class' },
       { name: 'BISE Larkana', href: '/results/larkana-board/12th-class' },
@@ -122,7 +122,7 @@ const PROVINCES: ProvinceData[] = [
     iconBg: 'bg-teal-50',
     iconColor: 'text-teal-700',
     allLink: '/boards',
-    allLabel: 'View All Balochistan Boards â†’',
+    allLabel: 'View All Balochistan Boards',
     boards: [
       { name: 'BISE Quetta', href: '/results/quetta-board/12th-class' },
       { name: 'BISE Turbat', href: '/boards' },
@@ -137,7 +137,7 @@ const PROVINCES: ProvinceData[] = [
     iconBg: 'bg-indigo-50',
     iconColor: 'text-indigo-800',
     allLink: '/results/federal-board/12th-class',
-    allLabel: 'View Federal Board Portal â†’',
+    allLabel: 'View Federal Board Portal',
     boards: [
       { name: 'FBISE Federal HSSC-II', href: '/results/federal-board/12th-class' },
       { name: 'Federal Board Gazette', href: '/results/federal-board/12th-class#gazette' },
@@ -301,6 +301,7 @@ export function HeaderMegaMenu({ onClose }: { onClose: () => void }) {
                 className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-emerald-200 bg-emerald-50/80 py-2.5 text-xs font-bold text-[#007054] transition-all hover:bg-emerald-100 hover:shadow-xs"
               >
                 <span>{activeProvince.allLabel}</span>
+                <span aria-hidden="true">&rarr;</span>
               </Link>
             </div>
           </div>
