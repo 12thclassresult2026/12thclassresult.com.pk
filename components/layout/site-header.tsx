@@ -41,6 +41,16 @@ export function SiteHeader() {
     return () => observer.disconnect()
   }, [])
 
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
+        setOpenDropdown(null)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
   return (
     <header ref={headerRef} className="sticky top-0 z-50 shadow-sm transition-colors">
       {/* Tier 1: Dark Evergreen Top Utility Bar */}
@@ -133,7 +143,7 @@ export function SiteHeader() {
       </div>
 
       {/* Tier 2: Pure White Primary Navigation Bar */}
-      <div className="border-b border-slate-200/80 bg-white">
+      <div className="relative border-b border-slate-200/80 bg-white">
         <div className="container-wide flex h-[62px] items-center justify-between gap-4">
           {/* Brand Logo with Cap Emblem */}
           <Link
