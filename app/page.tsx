@@ -7,6 +7,7 @@ import { BoardCardsGrid } from '@/components/home/board-cards-grid'
 import { CurrentStatusSection } from '@/components/home/current-status-section'
 import { HeroSection } from '@/components/home/hero-section'
 import { GazetteSection } from '@/components/home/gazette-section'
+import { GazetteLookupExplainerSection } from '@/components/home/gazette-lookup-explainer-section'
 import { ResultMethodsSection } from '@/components/home/result-methods-section'
 import { StepProcessSection } from '@/components/home/step-process-section'
 import { UnderstandResultSection } from '@/components/home/understand-result-section'
@@ -147,17 +148,20 @@ export default function HomePage() {
       {/* 6. RESULT METHODS (Ways to Check 2nd Year Result) */}
       <ResultMethodsSection />
 
-      {/* 7. GAZETTE DOWNLOAD SECTION */}
+      {/* 7. VERIFIED GAZETTE LOOKUP EXPLAINER */}
+      <GazetteLookupExplainerSection />
+
+      {/* 8. GAZETTE DOWNLOAD SECTION */}
       <section className="relative w-full overflow-hidden border-b border-slate-200/60 bg-gradient-to-b from-[#F9FBFA] via-white to-[#F2FAF7] py-16 sm:py-20">
         <div className="container-wide relative">
           <GazetteSection />
         </div>
       </section>
 
-      {/* 8. 5 SEMANTIC CONTENT SECTIONS (AEO / Comprehensive Topical Authority) */}
+      {/* 9. 5 SEMANTIC CONTENT SECTIONS (AEO / Comprehensive Topical Authority) */}
       <SemanticContentSections />
 
-      {/* 9. FREQUENTLY ASKED QUESTIONS (Showcase Design) */}
+      {/* 10. FREQUENTLY ASKED QUESTIONS (Showcase Design) */}
       <FaqShowcaseSection />
     </div>
   )
