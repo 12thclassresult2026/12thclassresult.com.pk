@@ -5,15 +5,16 @@ import type { FaqItem } from '@/components/ui/faq-accordion'
 
 import { BoardCardsGrid } from '@/components/home/board-cards-grid'
 import { CurrentStatusSection } from '@/components/home/current-status-section'
-import { HeroSection } from '@/components/home/hero-section'
-import { GazetteSection } from '@/components/home/gazette-section'
+import { FaqShowcaseSection } from '@/components/home/faq-showcase-section'
 import { GazetteLookupExplainerSection } from '@/components/home/gazette-lookup-explainer-section'
+import { GazetteSection } from '@/components/home/gazette-section'
+import { HeroSection } from '@/components/home/hero-section'
 import { ResultMethodsSection } from '@/components/home/result-methods-section'
+import { ResultScheduleSection } from '@/components/home/result-schedule-section'
+import { SemanticContentSections } from '@/components/home/semantic-content-sections'
 import { StepProcessSection } from '@/components/home/step-process-section'
 import { UnderstandResultSection } from '@/components/home/understand-result-section'
-import { SemanticContentSections } from '@/components/home/semantic-content-sections'
 import { JsonLdScript } from '@/components/seo/json-ld'
-import { FaqShowcaseSection } from '@/components/home/faq-showcase-section'
 import { BOARDS, routedBoards } from '@/lib/board/registry'
 import { PROVINCE_LABELS } from '@/lib/board/types'
 import { requirePage } from '@/lib/content/registry'
@@ -151,17 +152,20 @@ export default function HomePage() {
       {/* 7. VERIFIED GAZETTE LOOKUP EXPLAINER */}
       <GazetteLookupExplainerSection />
 
-      {/* 8. GAZETTE DOWNLOAD SECTION */}
+      {/* 8. GAZETTE SECTION */}
       <section className="relative w-full overflow-hidden border-b border-slate-200/60 bg-gradient-to-b from-[#F9FBFA] via-white to-[#F2FAF7] py-16 sm:py-20">
         <div className="container-wide relative">
           <GazetteSection />
         </div>
       </section>
 
-      {/* 9. 5 SEMANTIC CONTENT SECTIONS (AEO / Comprehensive Topical Authority) */}
+      {/* 9. RESULT SCHEDULE (When Will 12th Class Result Be Announced?) */}
+      <ResultScheduleSection />
+
+      {/* 10. 5 SEMANTIC CONTENT SECTIONS (AEO / Comprehensive Topical Authority) */}
       <SemanticContentSections />
 
-      {/* 10. FREQUENTLY ASKED QUESTIONS (Showcase Design) */}
+      {/* 11. FREQUENTLY ASKED QUESTIONS (Showcase Design) */}
       <FaqShowcaseSection />
     </div>
   )
