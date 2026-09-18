@@ -8,6 +8,7 @@ import { CurrentStatusSection } from '@/components/home/current-status-section'
 import { HeroSection } from '@/components/home/hero-section'
 import { GazetteSection } from '@/components/home/gazette-section'
 import { StepProcessSection } from '@/components/home/step-process-section'
+import { UnderstandResultSection } from '@/components/home/understand-result-section'
 import { SemanticContentSections } from '@/components/home/semantic-content-sections'
 import { JsonLdScript } from '@/components/seo/json-ld'
 import { FaqShowcaseSection } from '@/components/home/faq-showcase-section'
@@ -132,7 +133,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 4. 4-STEP PROCESS GUIDE */}
+      {/* 4. UNDERSTAND YOUR RESULT (Semantic Editorial Section) */}
+      <UnderstandResultSection />
+
+      {/* 5. 4-STEP PROCESS GUIDE */}
       <section className="w-full border-b border-[#B4D5CC]/50 bg-[#F3F8F7] py-16 sm:py-20">
         <div className="container-wide">
           <StepProcessSection />
