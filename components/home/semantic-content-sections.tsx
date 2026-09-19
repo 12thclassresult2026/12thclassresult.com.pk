@@ -13,6 +13,10 @@ import {
   ShieldCheckIcon,
   ZapIcon,
 } from '@/components/ui/icons'
+import type { Province } from '@/lib/board/types'
+
+import { BOARDS } from '@/lib/board/registry'
+import { boardsInRegion } from '@/lib/gazettes/coverage'
 
 function StethoscopeIcon({
   width = 20,
@@ -532,6 +536,51 @@ const ACADEMIC_STREAMS = [
   },
 ]
 
+/**
+ * The result date for a region, taken from the board registry.
+ *
+ * WHAT THIS REPLACED. Five rows of this table carried hard-typed strings —
+ * "Tentative: October 2026", "Tentative: August / September 2026" and three
+ * more — that appear nowhere in the registry and cite no source. The registry's
+ * own header says it plainly: "resultDate is unknown for every board except
+ * Quetta. No official notification..." So the homepage was publishing five
+ * invented dates while its data layer recorded that none had been announced.
+ *
+ * That is the exact failure this project exists to refuse: the live market
+ * carries three different dates for the same 2026 Punjab result, none citing a
+ * board notification, and saying so is the differentiator.
+ *
+ * A date appears here only with `status: 'confirmed'` and a source behind it.
+ * Everything else reads "Not announced", which is the truth and is also the
+ * thing no competitor says.
+ */
+function RegionResultDate({ province }: { province: Province }) {
+  const confirmed = boardsInRegion(province).filter(
+    (board) => board.resultDate.status === 'confirmed' && board.resultDate.value !== null,
+  )
+
+  if (confirmed.length === 0) {
+    return (
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-600">
+        <CalendarIcon width={13} height={13} />
+        Not announced
+      </span>
+    )
+  }
+
+  const earliest = confirmed
+    .map((board) => board.resultDate.value as string)
+    .sort()
+    .at(0) as string
+
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-[#e8f6f0] px-3 py-1.5 text-xs font-bold text-[#007054]">
+      <CalendarIcon width={13} height={13} />
+      Announced: {earliest}
+    </span>
+  )
+}
+
 export function SemanticContentSections() {
   return (
     <div className="relative border-b border-slate-200/80 bg-white py-16 sm:py-20">
@@ -586,11 +635,16 @@ export function SemanticContentSections() {
                   determines a student&apos;s cumulative intermediate score, division, and
                   eligibility for higher education.
                 </p>
+                {/*
+                  Counted from the registry. This read "All 24+ Boards" while the
+                  registry held 28 and two other places on the same site said
+                  "16+" and "25" — three hand-typed totals, none of them right.
+                */}
                 <p>
-                  All 24+ Boards of Intermediate and Secondary Education (BISE) across Punjab,
-                  Khyber Pakhtunkhwa (KPK), Sindh, Balochistan, Azad Jammu &amp; Kashmir (AJK), and
-                  the Federal Board (FBISE Islamabad) administer this examination annually across
-                  major study streams:
+                  The {BOARDS.length} Boards of Intermediate and Secondary Education (BISE) tracked
+                  here — across Punjab, Khyber Pakhtunkhwa (KPK), Sindh, Balochistan, Azad Jammu
+                  &amp; Kashmir (AJK), and the Federal Board (FBISE Islamabad) — administer this
+                  examination annually across major study streams:
                 </p>
               </div>
             </div>
@@ -965,12 +1019,11 @@ export function SemanticContentSections() {
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#007054] text-white shadow-2xs">
                     <FileTextIcon width={18} height={18} />
                   </div>
-                  <h3 className="mt-3 font-extrabold text-slate-900">
-                    1. Sealed Gazette Ingestion
-                  </h3>
+                  <h3 className="mt-3 font-extrabold text-slate-900">1. Source, From the Board</h3>
                   <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
-                    Official gazette PDFs published by education boards are captured directly upon
-                    release and cryptographically verified against board signatures.
+                    A gazette is taken from the board&rsquo;s own domain, never from an aggregator,
+                    and its SHA-256 checksum is recorded. Nothing is parsed unless the bytes still
+                    match that checksum and the cover page names the right board, year and paper.
                   </p>
                 </div>
 
@@ -978,10 +1031,11 @@ export function SemanticContentSections() {
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#007054] text-white shadow-2xs">
                     <ZapIcon width={18} height={18} />
                   </div>
-                  <h3 className="mt-3 font-extrabold text-slate-900">2. Deterministic Parsing</h3>
+                  <h3 className="mt-3 font-extrabold text-slate-900">2. Parse, Then Check It</h3>
                   <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
-                    Records are processed into structured index tables without modifying a single
-                    character of candidate marks, names, grades, or board remarks.
+                    Every row keeps the board&rsquo;s exact wording and the page it came from. A
+                    second reader then re-reads sample pages independently and compares. Anything
+                    ambiguous is held back rather than guessed.
                   </p>
                 </div>
 
@@ -989,18 +1043,37 @@ export function SemanticContentSections() {
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#007054] text-white shadow-2xs">
                     <ShieldCheckIcon width={18} height={18} />
                   </div>
-                  <h3 className="mt-3 font-extrabold text-slate-900">3. Edge-Cached Delivery</h3>
+                  <h3 className="mt-3 font-extrabold text-slate-900">3. Publish Only If Clean</h3>
                   <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
-                    When official websites crash under load, candidates can query their roll number
-                    against our globally distributed edge cache in under 50 milliseconds.
+                    A dataset is loaded in a staged state and stays there. Building it and
+                    publishing it are two separate decisions, so no result reaches this page until a
+                    person signs it off.
                   </p>
                 </div>
               </div>
 
+              {/*
+                The state of the pipeline, said plainly.
+
+                An earlier version of this block described a roll-number lookup
+                answering "in under 50 milliseconds" from a "globally distributed
+                edge cache", and gazettes "cryptographically verified against board
+                signatures". None of that was true: no lookup is published, boards
+                do not sign their gazettes, and the figure was invented. What the
+                pipeline really does is above; what it has not yet done is here.
+              */}
+              <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50/70 p-3.5 text-xs text-slate-700">
+                <strong className="text-slate-900">Current status:</strong> no gazette dataset is
+                published on this site yet. The pipeline above has been run end to end against one
+                board&rsquo;s gazette and held in a staged state. Until a dataset is signed off,
+                every board page sends you to the board&rsquo;s own portal or gazette, and says so.
+              </div>
+
               <div className="mt-2 rounded-xl border border-slate-200 bg-slate-50 p-3.5 text-xs text-slate-600">
-                <strong className="text-slate-900">Privacy &amp; Data Ethics:</strong> We do not ask
-                for student phone numbers, CNIC, or passwords. Roll numbers are queried strictly to
-                retrieve public examination records published in the official gazette.
+                <strong className="text-slate-900">Privacy &amp; Data Ethics:</strong> We never ask
+                for a phone number, CNIC or password. A gazette is a public examination record
+                published by the board; nothing here is indexed against a student&rsquo;s name, and
+                no roll number is ever written into a URL, a log or analytics.
               </div>
             </div>
           </article>
@@ -1222,7 +1295,9 @@ export function SemanticContentSections() {
                             <span className="block font-bold text-slate-900 sm:text-sm">
                               Punjab Boards
                             </span>
-                            <span className="text-xs text-slate-400">9 boards</span>
+                            <span className="text-xs text-slate-400">
+                              {boardsInRegion('punjab').length} boards
+                            </span>
                           </div>
                         </div>
                       </td>
@@ -1243,10 +1318,7 @@ export function SemanticContentSections() {
                         </div>
                       </td>
                       <td className="py-4 pr-5 pl-3 sm:pr-6">
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-[#e8f6f0] px-3 py-1.5 text-xs font-bold text-[#007054]">
-                          <CalendarIcon width={13} height={13} />
-                          Tentative: October 2026
-                        </span>
+                        <RegionResultDate province="punjab" />
                       </td>
                     </tr>
 
@@ -1261,7 +1333,10 @@ export function SemanticContentSections() {
                             <span className="block font-bold text-slate-900 sm:text-sm">
                               Federal Board (FBISE)
                             </span>
-                            <span className="text-xs text-slate-400">3 boards</span>
+                            <span className="text-xs text-slate-400">
+                              {boardsInRegion('federal').length} board
+                              {boardsInRegion('federal').length === 1 ? '' : 's'}
+                            </span>
                           </div>
                         </div>
                       </td>
@@ -1281,10 +1356,7 @@ export function SemanticContentSections() {
                         </div>
                       </td>
                       <td className="py-4 pr-5 pl-3 sm:pr-6">
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-[#e8f6f0] px-3 py-1.5 text-xs font-bold text-[#007054]">
-                          <CalendarIcon width={13} height={13} />
-                          Tentative: August / September 2026
-                        </span>
+                        <RegionResultDate province="federal" />
                       </td>
                     </tr>
 
@@ -1299,7 +1371,9 @@ export function SemanticContentSections() {
                             <span className="block font-bold text-slate-900 sm:text-sm">
                               KPK Boards
                             </span>
-                            <span className="text-xs text-slate-400">8 boards</span>
+                            <span className="text-xs text-slate-400">
+                              {boardsInRegion('khyber-pakhtunkhwa').length} boards
+                            </span>
                           </div>
                         </div>
                       </td>
@@ -1319,10 +1393,7 @@ export function SemanticContentSections() {
                         </div>
                       </td>
                       <td className="py-4 pr-5 pl-3 sm:pr-6">
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-[#e8f6f0] px-3 py-1.5 text-xs font-bold text-[#007054]">
-                          <CalendarIcon width={13} height={13} />
-                          Tentative: September 2026
-                        </span>
+                        <RegionResultDate province="khyber-pakhtunkhwa" />
                       </td>
                     </tr>
 
@@ -1337,7 +1408,9 @@ export function SemanticContentSections() {
                             <span className="block font-bold text-slate-900 sm:text-sm">
                               Sindh Boards
                             </span>
-                            <span className="text-xs text-slate-400">6 boards</span>
+                            <span className="text-xs text-slate-400">
+                              {boardsInRegion('sindh').length} boards
+                            </span>
                           </div>
                         </div>
                       </td>
@@ -1357,10 +1430,7 @@ export function SemanticContentSections() {
                         </div>
                       </td>
                       <td className="py-4 pr-5 pl-3 sm:pr-6">
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-[#e8f6f0] px-3 py-1.5 text-xs font-bold text-[#007054]">
-                          <CalendarIcon width={13} height={13} />
-                          Tentative: September – October 2026
-                        </span>
+                        <RegionResultDate province="sindh" />
                       </td>
                     </tr>
 
@@ -1391,10 +1461,7 @@ export function SemanticContentSections() {
                         </div>
                       </td>
                       <td className="py-4 pr-5 pl-3 sm:pr-6">
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-[#e8f6f0] px-3 py-1.5 text-xs font-bold text-[#007054]">
-                          <CalendarIcon width={13} height={13} />
-                          Tentative: September 2026
-                        </span>
+                        <RegionResultDate province="balochistan" />
                       </td>
                     </tr>
                   </tbody>

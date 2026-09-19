@@ -9,12 +9,8 @@ import {
   FileSearchIcon,
   FileTextIcon,
   LandmarkIcon,
-  LockIcon,
   MessageSquareIcon,
-  ShieldCheckIcon,
   SmartphoneIcon,
-  UsersIcon,
-  ZapIcon,
 } from '@/components/ui/icons'
 import { BOARDS } from '@/lib/board/registry'
 import { requirePage } from '@/lib/content/registry'
@@ -147,7 +143,7 @@ function PhoneHandsetIcon({
 }
 
 export default function TwelfthClassResultHub() {
-  // Precompute row data for the 25 boards to match the mockup
+  // Rows come from the registry, so the table cannot fall behind it.
   const tableRows: BoardPortalRow[] = BOARDS.map((board, i) => {
     const sources = rollNumberSources(board.id)
     const portal = sources[0]

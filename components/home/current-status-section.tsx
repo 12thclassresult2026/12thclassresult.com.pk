@@ -1,5 +1,7 @@
 import Link from 'next/link'
 
+import { BOARDS } from '@/lib/board/registry'
+
 import {
   ArrowRightIcon,
   CalendarIcon,
@@ -282,6 +284,11 @@ function AcademicCapBooksIllustration() {
 }
 
 export function CurrentStatusSection({ lastVerifiedAt = '2026-09-14' }: CurrentStatusSectionProps) {
+  // Counted, never typed: this sentence must stay true as boards announce.
+  const announcedCount = BOARDS.filter(
+    (board) => board.resultDate.status === 'confirmed' && board.resultDate.value !== null,
+  ).length
+
   const verifiedDateDisplay = formatVerifiedDate(lastVerifiedAt)
 
   return (
@@ -335,10 +342,16 @@ export function CurrentStatusSection({ lastVerifiedAt = '2026-09-14' }: CurrentS
                   availability status that automatically applies to every board.
                 </p>
                 <p>
-                  Select your board to see its latest available status, result method and Gazette
-                  availability. Where an official announcement has not yet been verified, clearly
-                  distinguish between confirmed, tentative, expected and awaiting-announcement
-                  information.
+                  Of the {BOARDS.length} boards tracked here,{' '}
+                  {announcedCount === 0
+                    ? 'none has yet published an HSSC Part-II 2026 result date backed by an official notification'
+                    : `${announcedCount} ${announcedCount === 1 ? 'has' : 'have'} published an HSSC Part-II 2026 result date backed by an official notification`}
+                  . Dates circulating elsewhere for this session are not carried here, because none
+                  of them could be traced to a board notification. When a board publishes one, it
+                  appears here with a link to the notification itself and the date it was checked.
+                </p>
+                <p>
+                  Select your board to see its own status, result method and gazette availability.
                 </p>
               </div>
             </div>

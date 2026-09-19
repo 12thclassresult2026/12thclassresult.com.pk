@@ -1,6 +1,6 @@
 ﻿'use client'
 
-import { useEffect, useState } from 'react'
+import { useMemo, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -15,6 +15,7 @@ import {
   SearchIcon,
   UserIcon,
 } from '@/components/ui/icons'
+import { routedBoards } from '@/lib/board/registry'
 
 interface BoardLink {
   name: string
@@ -44,10 +45,8 @@ const PROVINCES: ProvinceData[] = [
     boards: [
       { name: 'BISE Lahore', href: '/results/lahore-board/12th-class' },
       { name: 'BISE Karachi', href: '/results/karachi-board/12th-class' },
-      { name: 'BISE Faisalabad', href: '/results/faisalabad-board/12th-class' },
       { name: 'BISE Peshawar', href: '/results/peshawar-board/12th-class' },
       { name: 'BISE Rawalpindi', href: '/results/rawalpindi-board/12th-class' },
-      { name: 'FBISE Federal', href: '/results/federal-board/12th-class' },
       { name: 'BISE Multan', href: '/results/multan-board/12th-class' },
       { name: 'BISE Quetta', href: '/results/quetta-board/12th-class' },
       { name: 'BISE Gujranwala', href: '/results/gujranwala-board/12th-class' },
@@ -66,7 +65,6 @@ const PROVINCES: ProvinceData[] = [
     allLabel: 'View All Punjab Boards',
     boards: [
       { name: 'BISE Lahore', href: '/results/lahore-board/12th-class' },
-      { name: 'BISE Faisalabad', href: '/results/faisalabad-board/12th-class' },
       { name: 'BISE Multan', href: '/results/multan-board/12th-class' },
       { name: 'BISE Gujranwala', href: '/results/gujranwala-board/12th-class' },
       { name: 'BISE Rawalpindi', href: '/results/rawalpindi-board/12th-class' },
@@ -89,7 +87,6 @@ const PROVINCES: ProvinceData[] = [
       { name: 'BISE Mardan', href: '/results/mardan-board/12th-class' },
       { name: 'BISE Abbottabad', href: '/results/abbottabad-board/12th-class' },
       { name: 'BISE Swat', href: '/results/swat-board/12th-class' },
-      { name: 'BISE Kohat', href: '/results/kohat-board/12th-class' },
       { name: 'BISE Bannu', href: '/results/bannu-board/12th-class' },
       { name: 'BISE Malakand', href: '/results/malakand-board/12th-class' },
       { name: 'BISE DI Khan', href: '/results/dera-ismail-khan-board/12th-class' },
@@ -107,9 +104,6 @@ const PROVINCES: ProvinceData[] = [
       { name: 'BIEK Karachi', href: '/results/karachi-board/12th-class' },
       { name: 'BISE Hyderabad', href: '/results/hyderabad-board/12th-class' },
       { name: 'BISE Larkana', href: '/results/larkana-board/12th-class' },
-      { name: 'BISE Sukkur', href: '/results/sukkur-board/12th-class' },
-      { name: 'BISE Mirpurkhas', href: '/results/mirpurkhas-board/12th-class' },
-      { name: 'BISE Shaheed Benazirabad', href: '/results/shaheed-benazirabad-board/12th-class' },
     ],
   },
   {
@@ -128,14 +122,9 @@ const PROVINCES: ProvinceData[] = [
     subtitle: 'FBISE Islamabad',
     iconBg: 'bg-indigo-50',
     iconColor: 'text-indigo-800',
-    allLink: '/results/federal-board/12th-class',
-    allLabel: 'View Federal Board Portal',
-    boards: [
-      { name: 'FBISE Federal HSSC-II', href: '/results/federal-board/12th-class' },
-      { name: 'Federal Board Gazette', href: '/results/federal-board/12th-class#gazette' },
-      { name: 'Federal Date Schedule', href: '/results/federal-board/12th-class#schedule' },
-      { name: 'Federal SMS Method', href: '/results/federal-board/12th-class#sms' },
-    ],
+    allLink: '/boards#federal',
+    allLabel: 'View Federal Board',
+    boards: [],
   },
   {
     id: 'ajk',
@@ -179,8 +168,8 @@ const QUICK_LINKS = [
     bgColor: 'bg-cyan-50 text-cyan-700',
   },
   {
-    title: 'Result by Name',
-    subtitle: 'Search result by name',
+    title: 'Lost Your Roll Number?',
+    subtitle: 'How to recover it from your board',
     href: '/#check-result',
     icon: UserIcon,
     bgColor: 'bg-emerald-50 text-emerald-800',
@@ -201,15 +190,53 @@ export function HeaderMegaMenu({
   onClose: () => void
   initialProvince?: string
 }) {
+  /*
+   * A board appears in this menu only if it has a page.
+   *
+   * The lists above were hand-written and six of them pointed at boards that
+   * are deliberately unpublished — faisalabad, federal, kohat, sukkur,
+   * mirpurkhas and shaheed-benazirabad. That was twelve links to a 404 in the
+   * site-wide navigation, on every page, for a reader and for a crawler alike.
+   *
+   * Filtering against the registry means a board can never be advertised here
+   * before it earns a page, and appears automatically once it does.
+   */
+  const routedHrefs = useMemo(
+    () => new Set(routedBoards().map((board) => `/results/${board.slug}/12th-class`)),
+    [],
+  )
+  const provinces = useMemo(
+    () =>
+      PROVINCES.map((province) => ({
+        ...province,
+        boards: province.boards.filter((board) => routedHrefs.has(board.href.split('#')[0] ?? '')),
+      })).filter((province) => province.boards.length > 0),
+    [routedHrefs],
+  )
+
   const [selectedProvinceId, setSelectedProvinceId] = useState<string>(initialProvince)
 
-  // Sync when initialProvince changes from parent header
-  useEffect(() => {
+  /*
+   * Follow the prop when the parent changes it, WITHOUT an effect.
+   *
+   * This was `useEffect(() => setSelectedProvinceId(initialProvince), [...])`,
+   * which renders the menu once with the stale province, commits, then sets
+   * state and renders again — a visible flash on open and a lint error
+   * (react-hooks/set-state-in-effect).
+   *
+   * Adjusting state during render is the documented pattern for a value that
+   * must track a prop while still being user-settable: React discards the
+   * in-progress render and retries immediately, so the wrong province is never
+   * committed to the DOM.
+   */
+  const [lastInitialProvince, setLastInitialProvince] = useState<string>(initialProvince)
+  if (initialProvince !== lastInitialProvince) {
+    setLastInitialProvince(initialProvince)
     setSelectedProvinceId(initialProvince)
-  }, [initialProvince])
+  }
 
-  const activeProvince = (PROVINCES.find((p) => p.id === selectedProvinceId) ??
-    PROVINCES[0]) as ProvinceData
+  const activeProvince = (provinces.find((p) => p.id === selectedProvinceId) ??
+    provinces[0]) as ProvinceData
 
   return (
     <div
@@ -220,7 +247,7 @@ export function HeaderMegaMenu({
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
           {/* -- Panel 1: Leftmost Provinces Nav (Cols 1-3) -- */}
           <div className="space-y-1.5 border-slate-200/70 pr-2 lg:col-span-3 lg:border-r">
-            {PROVINCES.map((prov) => {
+            {provinces.map((prov) => {
               const isSelected = prov.id === selectedProvinceId
               return (
                 <button

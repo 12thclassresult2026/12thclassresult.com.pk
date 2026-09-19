@@ -173,7 +173,7 @@ export function SiteHeader() {
               alt="12thClassResult.com.pk — Pakistan's Education Results Portal"
               width={953}
               height={225}
-              className="h-[44px] w-auto max-w-[210px] sm:h-[48px] sm:max-w-[230px] object-contain transition-transform duration-200 group-hover:scale-[1.02]"
+              className="h-[44px] w-auto max-w-[210px] object-contain transition-transform duration-200 group-hover:scale-[1.02] sm:h-[48px] sm:max-w-[230px]"
               priority
             />
           </Link>

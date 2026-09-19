@@ -10,21 +10,21 @@ import {
   WhatsAppIcon,
   YouTubeIcon,
 } from '@/components/ui/icons'
+import { routedBoards } from '@/lib/board/registry'
 
-const BOARD_HREF = (slug: string) => {
-  const map: Record<string, string> = {
-    'bise-lahore': '/results/lahore-board/12th-class',
-    'bise-gujranwala': '/results/gujranwala-board/12th-class',
-    'bise-faisalabad': '/results/faisalabad-board/12th-class',
-    'bise-multan': '/results/multan-board/12th-class',
-    'bise-rawalpindi': '/results/rawalpindi-board/12th-class',
-    'bise-sargodha': '/results/sargodha-board/12th-class',
-    'bise-sahiwal': '/results/sahiwal-board/12th-class',
-    'bise-bahawalpur': '/results/bahawalpur-board/12th-class',
-    'bise-dg-khan': '/results/dg-khan-board/12th-class',
-    fbise: '/results/federal-board/12th-class',
-  }
-  return map[slug] || '/boards'
+/*
+ * Footer board links, resolved through the registry.
+ *
+ * This was a hand-written map, and two of its ten entries — `bise-faisalabad`
+ * and `fbise` — pointed at board pages that are deliberately unpublished and
+ * return 404. A dead link in a footer sits on every page of the site.
+ *
+ * Asking `routedBoards()` means a board is linked only once it has a page, and
+ * anything else falls back to the directory, where it is still named honestly.
+ */
+const BOARD_HREF = (boardId: string) => {
+  const board = routedBoards().find((candidate) => candidate.id === boardId)
+  return board ? `/results/${board.slug}/12th-class` : '/boards'
 }
 
 export function SiteFooter() {
@@ -479,24 +479,6 @@ export function SiteFooter() {
                   >
                     <span>&rsaquo;</span>
                     <span>Contact Us</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/methodology"
-                    className="flex items-center gap-1.5 text-slate-300 transition-colors hover:text-white"
-                  >
-                    <span>&rsaquo;</span>
-                    <span>Privacy Policy</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/methodology"
-                    className="flex items-center gap-1.5 text-slate-300 transition-colors hover:text-white"
-                  >
-                    <span>&rsaquo;</span>
-                    <span>Terms of Use</span>
                   </Link>
                 </li>
                 <li>

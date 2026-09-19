@@ -12,12 +12,22 @@ import { expect, test } from '@playwright/test'
 test.describe('core pages', () => {
   test('homepage states plainly what has not been announced', async ({ page }) => {
     await page.goto('/')
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Check your 12th class result')
-    // The differentiator: no competitor says this, and three of them publish
-    // mutually contradictory dates instead.
+    const h1 = page.getByRole('heading', { level: 1 })
+    await expect(h1).toHaveCount(1)
+    await expect(h1).toContainText(/12th Class Result/i)
+    /*
+     * The differentiator: no competitor says this, and three of them publish
+     * mutually contradictory dates instead.
+     *
+     * The wording is now generated from the registry, so this matches the claim
+     * rather than one sentence. A redesign once dropped the statement entirely
+     * and put five invented "Tentative: <month> 2026" dates on the page in its
+     * place; this is the assertion that catches that happening again.
+     */
     await expect(
-      page.getByText(/No HSSC Part-II 2026 result date has been confirmed/i),
+      page.getByText(/HSSC Part-II 2026 result date backed by an official notification/i),
     ).toBeVisible()
+    await expect(page.getByText(/could be traced to a board notification/i)).toBeVisible()
   })
 
   test('result hub owns the head term and lists boards', async ({ page }) => {
@@ -51,7 +61,7 @@ test.describe('the gazette-only board — the correctness rule', () => {
     // Karachi has no lookup form at all. Every competitor shows a roll-number
     // box for every board; doing that here would be an instruction a reader
     // cannot follow.
-    await expect(page.locator('input')).toHaveCount(0)
+    await expect(page.locator('main input')).toHaveCount(0)
     await expect(
       page.getByText(/does not have an online roll-number result checker/i).first(),
     ).toBeVisible()
@@ -299,17 +309,24 @@ test.describe('the trust layer — what makes the site citable', () => {
     // Scoped to the footer, which is what the test is named for. The header
     // also carries "How we verify" now, and an unscoped lookup would both
     // break on the duplicate and stop proving the footer claim.
+    /*
+     * Assert REACHABILITY, not wording.
+     *
+     * This matched the exact labels "How we verify" and "About". A redesign
+     * renamed them — the methodology link now reads "Read Our Full Verification
+     * Methodology" — and the test failed even though both pages were still one
+     * click away from every page. The claim in this test's own name is that a
+     * reader can get there, so pin the destination and let the label move.
+     */
     for (const path of ['/', '/results/12th-class', '/guides/rechecking']) {
       await page.goto(path)
       const footer = page.locator('footer')
-      await expect(
-        footer.getByRole('link', { name: 'How we verify' }),
-        `${path} has no methodology link in the footer`,
-      ).toBeVisible()
-      await expect(
-        footer.getByRole('link', { name: /^About/ }),
-        `${path} has no about link in the footer`,
-      ).toBeVisible()
+      for (const destination of ['/methodology', '/about']) {
+        await expect(
+          footer.locator(`a[href="${destination}"]`).first(),
+          `${path} does not link to ${destination} from the footer`,
+        ).toBeVisible()
+      }
     }
   })
 })
@@ -463,7 +480,7 @@ test.describe('board pages carry board-specific verified content', () => {
     // The correctness rule has to survive publishing 21 pages at once.
     for (const slug of ['karachi-board', 'hyderabad-board', 'mirpur-board']) {
       await page.goto(`/results/${slug}/12th-class`)
-      await expect(page.locator('input'), `${slug} rendered an input`).toHaveCount(0)
+      await expect(page.locator('main input'), `${slug} rendered an input`).toHaveCount(0)
     }
   })
 

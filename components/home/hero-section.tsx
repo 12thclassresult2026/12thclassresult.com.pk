@@ -340,8 +340,9 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
                   <div className="flex items-center justify-center gap-2 pt-1 text-center text-[11px] text-slate-500 sm:text-xs">
                     <ShieldCheckIcon width={15} height={15} className="shrink-0 text-[#007054]" />
                     <span>
-                      Direct roll-number matching against verified Gazette datasets and official
-                      sources.
+                      Takes you to your board&rsquo;s page, where its official portal link and
+                      verified status are. Your roll number is entered on the board&rsquo;s own
+                      site, never here.
                     </span>
                   </div>
                 </form>
@@ -408,7 +409,7 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
                         className="flex h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-[#007054] px-7 text-xs font-bold whitespace-nowrap text-white shadow-sm transition-all hover:bg-[#005842] sm:text-sm md:w-auto"
                       >
                         <SearchIcon width={16} height={16} />
-                        <span>Search by Name</span>
+                        <span>Go to Board Page</span>
                       </button>
                     </div>
                   </div>
@@ -416,7 +417,8 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
                   <div className="flex items-center justify-center gap-2 pt-1 text-center text-[11px] text-slate-500 sm:text-xs">
                     <ShieldCheckIcon width={15} height={15} className="shrink-0 text-[#007054]" />
                     <span>
-                      Name search looks up gazette archives and official portals where supported.
+                      No board we track offers a name-based result search. This takes you to your
+                      board&rsquo;s page; use your roll number on the board&rsquo;s own site.
                     </span>
                   </div>
                 </form>

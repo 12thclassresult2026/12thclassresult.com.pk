@@ -19,7 +19,13 @@ interface BoardItem {
   slug: string
   name: string
   shortName: string
-  province: 'punjab' | 'kpk' | 'federal' | 'sindh'
+  /*
+   * This union read 'punjab' | 'kpk' | 'federal' | 'sindh'. Balochistan and AJK
+   * were not representable, so BBISE Quetta and AJK BISE — the only board in
+   * each region, both published, both with a live page — could not appear in a
+   * grid that calls itself national.
+   */
+  province: 'punjab' | 'kpk' | 'federal' | 'sindh' | 'balochistan' | 'azad-jammu-kashmir'
   provinceLabel: string
   logo: string
   districts: string
@@ -257,6 +263,56 @@ const ALL_BOARDS: BoardItem[] = [
     logo: '/icons/crest.svg',
     districts: 'Mirpurkhas, Umerkot, Tharparkar',
   },
+  {
+    id: 'aku-eb',
+    slug: 'aku-eb',
+    name: 'AKU-EB',
+    shortName: 'AKU-EB',
+    province: 'sindh',
+    provinceLabel: 'Sindh',
+    logo: '/icons/crest.svg',
+    districts: '',
+  },
+  {
+    id: 'bise-shaheed-benazirabad',
+    slug: 'shaheed-benazirabad-board',
+    name: 'BISE Shaheed Benazirabad',
+    shortName: 'BISE Shaheed Benazirabad',
+    province: 'sindh',
+    provinceLabel: 'Sindh',
+    logo: '/logos/bise-shaheed-benazirabad.svg',
+    districts: '',
+  },
+  {
+    id: 'zueb',
+    slug: 'zueb',
+    name: 'ZUEB',
+    shortName: 'ZUEB',
+    province: 'sindh',
+    provinceLabel: 'Sindh',
+    logo: '/icons/crest.svg',
+    districts: '',
+  },
+  {
+    id: 'bbise',
+    slug: 'quetta-board',
+    name: 'BBISE Quetta',
+    shortName: 'BBISE Quetta',
+    province: 'balochistan',
+    provinceLabel: 'Balochistan',
+    logo: '/logos/bise-quetta.svg',
+    districts: '',
+  },
+  {
+    id: 'ajkbise',
+    slug: 'mirpur-board',
+    name: 'AJK BISE',
+    shortName: 'AJK BISE',
+    province: 'azad-jammu-kashmir',
+    provinceLabel: 'AJK',
+    logo: '/logos/bise-mirpur.svg',
+    districts: '',
+  },
 ]
 
 export function BoardCardsGrid({ year = 2026 }: { year?: number }) {
@@ -265,6 +321,17 @@ export function BoardCardsGrid({ year = 2026 }: { year?: number }) {
   const [showAll, setShowAll] = useState(false)
 
   const routedSlugs = useMemo(() => new Set(routedBoards().map((b) => b.slug)), [])
+
+  /*
+   * The count shown must be the count actually rendered.
+   *
+   * `ALL_BOARDS` below is a hand-maintained list and the board registry is the
+   * real source of truth; they can drift, and
+   * tests/validation/board-grid-parity.test.ts fails the build when they do.
+   * Until the grid reads from the registry directly, the number on screen is at
+   * least honest about the page it labels.
+   */
+  const boardCount = ALL_BOARDS.length
 
   // Filter logic matching the UI tabs & search bar
   const filteredBoards = useMemo(() => {
@@ -354,6 +421,8 @@ export function BoardCardsGrid({ year = 2026 }: { year?: number }) {
             { id: 'kpk', label: 'KPK' },
             { id: 'sindh', label: 'Sindh' },
             { id: 'federal', label: 'Federal' },
+            { id: 'balochistan', label: 'Balochistan' },
+            { id: 'azad-jammu-kashmir', label: 'AJK' },
           ].map((tab) => {
             const isActive = selectedProvince === tab.id
             return (
@@ -512,8 +581,15 @@ export function BoardCardsGrid({ year = 2026 }: { year?: number }) {
               <BookOpenIcon width={20} height={20} />
             </div>
             <div>
-              <div className="text-xs font-black text-slate-900">16+ Boards</div>
-              <div className="text-[11px] text-slate-500">All major boards in one place</div>
+              {/*
+                Counted from the registry, never typed by hand. Four different
+                hand-written totals were live at once — "16+", "24+" and "25" —
+                for a registry that actually holds 28. A number a reader can
+                check against the page below it has to come from the same place
+                the page does.
+              */}
+              <div className="text-xs font-black text-slate-900">{boardCount} Boards</div>
+              <div className="text-[11px] text-slate-500">Every board we track, in one place</div>
             </div>
           </div>
 

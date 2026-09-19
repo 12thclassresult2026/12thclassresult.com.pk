@@ -419,7 +419,7 @@ export function BoardsDirectoryClient({
         {filteredSections.length === 0 ? (
           <div className="rounded-2xl border border-slate-200 bg-white p-8 py-16 text-center">
             <p className="text-base font-medium text-slate-600">
-              No boards found matching "{searchQuery}".
+              No boards found matching &ldquo;{searchQuery}&rdquo;.
             </p>
             <button
               onClick={() => {
