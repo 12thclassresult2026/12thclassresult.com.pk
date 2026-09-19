@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 
 import { HeaderMegaMenu } from '@/components/layout/header-mega-menu'
+import { MobileNav } from '@/components/layout/mobile-nav'
 import { ResultUpdateTicker } from '@/components/layout/result-update-ticker'
 import {
   CalendarIcon,
@@ -440,8 +441,9 @@ export function SiteHeader() {
             </ul>
           </nav>
 
-          {/* Right Action Button (Check Result) */}
-          <div className="flex items-center gap-3">
+          {/* Right Action Button (Check Result) + the menu a phone gets */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            <MobileNav />
             <Link
               href="/#check-result"
               className="inline-flex items-center gap-1.5 rounded-xl bg-[#005B4C] px-4 py-2 text-xs font-bold text-white shadow-xs transition-all hover:bg-[#00473B] hover:shadow-md active:scale-95"

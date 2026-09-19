@@ -504,3 +504,74 @@ test.describe('board pages carry board-specific verified content', () => {
     }
   })
 })
+
+test.describe('a phone can navigate the site', () => {
+  /*
+   * The primary nav is `hidden ... lg:flex`, and for a while nothing replaced
+   * it below 1024px: a phone got the header logo and one "Check Result" button,
+   * with no route to /boards, the result hub, the guides or the trust pages.
+   *
+   * Most of this audience is on a phone and Google indexes mobile-first, so a
+   * header that renders no internal links on a small screen passes none either.
+   */
+  test('offers a menu toggle below the desktop breakpoint', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/')
+
+    const toggle = page.getByRole('button', { name: /open menu/i })
+    await expect(toggle, 'no menu toggle on a 390px viewport').toBeVisible()
+    await expect(page.locator('nav[aria-label="Primary"]')).toBeHidden()
+
+    await toggle.click()
+    const panel = page.locator('nav[aria-label="Mobile"]')
+    await expect(panel).toBeVisible()
+
+    // The destinations that matter, not the whole list.
+    for (const href of ['/boards', '/results/12th-class', '/methodology', '/about']) {
+      await expect(
+        panel.locator(`a[href="${href}"]`).first(),
+        `the mobile menu does not reach ${href}`,
+      ).toBeVisible()
+    }
+  })
+
+  test('lists only board pages that exist', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/')
+    await page.getByRole('button', { name: /open menu/i }).click()
+
+    const panel = page.locator('nav[aria-label="Mobile"]')
+    const hrefs = await panel
+      .locator('a[href^="/results/"]')
+      .evaluateAll((nodes) => nodes.map((n) => n.getAttribute('href') ?? ''))
+    expect(hrefs.length, 'no board links in the mobile menu').toBeGreaterThan(10)
+
+    // Held boards 404; advertising one here is the bug the mega menu had.
+    for (const held of ['faisalabad-board', 'federal-board', 'kohat-board', 'zueb']) {
+      expect(
+        hrefs.some((h) => h.includes(held)),
+        `the mobile menu links to ${held}, which has no page`,
+      ).toBe(false)
+    }
+  })
+
+  test('closes on Escape and returns focus to the toggle', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/')
+
+    await page.getByRole('button', { name: /open menu/i }).click()
+    await expect(page.locator('nav[aria-label="Mobile"]')).toBeVisible()
+
+    await page.keyboard.press('Escape')
+    await expect(page.locator('nav[aria-label="Mobile"]')).toBeHidden()
+    // Without this a keyboard user is dropped at the top of the document.
+    await expect(page.getByRole('button', { name: /open menu/i })).toBeFocused()
+  })
+
+  test('stays out of the way on desktop', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 })
+    await page.goto('/')
+    await expect(page.getByRole('button', { name: /open menu/i })).toBeHidden()
+    await expect(page.locator('nav[aria-label="Primary"]')).toBeVisible()
+  })
+})
