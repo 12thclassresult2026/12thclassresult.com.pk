@@ -205,26 +205,20 @@ export function SiteFooter() {
           <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-12 lg:gap-8">
             {/* -- Column 1: Brand Info & Social (lg:col-span-3) -- */}
             <div className="lg:col-span-3">
-              {/* Logo Lockup with Graduation Cap & Book Emblem */}
-              <Link href="/" className="group inline-flex items-center gap-3">
-                <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/10 p-1 backdrop-blur-xs">
+              {/* Logo Lockup (Official Master Graphic Logo) */}
+              <Link
+                href="/"
+                className="group inline-flex items-center transition-opacity hover:opacity-95"
+                aria-label="12thClassResult.com.pk — Homepage"
+              >
+                <div className="inline-flex rounded-xl bg-white p-2.5 shadow-md transition-transform group-hover:scale-[1.02]">
                   <Image
-                    src="/logo-emblem.svg"
-                    alt="12thClassResult.com.pk Emblem"
-                    width={48}
-                    height={48}
-                    className="h-full w-full object-contain"
+                    src="/logo.png"
+                    alt="12thClassResult.com.pk"
+                    width={953}
+                    height={225}
+                    className="h-10 w-auto max-w-[210px] object-contain"
                   />
-                </div>
-                <div>
-                  <div className="text-xl font-black tracking-tight text-white sm:text-[22px]">
-                    12<span className="inline-block -translate-y-1 text-sm font-extrabold">th</span>
-                    <span className="ml-0.5 text-[#00E599]">ClassResult</span>
-                    <span className="text-white">.com.pk</span>
-                  </div>
-                  <div className="text-[9.5px] font-bold tracking-[0.16em] text-emerald-300/90 uppercase">
-                    Pakistan&apos;s Education Results Portal
-                  </div>
                 </div>
               </Link>
 

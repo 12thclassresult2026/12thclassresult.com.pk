@@ -162,32 +162,20 @@ export function SiteHeader() {
       {/* Tier 2: Pure White Primary Navigation Bar */}
       <div className="relative border-b border-slate-200/80 bg-white">
         <div className="container-wide flex h-[62px] items-center justify-between gap-4">
-          {/* Brand Logo with Cap & Book Emblem (Matching Official Branding) */}
+          {/* Brand Logo (Official Master Graphic Logo) */}
           <Link
             href="/"
-            className="group flex shrink-0 items-center gap-2.5 transition-opacity hover:opacity-95"
+            className="group flex shrink-0 items-center transition-opacity hover:opacity-95"
             aria-label="12thClassResult.com.pk — Homepage"
           >
-            <div className="relative flex h-11 w-11 shrink-0 items-center justify-center">
-              <Image
-                src="/logo-emblem.svg"
-                alt="12thClassResult.com.pk Official Emblem"
-                width={44}
-                height={44}
-                className="h-11 w-11 object-contain drop-shadow-xs transition-transform group-hover:scale-105"
-                priority
-              />
-            </div>
-            <div className="flex flex-col text-left">
-              <span className="text-[18px] leading-none font-black tracking-tight text-slate-900 sm:text-[20px]">
-                12<span className="inline-block -translate-y-1 text-[12px] font-extrabold">th</span>
-                <span className="ml-0.5 text-[#007054]">ClassResult</span>
-                <span className="text-slate-900">.com.pk</span>
-              </span>
-              <span className="mt-1 text-[9px] font-bold tracking-[0.14em] text-slate-500 uppercase sm:text-[9.5px]">
-                Pakistan&apos;s Education Results Portal
-              </span>
-            </div>
+            <Image
+              src="/logo.png"
+              alt="12thClassResult.com.pk — Pakistan's Education Results Portal"
+              width={953}
+              height={225}
+              className="h-[44px] w-auto max-w-[210px] sm:h-[48px] sm:max-w-[230px] object-contain transition-transform duration-200 group-hover:scale-[1.02]"
+              priority
+            />
           </Link>
 
           {/* Desktop Navigation Links */}
