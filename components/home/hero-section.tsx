@@ -111,7 +111,41 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
   }
 
   return (
-    <section className="relative overflow-hidden bg-[#F8FAF9] bg-[url('/images/hero-bg.webp')] bg-cover bg-center bg-no-repeat pt-8 pb-20 sm:pt-10 sm:pb-24 lg:pt-12 lg:pb-32">
+    <section className="relative overflow-hidden bg-[#F8FAF9] bg-[url('/images/hero-bg-mobile.webp')] bg-cover bg-center bg-no-repeat pt-8 pb-20 sm:bg-[url('/images/hero-bg.webp')] sm:pt-10 sm:pb-24 lg:pt-12 lg:pb-32">
+      {/*
+        THE LCP ELEMENT, AND WHY IT IS HANDLED BY HAND.
+
+        PageSpeed measured mobile LCP at 8.6s against a desktop 95. The cause
+        was this background: `hero-bg.webp` was a 952 KB JPEG wearing a .webp
+        extension, and a CSS background is also discovered LATE — the browser
+        cannot request it until it has parsed the CSS and matched this element.
+
+        `next.config.ts` sets `images.unoptimized: true` on purpose (OpenNext on
+        Cloudflare has no IMAGES binding), so there is no `<Image>` resizing to
+        fall back on. The file on disk is the file a phone downloads, and the
+        responsive choice has to be made here:
+
+          mobile   hero-bg-mobile.webp    768x429     44 KB
+          >= 640   hero-bg.webp          1376x768    147 KB
+
+        These preload hints make the request start with the HTML instead of
+        after the stylesheet. React hoists them into <head>; `media` keeps a
+        phone from fetching the desktop file and vice versa.
+      */}
+      <link
+        rel="preload"
+        as="image"
+        href="/images/hero-bg-mobile.webp"
+        media="(max-width: 639px)"
+        fetchPriority="high"
+      />
+      <link
+        rel="preload"
+        as="image"
+        href="/images/hero-bg.webp"
+        media="(min-width: 640px)"
+        fetchPriority="high"
+      />
       {/* Soft gradient wash for crisp contrast and readability */}
       <div
         aria-hidden="true"
