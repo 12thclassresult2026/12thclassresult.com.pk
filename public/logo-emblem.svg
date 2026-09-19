@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 190" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="capTopEmbR" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#05825D" />
+      <stop offset="50%" stop-color="#006A4E" />
+      <stop offset="100%" stop-color="#004D38" />
+    </linearGradient>
+    <linearGradient id="capUnderEmbR" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#004D38" />
+      <stop offset="100%" stop-color="#002D20" />
+    </linearGradient>
+    <linearGradient id="pageDarkEmbR" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0D2137" />
+      <stop offset="100%" stop-color="#071220" />
+    </linearGradient>
+    <linearGradient id="pageGreenDarkEmbR" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#005C44" />
+      <stop offset="100%" stop-color="#004634" />
+    </linearGradient>
+    <linearGradient id="pageGreenBrightEmbR" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#007054" />
+      <stop offset="70%" stop-color="#009668" />
+      <stop offset="100%" stop-color="#10B981" />
+    </linearGradient>
+    <radialGradient id="shadowEmbR" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#004332" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#004332" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Floor Shadow -->
+  <ellipse cx="95" cy="172" rx="75" ry="9" fill="url(#shadowEmbR)" />
+
+  <!-- Left Outer Spine / Cover -->
+  <path d="M95,152 C65,152 35,134 16,92 C18,114 44,146 95,162 Z" fill="url(#pageDarkEmbR)" />
+  <path d="M95,157 C68,157 42,143 24,124 C36,145 64,163 95,168 Z" fill="#0D2137" opacity="0.6" />
+  
+  <!-- Right Outer Spine / Cover -->
+  <path d="M95,152 C125,152 155,134 174,92 C172,114 146,146 95,162 Z" fill="url(#pageDarkEmbR)" />
+  <path d="M95,157 C122,157 148,143 166,124 C154,145 126,163 95,168 Z" fill="#0D2137" opacity="0.6" />
+
+  <!-- Base Center Notch -->
+  <polygon points="90,157 100,157 95,170" fill="#071220" />
+
+  <!-- Left Wing Middle Page -->
+  <path d="M95,148 C60,146 32,120 18,74 C30,108 60,138 95,148 Z" fill="url(#pageGreenDarkEmbR)" />
+  <!-- Right Wing Middle Page -->
+  <path d="M95,148 C130,146 158,120 172,74 C160,108 130,138 95,148 Z" fill="url(#pageGreenDarkEmbR)" />
+
+  <!-- Left Wing Top Page -->
+  <path d="M95,140 C62,134 36,98 22,54 C34,88 64,124 95,134 Z" fill="url(#pageGreenBrightEmbR)" />
+  <path d="M95,134 C68,126 44,94 30,62 C42,90 68,118 95,126 Z" fill="#005B42" opacity="0.3" />
+
+  <!-- Right Wing Top Page -->
+  <path d="M95,140 C128,134 154,98 168,54 C156,88 126,124 95,134 Z" fill="url(#pageGreenBrightEmbR)" />
+  <path d="M95,134 C122,126 146,94 160,62 C148,90 122,118 95,126 Z" fill="#005B42" opacity="0.3" />
+
+  <!-- White Highlights -->
+  <path d="M95,145 C64,140 38,114 20,74" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.95" />
+  <path d="M95,145 C126,140 152,114 170,74" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.95" />
+  <path d="M95,150 C70,148 46,128 28,98" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.8" />
+  <path d="M95,150 C120,148 144,128 162,98" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.8" />
+
+  <!-- Center Badge with Pakistan Crescent & Star -->
+  <circle cx="95" cy="108" r="30" fill="#ffffff" />
+  <circle cx="95" cy="108" r="28" fill="#007054" />
+  <path d="M106,94 C94,96 85,106 87,118 C88,128 97,135 107,132 C96,131 90,123 91,114 C92,105 99,97 106,94 Z" fill="#ffffff" />
+  <polygon points="107.5,101 109.5,106.5 115,106.5 110.5,110 112.5,115.5 107.5,112 102.5,115.5 104.5,110 100,106.5 105.5,106.5" fill="#ffffff" />
+
+  <!-- Skullcap Base -->
+  <path d="M56,50 C56,72 134,72 134,50 Z" fill="url(#capUnderEmbR)" />
+
+  <!-- Mortarboard Diamond Top -->
+  <polygon points="95,8 172,40 95,72 18,40" fill="url(#capTopEmbR)" />
+  <polygon points="18,40 95,72 95,77 18,45" fill="#003525" />
+  <polygon points="172,40 95,72 95,77 172,45" fill="#004D38" />
+
+  <ellipse cx="95" cy="40" rx="6" ry="3.5" fill="#003525" />
+
+  <!-- Hanging Tassel Cord & Brush on Right -->
+  <path d="M95,40 Q135,42 148,62" stroke="#00875A" stroke-width="3" fill="none" stroke-linecap="round" />
+  <circle cx="148" cy="63" r="3" fill="#10B981" />
+  <path d="M145,64 L142,92 L152,92 L150,64 Z" fill="#00875A" />
+  <rect x="144" y="66" width="6" height="2.5" rx="0.5" fill="#F59E0B" />
+</svg>

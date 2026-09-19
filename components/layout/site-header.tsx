@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 
@@ -161,35 +162,30 @@ export function SiteHeader() {
       {/* Tier 2: Pure White Primary Navigation Bar */}
       <div className="relative border-b border-slate-200/80 bg-white">
         <div className="container-wide flex h-[62px] items-center justify-between gap-4">
-          {/* Brand Logo with Cap Emblem */}
+          {/* Brand Logo with Cap & Book Emblem (Matching Official Branding) */}
           <Link
             href="/"
             className="group flex shrink-0 items-center gap-2.5 transition-opacity hover:opacity-95"
-            aria-label="12thClassResult.com.pk � Homepage"
+            aria-label="12thClassResult.com.pk — Homepage"
           >
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#007054] text-white shadow-xs">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-6 w-6"
-                aria-hidden="true"
-              >
-                <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" />
-                <path d="M22 10v6" />
-                <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" />
-              </svg>
+            <div className="relative flex h-11 w-11 shrink-0 items-center justify-center">
+              <Image
+                src="/logo-emblem.svg"
+                alt="12thClassResult.com.pk Official Emblem"
+                width={44}
+                height={44}
+                className="h-11 w-11 object-contain drop-shadow-xs transition-transform group-hover:scale-105"
+                priority
+              />
             </div>
             <div className="flex flex-col text-left">
-              <span className="text-[17px] leading-none font-black tracking-tight text-slate-900 sm:text-lg">
-                12thclassresult<span className="text-[#007054]">.com.pk</span>
+              <span className="text-[18px] leading-none font-black tracking-tight text-slate-900 sm:text-[20px]">
+                12<span className="inline-block -translate-y-1 text-[12px] font-extrabold">th</span>
+                <span className="ml-0.5 text-[#007054]">ClassResult</span>
+                <span className="text-slate-900">.com.pk</span>
               </span>
-              <span className="mt-1 text-[10px] font-medium tracking-tight text-slate-500">
-                Your Guide to Board Results in Pakistan
+              <span className="mt-1 text-[9px] font-bold tracking-[0.14em] text-slate-500 uppercase sm:text-[9.5px]">
+                Pakistan&apos;s Education Results Portal
               </span>
             </div>
           </Link>

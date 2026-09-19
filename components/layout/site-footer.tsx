@@ -205,49 +205,25 @@ export function SiteFooter() {
           <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-12 lg:gap-8">
             {/* -- Column 1: Brand Info & Social (lg:col-span-3) -- */}
             <div className="lg:col-span-3">
-              {/* Logo Lockup with Graduation Cap & Book */}
+              {/* Logo Lockup with Graduation Cap & Book Emblem */}
               <Link href="/" className="group inline-flex items-center gap-3">
-                <div className="relative flex h-11 w-11 shrink-0 items-center justify-center">
-                  <svg
-                    viewBox="0 0 64 64"
-                    fill="none"
-                    className="h-10 w-10 text-white"
-                    stroke="currentColor"
-                  >
-                    {/* Mortarboard Cap */}
-                    <path
-                      d="M32 6L4 19l28 13 28-13L32 6z"
-                      fill="white"
-                      stroke="white"
-                      strokeWidth="1.5"
-                      strokeLinejoin="round"
-                    />
-                    <path d="M52 23.5v15" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
-                    <circle cx="52" cy="40" r="2.5" fill="white" />
-                    <path
-                      d="M15 24.5v10c0 5 7.6 9 17 9s17-4 17-9v-10"
-                      stroke="white"
-                      strokeWidth="2.5"
-                      strokeLinejoin="round"
-                      fill="#002B20"
-                    />
-                    {/* Open Book Base */}
-                    <path
-                      d="M6 46c7.5-4 17-3 26 2 9-5 18.5-6 26-2v6c-7.5-4-17-3-26 2-9-5-18.5-6-26-2v-6z"
-                      fill="white"
-                      stroke="white"
-                      strokeWidth="1.5"
-                    />
-                    <path d="M10 49c6.5-3 14-2.5 22 1.5" stroke="#002B20" strokeWidth="1.5" />
-                    <path d="M54 49c-6.5-3-14-2.5-22 1.5" stroke="#002B20" strokeWidth="1.5" />
-                  </svg>
+                <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/10 p-1 backdrop-blur-xs">
+                  <Image
+                    src="/logo-emblem.svg"
+                    alt="12thClassResult.com.pk Emblem"
+                    width={48}
+                    height={48}
+                    className="h-full w-full object-contain"
+                  />
                 </div>
                 <div>
                   <div className="text-xl font-black tracking-tight text-white sm:text-[22px]">
-                    12thclassresult<span className="text-[#00E599]">.com.pk</span>
+                    12<span className="inline-block -translate-y-1 text-sm font-extrabold">th</span>
+                    <span className="ml-0.5 text-[#00E599]">ClassResult</span>
+                    <span className="text-white">.com.pk</span>
                   </div>
-                  <div className="text-[10px] font-bold tracking-wider text-emerald-300/80 uppercase">
-                    Your Guide to Board Results in Pakistan
+                  <div className="text-[9.5px] font-bold tracking-[0.16em] text-emerald-300/90 uppercase">
+                    Pakistan&apos;s Education Results Portal
                   </div>
                 </div>
               </Link>

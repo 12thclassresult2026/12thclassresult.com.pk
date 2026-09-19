@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 200" width="100%" height="100%" fill="none">
+  <defs>
+    <!-- Cap Gradients -->
+    <linearGradient id="capTopRef" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#05825D" />
+      <stop offset="50%" stop-color="#006A4E" />
+      <stop offset="100%" stop-color="#004D38" />
+    </linearGradient>
+    <linearGradient id="capUnderRef" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#004D38" />
+      <stop offset="100%" stop-color="#002D20" />
+    </linearGradient>
+
+    <!-- Page Gradients -->
+    <linearGradient id="pageDarkRef" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0D2137" />
+      <stop offset="100%" stop-color="#071220" />
+    </linearGradient>
+    <linearGradient id="pageGreenDarkRef" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#005C44" />
+      <stop offset="100%" stop-color="#004634" />
+    </linearGradient>
+    <linearGradient id="pageGreenBrightRef" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#007054" />
+      <stop offset="70%" stop-color="#009668" />
+      <stop offset="100%" stop-color="#10B981" />
+    </linearGradient>
+
+    <radialGradient id="shadowRef" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#004332" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#004332" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- ==================== EMBLEM CREST ==================== -->
+  <g transform="translate(10, 10)">
+    <!-- Floor Shadow -->
+    <ellipse cx="95" cy="172" rx="75" ry="9" fill="url(#shadowRef)" />
+
+    <!-- === BOOK PAGES: LAYER 1 (OUTER DARK COVER) === -->
+    <!-- Left Outer Spine / Cover -->
+    <path d="M95,152 C65,152 35,134 16,92 C18,114 44,146 95,162 Z" fill="url(#pageDarkRef)" />
+    <!-- Left Dark Under Rim Pages -->
+    <path d="M95,157 C68,157 42,143 24,124 C36,145 64,163 95,168 Z" fill="#0D2137" opacity="0.6" />
+    
+    <!-- Right Outer Spine / Cover -->
+    <path d="M95,152 C125,152 155,134 174,92 C172,114 146,146 95,162 Z" fill="url(#pageDarkRef)" />
+    <!-- Right Dark Under Rim Pages -->
+    <path d="M95,157 C122,157 148,143 166,124 C154,145 126,163 95,168 Z" fill="#0D2137" opacity="0.6" />
+
+    <!-- Base Center Notch -->
+    <polygon points="90,157 100,157 95,170" fill="#071220" />
+
+    <!-- === BOOK PAGES: LAYER 2 (DEEP FOREST GREEN PAGES) === -->
+    <!-- Left Wing Middle Page -->
+    <path d="M95,148 C60,146 32,120 18,74 C30,108 60,138 95,148 Z" fill="url(#pageGreenDarkRef)" />
+    <!-- Right Wing Middle Page -->
+    <path d="M95,148 C130,146 158,120 172,74 C160,108 130,138 95,148 Z" fill="url(#pageGreenDarkRef)" />
+
+    <!-- === BOOK PAGES: LAYER 3 (VIBRANT EMERALD INNER PAGES) === -->
+    <!-- Left Wing Top Page (Sweeping High) -->
+    <path d="M95,140 C62,134 36,98 22,54 C34,88 64,124 95,134 Z" fill="url(#pageGreenBrightRef)" />
+    <path d="M95,134 C68,126 44,94 30,62 C42,90 68,118 95,126 Z" fill="#005B42" opacity="0.3" />
+
+    <!-- Right Wing Top Page (Sweeping High) -->
+    <path d="M95,140 C128,134 154,98 168,54 C156,88 126,124 95,134 Z" fill="url(#pageGreenBrightRef)" />
+    <path d="M95,134 C122,126 146,94 160,62 C148,90 122,118 95,126 Z" fill="#005B42" opacity="0.3" />
+
+    <!-- Crisp White Page Separation Highlights -->
+    <path d="M95,145 C64,140 38,114 20,74" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.95" />
+    <path d="M95,145 C126,140 152,114 170,74" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.95" />
+
+    <path d="M95,150 C70,148 46,128 28,98" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.8" />
+    <path d="M95,150 C120,148 144,128 162,98" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.8" />
+
+    <!-- === CENTER BADGE: PAKISTAN CRESCENT & STAR === -->
+    <!-- Outer White Ring -->
+    <circle cx="95" cy="108" r="30" fill="#ffffff" />
+    <!-- Inner Green Circle -->
+    <circle cx="95" cy="108" r="28" fill="#007054" />
+    <!-- White Crescent -->
+    <path d="M106,94 C94,96 85,106 87,118 C88,128 97,135 107,132 C96,131 90,123 91,114 C92,105 99,97 106,94 Z" fill="#ffffff" />
+    <!-- White Star (tilted inside crescent cradle) -->
+    <polygon points="107.5,101 109.5,106.5 115,106.5 110.5,110 112.5,115.5 107.5,112 102.5,115.5 104.5,110 100,106.5 105.5,106.5" fill="#ffffff" />
+
+    <!-- === GRADUATION CAP === -->
+    <!-- Skullcap Base -->
+    <path d="M56,50 C56,72 134,72 134,50 Z" fill="url(#capUnderRef)" />
+
+    <!-- Mortarboard Diamond Top -->
+    <polygon points="95,8 172,40 95,72 18,40" fill="url(#capTopRef)" />
+    <!-- Bevel 3D Bottom Edges -->
+    <polygon points="18,40 95,72 95,77 18,45" fill="#003525" />
+    <polygon points="172,40 95,72 95,77 172,45" fill="#004D38" />
+
+    <!-- Center Button -->
+    <ellipse cx="95" cy="40" rx="6" ry="3.5" fill="#003525" />
+
+    <!-- Hanging Tassel Cord & Brush on Right -->
+    <path d="M95,40 Q135,42 148,62" stroke="#00875A" stroke-width="3" fill="none" stroke-linecap="round" />
+    <circle cx="148" cy="63" r="3" fill="#10B981" />
+    <path d="M145,64 L142,92 L152,92 L150,64 Z" fill="#00875A" />
+    <!-- Gold Tassel Band -->
+    <rect x="144" y="66" width="6" height="2.5" rx="0.5" fill="#F59E0B" />
+  </g>
+
+  <!-- ==================== TYPOGRAPHY & BRANDING ==================== -->
+  <g transform="translate(210, 24)">
+    <!-- Main Wordmark: 11th/12th (Navy) + ClassResult (Emerald) + .com.pk (Navy) -->
+    <text x="0" y="68" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="58" letter-spacing="-0.025em">
+      <tspan fill="#111827">12</tspan><tspan fill="#111827" font-size="36" font-weight="800" dx="-2" dy="-20">th</tspan><tspan fill="#007054" font-size="58" font-weight="900" dx="6" dy="20">ClassResult</tspan><tspan fill="#111827" font-size="36" font-weight="800">.com.pk</tspan>
+    </text>
+
+    <!-- Subtitle: PAKISTAN'S EDUCATION RESULTS PORTAL -->
+    <text x="4" y="104" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="700" font-size="14.5" fill="#334155" letter-spacing="0.26em">
+      PAKISTAN&apos;S EDUCATION RESULTS PORTAL
+    </text>
+
+    <!-- Horizontal Feature Strip with Dividers -->
+    <g transform="translate(3, 126)">
+      <!-- 1. Results -->
+      <g transform="translate(0, 0)">
+        <path d="M2 3h6a2 2 0 0 1 2 2v10a2 2 0 0 0-2-2H2z" fill="#007054" />
+        <path d="M18 3h-6a2 2 0 0 0-2 2v10a2 2 0 0 1 2-2h6z" fill="#007054" opacity="0.8" />
+        <text x="25" y="12" font-family="system-ui, sans-serif" font-weight="700" font-size="12" fill="#334155" letter-spacing="0.08em">RESULTS</text>
+      </g>
+
+      <!-- Divider 1 -->
+      <line x1="110" y1="0" x2="110" y2="15" stroke="#CBD5E1" stroke-width="1.5" />
+
+      <!-- 2. Dates -->
+      <g transform="translate(128, 0)">
+        <rect x="1" y="2" width="14" height="12" rx="2" fill="none" stroke="#007054" stroke-width="1.8" />
+        <line x1="1" y1="6" x2="15" y2="6" stroke="#007054" stroke-width="1.8" />
+        <circle cx="5" cy="9.5" r="1" fill="#007054" />
+        <circle cx="8" cy="9.5" r="1" fill="#007054" />
+        <circle cx="11" cy="9.5" r="1" fill="#007054" />
+        <text x="23" y="12" font-family="system-ui, sans-serif" font-weight="700" font-size="12" fill="#334155" letter-spacing="0.08em">DATES</text>
+      </g>
+
+      <!-- Divider 2 -->
+      <line x1="210" y1="0" x2="210" y2="15" stroke="#CBD5E1" stroke-width="1.5" />
+
+      <!-- 3. Gazettes -->
+      <g transform="translate(228, 0)">
+        <rect x="2" y="1" width="13" height="15" rx="1.5" fill="#007054" />
+        <line x1="5" y1="5" x2="12" y2="5" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" />
+        <line x1="5" y1="8" x2="12" y2="8" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" />
+        <line x1="5" y1="11" x2="9" y2="11" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" />
+        <text x="23" y="12" font-family="system-ui, sans-serif" font-weight="700" font-size="12" fill="#334155" letter-spacing="0.08em">GAZETTES</text>
+      </g>
+
+      <!-- Divider 3 -->
+      <line x1="336" y1="0" x2="336" y2="15" stroke="#CBD5E1" stroke-width="1.5" />
+
+      <!-- 4. All Boards -->
+      <g transform="translate(354, 0)">
+        <polygon points="8,1 15,4.5 8,8 1,4.5" fill="#007054" />
+        <path d="M4,6.5v4c0 1.5 1.8 3 4 3s4-1.5 4-3v-4" fill="#007054" opacity="0.8" />
+        <path d="M15,4.5v5" stroke="#007054" stroke-width="1.2" />
+        <text x="23" y="12" font-family="system-ui, sans-serif" font-weight="700" font-size="12" fill="#334155" letter-spacing="0.08em">ALL BOARDS</text>
+      </g>
+    </g>
+  </g>
+</svg>
