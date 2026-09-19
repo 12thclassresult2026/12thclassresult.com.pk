@@ -374,16 +374,24 @@ export function SiteHeader() {
                 </button>
               </li>
 
-              {/* All Boards - Also Triggers Mega Menu */}
-              <li className="relative" onMouseEnter={() => setOpenDropdown('punjab')}>
-                <button
-                  type="button"
-                  onClick={() => setOpenDropdown(openDropdown === 'punjab' ? null : 'punjab')}
-                  className="flex items-center gap-1 rounded-md px-3 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
+              {/* All Boards - Triggers Mega Menu with all provinces */}
+              <li className="relative" onMouseEnter={() => setOpenDropdown('all-boards')}>
+                <Link
+                  href="/boards"
+                  onClick={() => setOpenDropdown(null)}
+                  className={`flex items-center gap-1 px-3.5 py-2 text-[13px] font-semibold transition-colors ${
+                    openDropdown === 'all-boards'
+                      ? 'rounded-t-xl bg-emerald-50 text-[#007054] shadow-xs'
+                      : 'rounded-md text-slate-700 hover:bg-slate-50 hover:text-[#007054]'
+                  }`}
                 >
                   <span>All Boards</span>
-                  <ChevronDownIcon width={12} height={12} className="text-slate-400" />
-                </button>
+                  <ChevronDownIcon
+                    width={12}
+                    height={12}
+                    className={openDropdown === 'all-boards' ? 'text-[#007054]' : 'text-slate-400'}
+                  />
+                </Link>
               </li>
 
               {/* Date Schedule */}
@@ -460,7 +468,12 @@ export function SiteHeader() {
           </div>
 
           {/* Full Mega Menu Dropdown */}
-          {openDropdown === 'punjab' && <HeaderMegaMenu onClose={() => setOpenDropdown(null)} />}
+          {(openDropdown === 'punjab' || openDropdown === 'all-boards') && (
+            <HeaderMegaMenu
+              initialProvince={openDropdown === 'all-boards' ? 'all' : 'punjab'}
+              onClose={() => setOpenDropdown(null)}
+            />
+          )}
         </div>
       </div>
 

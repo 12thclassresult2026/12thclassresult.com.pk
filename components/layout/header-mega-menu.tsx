@@ -1,6 +1,6 @@
 ﻿'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -44,16 +44,16 @@ const PROVINCES: ProvinceData[] = [
     boards: [
       { name: 'BISE Lahore', href: '/results/lahore-board/12th-class' },
       { name: 'BISE Karachi', href: '/results/karachi-board/12th-class' },
-      { name: 'BISE Gujranwala', href: '/results/gujranwala-board/12th-class' },
-      { name: 'BISE Peshawar', href: '/results/peshawar-board/12th-class' },
       { name: 'BISE Faisalabad', href: '/results/faisalabad-board/12th-class' },
+      { name: 'BISE Peshawar', href: '/results/peshawar-board/12th-class' },
+      { name: 'BISE Rawalpindi', href: '/results/rawalpindi-board/12th-class' },
       { name: 'FBISE Federal', href: '/results/federal-board/12th-class' },
       { name: 'BISE Multan', href: '/results/multan-board/12th-class' },
       { name: 'BISE Quetta', href: '/results/quetta-board/12th-class' },
-      { name: 'BISE Rawalpindi', href: '/results/rawalpindi-board/12th-class' },
+      { name: 'BISE Gujranwala', href: '/results/gujranwala-board/12th-class' },
       { name: 'BISE Hyderabad', href: '/results/hyderabad-board/12th-class' },
       { name: 'BISE Sargodha', href: '/results/sargodha-board/12th-class' },
-      { name: 'BISE Abbottabad', href: '/results/abbottabad-board/12th-class' },
+      { name: 'BISE Mirpur AJK', href: '/results/mirpur-board/12th-class' },
     ],
   },
   {
@@ -62,21 +62,18 @@ const PROVINCES: ProvinceData[] = [
     subtitle: 'All Punjab education boards',
     iconBg: 'bg-emerald-50',
     iconColor: 'text-[#007054]',
-    allLink: '/boards',
+    allLink: '/boards#punjab',
     allLabel: 'View All Punjab Boards',
     boards: [
       { name: 'BISE Lahore', href: '/results/lahore-board/12th-class' },
-      { name: 'BISE Sahiwal', href: '/results/sahiwal-board/12th-class' },
-      { name: 'BISE Gujranwala', href: '/results/gujranwala-board/12th-class' },
-      { name: 'BISE Bahawalpur', href: '/results/bahawalpur-board/12th-class' },
       { name: 'BISE Faisalabad', href: '/results/faisalabad-board/12th-class' },
-      { name: 'BISE DG Khan', href: '/results/dg-khan-board/12th-class' },
       { name: 'BISE Multan', href: '/results/multan-board/12th-class' },
-      { name: 'BISE Sialkot', href: '/results/gujranwala-board/12th-class' },
+      { name: 'BISE Gujranwala', href: '/results/gujranwala-board/12th-class' },
       { name: 'BISE Rawalpindi', href: '/results/rawalpindi-board/12th-class' },
-      { name: 'BISE Sheikhupura', href: '/results/lahore-board/12th-class' },
       { name: 'BISE Sargodha', href: '/results/sargodha-board/12th-class' },
-      { name: 'BISE Vehari', href: '/results/multan-board/12th-class' },
+      { name: 'BISE Bahawalpur', href: '/results/bahawalpur-board/12th-class' },
+      { name: 'BISE Sahiwal', href: '/results/sahiwal-board/12th-class' },
+      { name: 'BISE DG Khan', href: '/results/dg-khan-board/12th-class' },
     ],
   },
   {
@@ -85,16 +82,16 @@ const PROVINCES: ProvinceData[] = [
     subtitle: 'All KPK education boards',
     iconBg: 'bg-blue-50',
     iconColor: 'text-blue-700',
-    allLink: '/boards',
+    allLink: '/boards#khyber-pakhtunkhwa',
     allLabel: 'View All KPK Boards',
     boards: [
       { name: 'BISE Peshawar', href: '/results/peshawar-board/12th-class' },
-      { name: 'BISE Kohat', href: '/results/kohat-board/12th-class' },
-      { name: 'BISE Abbottabad', href: '/results/abbottabad-board/12th-class' },
-      { name: 'BISE Malakand', href: '/results/malakand-board/12th-class' },
-      { name: 'BISE Swat', href: '/results/swat-board/12th-class' },
-      { name: 'BISE Bannu', href: '/results/bannu-board/12th-class' },
       { name: 'BISE Mardan', href: '/results/mardan-board/12th-class' },
+      { name: 'BISE Abbottabad', href: '/results/abbottabad-board/12th-class' },
+      { name: 'BISE Swat', href: '/results/swat-board/12th-class' },
+      { name: 'BISE Kohat', href: '/results/kohat-board/12th-class' },
+      { name: 'BISE Bannu', href: '/results/bannu-board/12th-class' },
+      { name: 'BISE Malakand', href: '/results/malakand-board/12th-class' },
       { name: 'BISE DI Khan', href: '/results/dera-ismail-khan-board/12th-class' },
     ],
   },
@@ -104,31 +101,26 @@ const PROVINCES: ProvinceData[] = [
     subtitle: 'All Sindh education boards',
     iconBg: 'bg-amber-50',
     iconColor: 'text-amber-700',
-    allLink: '/boards',
+    allLink: '/boards#sindh',
     allLabel: 'View All Sindh Boards',
     boards: [
       { name: 'BIEK Karachi', href: '/results/karachi-board/12th-class' },
-      { name: 'BISE Larkana', href: '/results/larkana-board/12th-class' },
       { name: 'BISE Hyderabad', href: '/results/hyderabad-board/12th-class' },
-      { name: 'BISE Mirpurkhas', href: '/results/mirpurkhas-board/12th-class' },
+      { name: 'BISE Larkana', href: '/results/larkana-board/12th-class' },
       { name: 'BISE Sukkur', href: '/results/sukkur-board/12th-class' },
-      { name: 'BISE SBA Nawabshah', href: '/results/shaheed-benazirabad-board/12th-class' },
+      { name: 'BISE Mirpurkhas', href: '/results/mirpurkhas-board/12th-class' },
+      { name: 'BISE Shaheed Benazirabad', href: '/results/shaheed-benazirabad-board/12th-class' },
     ],
   },
   {
     id: 'balochistan',
-    title: 'Balochistan Boards',
+    title: 'Balochistan Board',
     subtitle: 'All Balochistan education boards',
     iconBg: 'bg-teal-50',
     iconColor: 'text-teal-700',
-    allLink: '/boards',
-    allLabel: 'View All Balochistan Boards',
-    boards: [
-      { name: 'BISE Quetta', href: '/results/quetta-board/12th-class' },
-      { name: 'BISE Turbat', href: '/boards' },
-      { name: 'BISE Loralai', href: '/boards' },
-      { name: 'BISE Khuzdar', href: '/boards' },
-    ],
+    allLink: '/boards#balochistan',
+    allLabel: 'View Balochistan Board',
+    boards: [{ name: 'BISE Quetta', href: '/results/quetta-board/12th-class' }],
   },
   {
     id: 'federal',
@@ -144,6 +136,16 @@ const PROVINCES: ProvinceData[] = [
       { name: 'Federal Date Schedule', href: '/results/federal-board/12th-class#schedule' },
       { name: 'Federal SMS Method', href: '/results/federal-board/12th-class#sms' },
     ],
+  },
+  {
+    id: 'ajk',
+    title: 'AJK Board',
+    subtitle: 'Azad Jammu & Kashmir',
+    iconBg: 'bg-orange-50',
+    iconColor: 'text-orange-700',
+    allLink: '/boards#azad-jammu-kashmir',
+    allLabel: 'View AJK Board',
+    boards: [{ name: 'BISE Mirpur AJK', href: '/results/mirpur-board/12th-class' }],
   },
 ]
 
@@ -192,8 +194,19 @@ const QUICK_LINKS = [
   },
 ]
 
-export function HeaderMegaMenu({ onClose }: { onClose: () => void }) {
-  const [selectedProvinceId, setSelectedProvinceId] = useState<string>('punjab')
+export function HeaderMegaMenu({
+  onClose,
+  initialProvince = 'punjab',
+}: {
+  onClose: () => void
+  initialProvince?: string
+}) {
+  const [selectedProvinceId, setSelectedProvinceId] = useState<string>(initialProvince)
+
+  // Sync when initialProvince changes from parent header
+  useEffect(() => {
+    setSelectedProvinceId(initialProvince)
+  }, [initialProvince])
 
   const activeProvince = (PROVINCES.find((p) => p.id === selectedProvinceId) ??
     PROVINCES[0]) as ProvinceData
