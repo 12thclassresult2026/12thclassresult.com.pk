@@ -228,4 +228,29 @@
     text-transform: uppercase;
     color: var(--color-accent-700);
   }
+
+  /*
+    Continuous Infinite Ticker Animation
+    Hardware-accelerated horizontal marquee that loops seamlessly.
+  */
+  @keyframes ticker {
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+    100% {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  .animate-ticker {
+    display: flex;
+    width: max-content;
+    animation: ticker 36s linear infinite;
+    will-change: transform;
+  }
+
+  .animate-ticker:hover,
+  .group:hover .animate-ticker {
+    animation-play-state: paused;
+  }
 }
