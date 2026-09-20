@@ -25,6 +25,7 @@ export function GazetteResult({
   examinationLabel,
   gazetteSourceUrl,
   gazetteCheckedOn,
+  boardPageHref,
 }: {
   outcome: LookupOutcome
   boardName: string
@@ -32,6 +33,11 @@ export function GazetteResult({
   examinationLabel: string
   gazetteSourceUrl: string
   gazetteCheckedOn: string
+  /**
+   * Where this board's own page is. Supplied from the homepage, where the
+   * reader has not been to that page and "linked above" would be a lie.
+   */
+  boardPageHref?: string
 }) {
   if (outcome.kind === 'invalid-request') {
     return (
@@ -56,10 +62,28 @@ export function GazetteResult({
           statement about your result — it means we have no verified dataset for this board, year
           and examination.
         </p>
-        <p className="mt-3">
-          Your result may still be available from the board itself. The board’s own gazette and
-          portal are linked above.
-        </p>
+        {/*
+          The reader may be on the homepage, where nothing is "linked above".
+          An honest dead end is still a dead end; point at the page that does
+          carry this board's official portal link and verified status.
+        */}
+        {boardPageHref ? (
+          <p className="mt-3">
+            Your result may still be available from the board itself.{' '}
+            <a
+              href={boardPageHref}
+              className="text-primary-700 font-semibold underline underline-offset-4"
+            >
+              Open {boardName}’s page
+            </a>{' '}
+            for its official portal link and what has actually been announced.
+          </p>
+        ) : (
+          <p className="mt-3">
+            Your result may still be available from the board itself. The board’s own gazette and
+            portal are linked above.
+          </p>
+        )}
       </Notice>
     )
   }

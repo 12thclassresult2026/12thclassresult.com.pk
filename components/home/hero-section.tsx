@@ -80,16 +80,17 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
   const smsInfo = getBoardSmsInfo(selectedSlug)
 
   /*
-   * TWO OUTCOMES, AND THE BOARD DECIDES WHICH.
+   * THE ANSWER APPEARS ON THIS PAGE. ALWAYS.
    *
-   * Where a gazette dataset is published, the result appears right here — the
-   * reader asked a question on this page and gets the answer on this page.
+   * Two earlier versions got this wrong in different ways. The first threw the
+   * roll number away and navigated to the board page regardless. The second
+   * looked up where a dataset existed but still navigated everywhere else — so
+   * selecting Lahore and pressing Search moved you somewhere you had not asked
+   * to go, which is exactly what a reader on a homepage does not want.
    *
-   * Where one is not, the roll number cannot be answered by us at all, so the
-   * form does what it did before and sends the reader to their board's page,
-   * which carries the official portal link and what has actually been
-   * announced. Silently discarding the input, which is what this used to do,
-   * was the worst of both.
+   * Every board now gets a reply here, including "we have not published this
+   * board's gazette yet", which `lookupResult` already produces as
+   * `dataset-unavailable` and the card renders with a link onward.
    */
   const [lookup, setLookup] = useState<LookupActionState>({ status: 'idle' })
   const [looking, setLooking] = useState(false)
@@ -98,12 +99,16 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
     e.preventDefault()
     if (!chosen) return
 
-    const dataset = datasetForBoard(chosen.slug)
-    if (!dataset) {
-      router.push(targetHref)
-      return
-    }
-
+    /*
+     * NO NAVIGATION. The answer belongs on the page the question was asked on,
+     * whatever the answer is.
+     *
+     * This used to bail out to the board page whenever no dataset existed, so
+     * selecting Lahore and pressing Search moved you somewhere you had not
+     * asked to go. `lookupResult` already returns `dataset-unavailable` for
+     * exactly that case, and the card says so plainly with a link onward — one
+     * path, one set of words to keep truthful.
+     */
     const form = new FormData()
     form.set('board', chosen.slug)
     form.set('rollNumber', rollNumber)
@@ -413,7 +418,7 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
                     <span>
                       {datasetForBoard(chosen?.slug ?? '')
                         ? 'Read from this board’s own gazette. Your roll number is sent once to look it up — it is never stored, logged, or put in the page address.'
-                        : 'This board has no published gazette here yet, so the form takes you to its page, where the official portal link and verified status are.'}
+                        : 'We have not published this board’s gazette yet. Search anyway — the answer will say so right here, with a link to the board’s own portal.'}
                     </span>
                   </div>
 
@@ -449,6 +454,7 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
                           }
                           gazetteSourceUrl={datasetForBoard(chosen.slug)?.sourceUrl ?? ''}
                           gazetteCheckedOn={datasetForBoard(chosen.slug)?.checkedAt ?? ''}
+                          boardPageHref={targetHref}
                         />
                       </div>
                     ) : null}
