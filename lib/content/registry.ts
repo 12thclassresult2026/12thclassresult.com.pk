@@ -202,7 +202,7 @@ const BUILT_PAGES: PageEntry[] = [
     title: '12th Class Rechecking in Pakistan — Fees, Rules & Deadlines',
     h1: 'Rechecking your 12th class result',
     description:
-      'What rechecking actually checks — and what it never does — with each Punjab board\'s published fee, deadline, process, and verified rules for 12th class.',
+      "What rechecking actually checks — and what it never does — with each Punjab board's published fee, deadline, process, and verified rules for 12th class.",
     seoTarget: {
       primaryKeyword: '12th class rechecking',
       secondaryKeywords: [

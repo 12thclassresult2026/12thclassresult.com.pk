@@ -21,12 +21,26 @@ const CSP = [
   "object-src 'none'",
   "frame-ancestors 'none'",
   "form-action 'self'",
-  "img-src 'self' data: blob:",
+  // google-analytics.com is here for GA's pixel fallback, which some browsers
+  // and blockers still take instead of the fetch beacon.
+  "img-src 'self' data: blob: https://www.google-analytics.com",
   "font-src 'self' data:",
   "style-src 'self' 'unsafe-inline'",
-  "script-src 'self' 'unsafe-inline'",
+  /*
+   * GA4 needs three origins and gets exactly three.
+   *
+   * This policy was 'self' only, which is why Cloudflare's auto-injected Web
+   * Analytics beacon was silently blocked. Opening it is a real decision, not
+   * a formality: every origin named here can execute script on a page that
+   * renders students' results.
+   *
+   * What is NOT added: no wildcard, no tag-manager container, no ad or
+   * remarketing origin. If a fourth origin ever seems necessary, that is the
+   * moment to ask what it would be reading.
+   */
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",
   "frame-src 'self'",
-  "connect-src 'self'",
+  "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com",
   'upgrade-insecure-requests',
 ].join('; ')
 

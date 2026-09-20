@@ -161,7 +161,15 @@ const RECORD_MODULES = /from '@\/lib\/gazettes\/(lookup|normalize|parser|store)/
 
 function recordHandlingFiles(): string[] {
   return sourceFiles().filter((file) => {
-    const source = readFileSync(file, 'utf8')
+    /*
+     * CODE ONLY. The layout carries a comment explaining why mounting GA
+     * there is safe, and that sentence names GazetteRecord. Classifying on raw
+     * text pulled the layout into this set, which then failed the metadata
+     * rule on its own `export const metadata` — a line every layout has and
+     * that contains no student. A scan that punishes a file for documenting
+     * the rule teaches people to delete the documentation.
+     */
+    const source = codeOnly(readFileSync(file, 'utf8'))
     return RECORD_MODULES.test(source) || /\bGazetteRecord\b/.test(source)
   })
 }
@@ -243,5 +251,85 @@ describe('the lookup contract itself', () => {
       compositeKey({ ...base, examination: 'second-annual' }),
     ])
     expect(keys.size).toBe(4)
+  })
+})
+
+describe('analytics can never be handed a student', () => {
+  /*
+   * GA4 is mounted in the layout. That is safe only because of a chain of
+   * facts, and a test is the only thing that keeps the chain intact:
+   *
+   *   the roll number is POSTed in a Server Action body, so it is not in a URL
+   *   -> GA's page_location has no identifier to read
+   *   -> the result renders without a navigation, so no page view is tied to it
+   *
+   * Break any link — move the lookup to a query string, add a gtag call beside
+   * a record — and personal data starts flowing to a third party.
+   */
+  it('mounts analytics only in the layout, never in a component that sees a record', () => {
+    const GA_CALL = /\b(gtag\s*\(|dataLayer\s*\.push|googletagmanager)/i
+
+    const offenders: string[] = []
+    for (const file of sourceFiles()) {
+      const source = codeOnly(readFileSync(file, 'utf8'))
+      if (!GA_CALL.test(source)) continue
+
+      const relative = file.replace(REPO_ROOT, '').replace(/\\/g, '/').replace(/^\//, '')
+      // The layout mounts it; the analytics component is it. Anything else
+      // that touches GA must not also touch a record.
+      const allowed = relative === 'app/layout.tsx' || relative.startsWith('components/analytics/')
+      if (allowed) continue
+
+      offenders.push(relative)
+    }
+
+    expect(
+      offenders,
+      `analytics code outside the layout and components/analytics/:\n  ${offenders.join('\n  ')}`,
+    ).toEqual([])
+  })
+
+  it('never puts a roll number in a URL, which is what keeps GA blind', () => {
+    /*
+     * The lookup must stay a Server Action. The day it becomes a route with
+     * `?roll=` is the day every student's identifier is in GA's page_location,
+     * in browser history and in any referrer the page emits.
+     */
+    const action = readFileSync(
+      join(REPO_ROOT, 'app/results/[board]/12th-class/lookup-action.ts'),
+      'utf8',
+    )
+    expect(action.startsWith("'use server'")).toBe(true)
+    expect(action).toContain('formData')
+
+    // And no component may build a link carrying one.
+    const ROLL_IN_URL = /(?:href|action|push)\s*[=(]\s*[`'"][^`'"]*[?&]roll/i
+    const offenders: string[] = []
+    for (const file of sourceFiles()) {
+      const source = codeOnly(readFileSync(file, 'utf8'))
+      if (ROLL_IN_URL.test(source)) {
+        offenders.push(file.replace(REPO_ROOT, '').replace(/\\/g, '/'))
+      }
+    }
+    expect(
+      offenders,
+      `a roll number is being put into a URL:\n  ${offenders.join('\n  ')}`,
+    ).toEqual([])
+  })
+
+  it('opens the CSP to named analytics origins only, never a wildcard host', () => {
+    const config = readFileSync(join(REPO_ROOT, 'next.config.ts'), 'utf8')
+    const scriptSrc = /"script-src ([^"]*)"/.exec(config)?.[1] ?? ''
+
+    // A wildcard in script-src would let anything on that domain run on a page
+    // that renders students' results.
+    expect(scriptSrc).not.toMatch(/https:\/\/\*/)
+    expect(scriptSrc).not.toContain("'unsafe-eval'")
+    for (const origin of scriptSrc.split(/\s+/).filter((t) => t.startsWith('https://'))) {
+      expect(
+        ['https://www.googletagmanager.com'],
+        `${origin} was added to script-src; confirm it should be able to run script here`,
+      ).toContain(origin)
+    }
   })
 })

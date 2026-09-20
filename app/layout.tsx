@@ -3,6 +3,7 @@ import { Caveat, Inter, Noto_Nastaliq_Urdu } from 'next/font/google'
 
 import './globals.css'
 
+import { GoogleAnalytics } from '@/components/analytics/google-analytics'
 import { FloatingSocialBar } from '@/components/layout/floating-social-bar'
 import { SiteFooter } from '@/components/layout/site-footer'
 import { SiteHeader } from '@/components/layout/site-header'
@@ -54,6 +55,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <SiteFooter />
+        {/*
+          Mounted in the layout and nowhere near the result path. A roll number
+          is POSTed in a Server Action body and never reaches a URL, so there is
+          no identifier for GA to read; the privacy suite fails the build if
+          `gtag(` ever appears in a file that handles a GazetteRecord.
+        */}
+        <GoogleAnalytics measurementId="G-JQS6JC9MZ1" />
         <FloatingSocialBar />
         <JsonLdScript nodes={[organizationSchema(), webSiteSchema()]} />
       </body>
