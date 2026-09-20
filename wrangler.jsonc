@@ -54,11 +54,30 @@
   // failed open, www emits noindex plus an apex canonical rather than quietly
   // duplicating the site.
 
-  // No D1, KV or R2 binding is declared: nothing in this foundation needs one
-  // (section 8). The account currently has no D1 databases and no KV
-  // namespaces, and R2 is not enabled. Add a binding only against a real
-  // requirement, using ids returned by the authenticated account - never
-  // invented ones, and never a placeholder.
+  // GAZETTE LOOKUP STORE.
+  //
+  // The id below was returned by `wrangler d1 create` on the authenticated
+  // account - never invented, never a placeholder.
+  //
+  // WHY D1 AND NOT STATIC FILES. The dataset is 138,617 real students. Shipping
+  // it as JSON shards in `public/` would be simpler and would also hand anyone
+  // who enumerates the shard names the entire cohort. D1 answers one exact
+  // `board:year:examination:rollNumber` and nothing else - there is no list, no
+  // prefix scan and no export, which is what keeps a lookup from becoming a
+  // bulk download of minors' results.
+  //
+  // One database per board+year, per docs/architecture-decisions/gazette-storage.md.
+  "d1_databases": [
+    {
+      "binding": "GAZETTE_DB",
+      "database_name": "12thclassresult-gazette",
+      "database_id": "ee74df2a-69e2-4ab3-9e54-31450203f92b",
+    },
+  ],
+
+  // No KV or R2 binding is declared: nothing needs one yet. R2 is where the
+  // original gazette PDFs belong when they are archived - bulk, cold, and never
+  // on the lookup path.
   "vars": {
     "NEXT_PUBLIC_SITE_ORIGIN": "https://12thclassresult.com.pk",
   },

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { ResultCommandCenter } from '@/components/result/command-center'
+import { RollNumberLookup } from '@/components/result/roll-number-lookup'
 import { SourceObservations } from '@/components/result/source-observations'
 import { Breadcrumbs } from '@/components/seo/breadcrumbs'
 import { JsonLdScript } from '@/components/seo/json-ld'
@@ -13,6 +14,7 @@ import { CURRENT_RESULT_YEAR, getBoardBySlug, routedBoards } from '@/lib/board/r
 import { breadcrumbSchema, webPageSchema } from '@/lib/schema/json-ld'
 import { capabilityLabel } from '@/lib/result/capability'
 import { getPageByPath } from '@/lib/content/registry'
+import { datasetForBoard } from '@/lib/gazettes/datasets'
 import { linkableSources } from '@/lib/result-sources/registry'
 import { metadataForPage } from '@/lib/seo/metadata'
 
@@ -60,6 +62,7 @@ export default async function BoardResultPage({ params }: { params: Promise<{ bo
 
   const sources = linkableSources(board.id)
   const year = CURRENT_RESULT_YEAR
+  const dataset = datasetForBoard(board.slug)
 
   return (
     <>
@@ -104,6 +107,17 @@ export default async function BoardResultPage({ params }: { params: Promise<{ bo
               ))}
             </ul>
           </section>
+        ) : null}
+
+        {dataset ? (
+          <RollNumberLookup
+            boardSlug={board.slug}
+            boardName={board.shortName}
+            year={dataset.year}
+            examinationLabel={dataset.examinationLabel}
+            gazetteSourceUrl={dataset.sourceUrl}
+            gazetteCheckedOn={dataset.checkedAt}
+          />
         ) : null}
 
         <PerGroupStatus board={board} year={year} />
