@@ -1,9 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+import { startTransition, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+
+import type { LookupActionState } from '@/app/results/[board]/12th-class/lookup-action'
+
+import { lookupRollNumber } from '@/app/results/[board]/12th-class/lookup-action'
+import { GazetteResult } from '@/components/result/gazette-result'
+import { datasetForBoard } from '@/lib/gazettes/datasets'
 
 import {
   AlertTriangleIcon,
@@ -73,10 +79,41 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
   const targetHref = chosen?.hasPage ? `/results/${chosen.slug}/12th-class` : '/boards'
   const smsInfo = getBoardSmsInfo(selectedSlug)
 
+  /*
+   * TWO OUTCOMES, AND THE BOARD DECIDES WHICH.
+   *
+   * Where a gazette dataset is published, the result appears right here — the
+   * reader asked a question on this page and gets the answer on this page.
+   *
+   * Where one is not, the roll number cannot be answered by us at all, so the
+   * form does what it did before and sends the reader to their board's page,
+   * which carries the official portal link and what has actually been
+   * announced. Silently discarding the input, which is what this used to do,
+   * was the worst of both.
+   */
+  const [lookup, setLookup] = useState<LookupActionState>({ status: 'idle' })
+  const [looking, setLooking] = useState(false)
+
   function handleRollSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!chosen) return
-    router.push(targetHref)
+
+    const dataset = datasetForBoard(chosen.slug)
+    if (!dataset) {
+      router.push(targetHref)
+      return
+    }
+
+    const form = new FormData()
+    form.set('board', chosen.slug)
+    form.set('rollNumber', rollNumber)
+
+    setLooking(true)
+    startTransition(async () => {
+      const next = await lookupRollNumber({ status: 'idle' }, form)
+      setLookup(next)
+      setLooking(false)
+    })
   }
 
   function handleNameSubmit(e: React.FormEvent) {
@@ -365,7 +402,7 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
                         className="flex h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-[#007054] px-7 text-xs font-bold whitespace-nowrap text-white shadow-sm transition-all hover:bg-[#005842] sm:text-sm md:w-auto"
                       >
                         <SearchIcon width={16} height={16} />
-                        <span>Search Result</span>
+                        <span>{looking ? 'Searching…' : 'Search Result'}</span>
                       </button>
                     </div>
                   </div>
@@ -374,10 +411,47 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
                   <div className="flex items-center justify-center gap-2 pt-1 text-center text-[11px] text-slate-500 sm:text-xs">
                     <ShieldCheckIcon width={15} height={15} className="shrink-0 text-[#007054]" />
                     <span>
-                      Takes you to your board&rsquo;s page, where its official portal link and
-                      verified status are. Your roll number is entered on the board&rsquo;s own
-                      site, never here.
+                      {datasetForBoard(chosen?.slug ?? '')
+                        ? 'Read from this board’s own gazette. Your roll number is sent once to look it up — it is never stored, logged, or put in the page address.'
+                        : 'This board has no published gazette here yet, so the form takes you to its page, where the official portal link and verified status are.'}
                     </span>
+                  </div>
+
+                  {/*
+                    The answer appears on the page the question was asked on.
+                    `aria-live` so it is announced rather than silently replacing
+                    what was there.
+                  */}
+                  <div aria-live="polite">
+                    {lookup.status === 'rate-limited' ? (
+                      <p className="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs text-slate-700 sm:text-sm">
+                        That is a lot of lookups in a short time. Please wait{' '}
+                        {lookup.retryAfterSeconds} seconds and try again — the limit is there to
+                        stop automated collection of other students’ results.
+                      </p>
+                    ) : null}
+
+                    {lookup.status === 'unconfigured' ? (
+                      <p className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs text-slate-700 sm:text-sm">
+                        The result store is not reachable from this environment, so nothing was
+                        looked up. This is not a statement about your result.
+                      </p>
+                    ) : null}
+
+                    {lookup.status === 'done' && chosen ? (
+                      <div className="mt-2 text-left">
+                        <GazetteResult
+                          outcome={lookup.outcome}
+                          boardName={chosen.shortName}
+                          year={datasetForBoard(chosen.slug)?.year ?? 2025}
+                          examinationLabel={
+                            datasetForBoard(chosen.slug)?.examinationLabel ?? 'HSSC Part-II'
+                          }
+                          gazetteSourceUrl={datasetForBoard(chosen.slug)?.sourceUrl ?? ''}
+                          gazetteCheckedOn={datasetForBoard(chosen.slug)?.checkedAt ?? ''}
+                        />
+                      </div>
+                    ) : null}
                   </div>
                 </form>
               )}
