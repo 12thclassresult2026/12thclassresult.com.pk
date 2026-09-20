@@ -481,12 +481,30 @@ export function GazetteResult({
   }
 
   return (
-    <div className="animate-in fade-in mt-6 space-y-4 duration-300">
+    <div className="animate-in fade-in mt-6 space-y-3.5 duration-300">
       {/* Trigger celebratory confetti for passing result */}
       {isPassing && <ConfettiEffect />}
 
-      {/* ── LUXURY DARK RESULT CARD ── */}
-      <div className="relative mx-auto max-w-lg overflow-hidden rounded-3xl border border-slate-700/80 bg-gradient-to-b from-[#0F1D40] via-[#0B1329] to-[#070C1B] p-6 text-left text-white shadow-2xl sm:p-8">
+      {/* Official Roll Number Notice Banner */}
+      <div className="mx-auto flex max-w-md items-center gap-2.5 rounded-xl border border-emerald-200 bg-emerald-50/90 px-3.5 py-2 text-left text-xs text-emerald-900 shadow-2xs">
+        <svg
+          className="h-4 w-4 shrink-0 text-emerald-600"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <circle cx="12" cy="12" r="10" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4" />
+        </svg>
+        <span className="text-[11.5px] leading-snug">
+          Use your official roll number as mentioned on your admit card. Verified from official
+          board gazette records.
+        </span>
+      </div>
+
+      {/* ── LUXURY DARK RESULT CARD (matching 11thclassresult house style) ── */}
+      <div className="relative mx-auto max-w-md overflow-hidden rounded-3xl border border-slate-700/80 bg-gradient-to-b from-[#0F1D40] via-[#0B1329] to-[#070C1B] p-6 text-white shadow-2xl sm:p-8">
         {/* Top Bar: Brand Watermark & Status Pill */}
         <div className="flex items-center justify-between">
           <span className="font-mono text-[11px] font-bold tracking-wider text-slate-400">
@@ -507,7 +525,7 @@ export function GazetteResult({
         <div className="mt-6 text-center">
           {isPassing ? (
             <p className="text-[11px] font-extrabold tracking-[0.25em] text-[#F59E0B] uppercase">
-              ★ CONGRATULATIONS ★
+              ✦ CONGRATULATIONS ✦
             </p>
           ) : (
             <p className="text-[11px] font-extrabold tracking-[0.25em] text-slate-400 uppercase">
@@ -519,7 +537,7 @@ export function GazetteResult({
             {record.candidateName ?? `Roll No ${record.rollNumber}`}
           </h2>
 
-          <p className="mt-1 text-xs font-semibold text-slate-300">Roll No {record.rollNumber}</p>
+          <p className="mt-1 text-xs font-medium text-slate-300">Roll No: {record.rollNumber}</p>
         </div>
 
         {/* 2x2 Highlight Metric Boxes */}
@@ -563,7 +581,7 @@ export function GazetteResult({
         <div className="mt-5 text-center">
           <p className="text-sm font-bold text-white">{boardName}</p>
           <p className="text-xs text-slate-400">
-            12th Class (2nd Year) • {examinationLabel} {year}
+            12th Class (2nd Year) · {examinationLabel} {year}
           </p>
         </div>
 
@@ -606,34 +624,22 @@ export function GazetteResult({
           <p className="font-mono text-xs font-bold tracking-wider text-emerald-400">
             12thclassresult.com.pk
           </p>
-          <p className="text-[10px] text-slate-500">Check your result in one tap</p>
+          <p className="text-[10px] text-slate-500">Check your result in one tap.</p>
         </div>
       </div>
 
-      {/* ── ACTION BUTTONS: Copy, Share, Download ── */}
-      <div className="mx-auto flex max-w-lg flex-wrap items-center justify-center gap-2 pt-1">
-        <button
-          type="button"
-          onClick={handleCopy}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs transition-colors hover:border-[#005B4C] hover:text-[#005B4C] active:scale-95"
-        >
-          <svg
-            className="h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
-          </svg>
-          <span>{copied ? 'Copied to Clipboard!' : 'Copy Result'}</span>
-        </button>
+      {/* Gazette Reference Subtext */}
+      <p className="mx-auto max-w-md text-center text-[11px] leading-relaxed text-slate-500">
+        Gazette declared reference — not a Detailed Marks Certificate (DMC). Errors and Omissions
+        are EXCEPTED. Verify important details on your board’s official website.
+      </p>
 
+      {/* ── ACTION BUTTONS ROW: Share Card (Green), Download (White), Copy (White) ── */}
+      <div className="mx-auto flex max-w-md flex-wrap items-center justify-center gap-2 pt-0.5">
         <button
           type="button"
           onClick={handleShare}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs transition-colors hover:border-[#005B4C] hover:text-[#005B4C] active:scale-95"
+          className="flex items-center gap-1.5 rounded-xl bg-[#005B4C] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-[#00473B] active:scale-[0.98]"
         >
           <svg
             className="h-4 w-4"
@@ -648,14 +654,14 @@ export function GazetteResult({
             <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
             <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
           </svg>
-          <span>Share</span>
+          <span>Share Card</span>
         </button>
 
         <button
           type="button"
           onClick={handleDownload}
           disabled={isDownloading}
-          className="inline-flex items-center gap-1.5 rounded-xl bg-[#005B4C] px-5 py-2.5 text-xs font-bold text-white shadow-xs transition-colors hover:bg-[#00473B] active:scale-95 disabled:opacity-50"
+          className="flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs transition-all hover:bg-slate-50 active:scale-[0.98] disabled:opacity-60"
         >
           <svg
             className="h-4 w-4"
@@ -670,12 +676,66 @@ export function GazetteResult({
               d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
             />
           </svg>
-          <span>{isDownloading ? 'Generating...' : 'Download Card'}</span>
+          <span>{isDownloading ? 'Preparing…' : 'Download'}</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={handleCopy}
+          className="flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs transition-all hover:bg-slate-50 active:scale-[0.98]"
+        >
+          {copied ? (
+            <>
+              <svg
+                className="h-4 w-4 text-emerald-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span className="font-bold text-emerald-700">Copied!</span>
+            </>
+          ) : (
+            <>
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+              </svg>
+              <span>Copy</span>
+            </>
+          )}
         </button>
       </div>
 
-      {/* Gazette Verbatim Details & Disclaimer */}
-      <div className="mx-auto max-w-lg space-y-2 pt-1 text-center">
+      {/* Source Provenance Line */}
+      <p className="mx-auto max-w-md text-center text-[11px] text-slate-500">
+        Source: official-{record.sourceDatasetId}-roll-{record.rollNumber} • Page{' '}
+        {record.sourcePage} (checked {gazetteCheckedOn})
+      </p>
+
+      {/* Check Another Roll Number Button */}
+      {onReset && (
+        <div className="text-center">
+          <button
+            type="button"
+            onClick={onReset}
+            className="inline-flex items-center gap-1 text-xs font-bold text-[#0069D9] transition-colors hover:text-[#004fa8] hover:underline"
+          >
+            <span>← Check another roll number</span>
+          </button>
+        </div>
+      )}
+
+      {/* Exact Gazette Details Accordion */}
+      <div className="mx-auto max-w-md">
         <details className="rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-2 text-left">
           <summary className="cursor-pointer text-xs font-semibold text-slate-700 hover:text-slate-900">
             Show the gazette’s exact wording
@@ -683,31 +743,29 @@ export function GazetteResult({
           <pre className="mt-2 rounded-lg border border-slate-200 bg-white p-2.5 font-mono text-xs whitespace-pre-wrap text-slate-600">
             {record.rawResultStatus}
           </pre>
+          <p className="mt-2 text-[11px] text-slate-500">
+            Errors and Omissions are EXCEPTED. Read from {boardName}’s official gazette, page{' '}
+            {record.sourcePage}.{' '}
+            <a
+              href={gazetteSourceUrl}
+              rel="noopener nofollow"
+              target="_blank"
+              className="font-semibold text-[#0069D9] underline underline-offset-2"
+            >
+              Open original gazette
+            </a>
+          </p>
         </details>
+      </div>
 
-        <p className="text-[11px] leading-relaxed text-slate-500">
-          This is a gazette notice, not a Detailed Marks Certificate. Errors and Omissions are
-          EXCEPTED. Read from {boardName}’s official gazette, page {record.sourcePage}, checked{' '}
-          {gazetteCheckedOn}.{' '}
-          <a
-            href={gazetteSourceUrl}
-            rel="noopener nofollow"
-            target="_blank"
-            className="font-semibold text-[#0069D9] underline underline-offset-2"
-          >
-            Open original gazette
-          </a>
-        </p>
-
-        {onReset && (
-          <button
-            type="button"
-            onClick={onReset}
-            className="mt-1 text-xs font-bold text-[#0069D9] transition-colors hover:text-[#004fa8]"
-          >
-            ← Check another roll number
-          </button>
-        )}
+      {/* Bottom Privacy & Official Sources Trust Bar */}
+      <div className="flex items-center justify-center gap-6 pt-1 text-[11px] font-medium text-slate-400">
+        <span className="flex items-center gap-1">
+          <span>🔒</span> Privacy-safe search
+        </span>
+        <span className="flex items-center gap-1">
+          <span>🌐</span> Official sources only
+        </span>
       </div>
     </div>
   )
