@@ -68,7 +68,7 @@ describe('metadata uniqueness across the whole inventory', () => {
     for (const page of PAGES) {
       expect(page.title.length).toBeLessThanOrEqual(70)
       expect(page.description.length).toBeGreaterThanOrEqual(50)
-      expect(page.description.length).toBeLessThanOrEqual(200)
+      expect(page.description.length).toBeLessThanOrEqual(160)
     }
   })
 })

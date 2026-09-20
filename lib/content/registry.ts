@@ -40,14 +40,14 @@ function boardDescription(board: (typeof BOARDS)[number]): string {
   switch (board.accessModel) {
     case 'gazette-only':
       return perGroup
-        ? `${name} has no online roll-number checker, and declares each group on its own date. Where to find your group's gazette, and what has actually been announced.`
-        : `${name} has no online roll-number checker — its HSSC Part-II results are published as gazette files. Where to find yours, and what has been verified.`
+        ? `${name} declares each group on its own date via gazette. Find your group's official gazette, verified announcement dates, and result status.`
+        : `Find ${name} HSSC Part-II results published via official gazette files. Access download links, verified dates, and board announcement details.`
     case 'session-rotating-portal':
-      return `${name} serves one examination session at a time, so a saved link can quietly point at the wrong class. How to reach the right HSSC Part-II result, and what has been verified.`
+      return `Check the ${name} HSSC Part-II result: direct portal link, required roll number details, verified session status, and official announcement updates.`
     case 'unverified':
       return `What could and could not be verified about how ${name} publishes its HSSC Part-II result, and the board's own website to check it against.`
     case 'roll-number-portal':
-      return `Check the ${name} HSSC Part-II result on the board's own portal: what it asks you for, what has actually been announced, and where each fact came from.`
+      return `Check the ${name} HSSC Part-II result on the board's own portal: required details, verified announcement dates, and official source links.`
     default: {
       const exhaustive: never = board.accessModel
       return String(exhaustive)
@@ -69,7 +69,7 @@ const BUILT_PAGES: PageEntry[] = [
     title: '12th Class Result 2026 — Boards, Dates & Official Sources',
     h1: 'Check your 12th class result',
     description:
-      'Find your 12th class (HSSC Part-II) result board by board, with the official portal for each, what each board actually asks for, and what has and has not been announced.',
+      'Check your 12th class (HSSC Part-II) result board by board. Find official portals, requirements, roll number search, and verified result dates for all boards.',
     seoTarget: {
       primaryKeyword: '12thclassresult.com.pk',
       secondaryKeywords: ['12th class result website', 'hssc part 2 result portal'],
@@ -98,7 +98,7 @@ const BUILT_PAGES: PageEntry[] = [
     title: '12th Class Result — HSSC Part-II Result by Board',
     h1: '12th Class Result (HSSC Part-II)',
     description:
-      'The 12th class result explained board by board: which official portal serves each board, what it asks for, and how to tell an announced result from an expected one.',
+      'The 12th class result explained board by board: official portals, required credentials, announced dates, and how to verify your HSSC Part-II result online.',
     seoTarget: {
       // THE head term for this site. Owned here and nowhere else.
       primaryKeyword: '12th class result',
@@ -153,7 +153,7 @@ const BUILT_PAGES: PageEntry[] = [
     title: 'Pakistan Education Boards — 12th Class Result Portals',
     h1: 'Education Boards',
     description:
-      'Every board covered here, with its official website, the portal that actually serves HSSC Part-II results, and an honest note on what has been verified for each.',
+      'Every board covered here, with its official website, the portal that serves HSSC Part-II results, and an honest note on what has been verified for each.',
     seoTarget: {
       primaryKeyword: 'education boards pakistan 12th class result',
       secondaryKeywords: ['bise boards list', 'punjab boards result portals'],
@@ -202,7 +202,7 @@ const BUILT_PAGES: PageEntry[] = [
     title: '12th Class Rechecking in Pakistan — Fees, Rules & Deadlines',
     h1: 'Rechecking your 12th class result',
     description:
-      'What rechecking actually checks — and what it never does — with each Punjab board’s published fee, deadline and process, and an honest note on which figures apply to 12th class.',
+      'What rechecking actually checks — and what it never does — with each Punjab board\'s published fee, deadline, process, and verified rules for 12th class.',
     seoTarget: {
       primaryKeyword: '12th class rechecking',
       secondaryKeywords: [
@@ -265,7 +265,7 @@ const BUILT_PAGES: PageEntry[] = [
     title: 'How 12th Class Percentage Is Calculated in Pakistan',
     h1: 'How your 12th class percentage is calculated',
     description:
-      'HSSC marks are out of a total, not a CGPA — so the CGPA × 9.5 formula in circulation does not apply in Pakistan. The actual rule, what counts toward it, and why no grade is shown.',
+      'HSSC marks are out of a total, not a CGPA. The actual formula for Pakistani 12th class percentage, what counts toward total marks, and why no grade is shown.',
     seoTarget: {
       primaryKeyword: '12th class percentage calculation',
       secondaryKeywords: [
@@ -347,7 +347,7 @@ const BUILT_PAGES: PageEntry[] = [
     title: 'About 12thClassResult.com.pk',
     h1: 'About this site',
     description:
-      'An independent information service for Pakistani HSSC Part-II results. What it is, what it deliberately is not, who operates it, and how it stays independent of the boards.',
+      'An independent information service for Pakistani HSSC Part-II results: our verification standards, editorial independence, and how this service operates.',
     seoTarget: {
       primaryKeyword: 'about 12thclassresult.com.pk',
       secondaryKeywords: ['who runs 12thclassresult'],
