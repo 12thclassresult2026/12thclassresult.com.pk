@@ -443,7 +443,6 @@ export function SiteHeader() {
 
           {/* Right Action Button (Check Result) + the menu a phone gets */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <MobileNav />
             <Link
               href="/#check-result"
               className="inline-flex items-center gap-1.5 rounded-xl bg-[#005B4C] px-4 py-2 text-xs font-bold text-white shadow-xs transition-all hover:bg-[#00473B] hover:shadow-md active:scale-95"
@@ -451,6 +450,7 @@ export function SiteHeader() {
               <span>Check Result</span>
               <span aria-hidden="true">&rarr;</span>
             </Link>
+            <MobileNav />
           </div>
 
           {/* Full Mega Menu Dropdown */}
