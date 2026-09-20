@@ -8,7 +8,7 @@ import {
   ClockIcon,
   ShieldCheckIcon,
 } from '@/components/ui/icons'
-import { BOARDS } from '@/lib/board/registry'
+import { BOARDS, boardPageHref } from '@/lib/board/registry'
 import { PROVINCE_LABELS } from '@/lib/board/types'
 
 const STATUS_DEFINITIONS = [
@@ -346,7 +346,7 @@ export function ResultScheduleSection() {
                       {/* Actions Column */}
                       <td className="px-6 py-4 text-right sm:px-8">
                         <Link
-                          href={`/results/${board.slug}/12th-class`}
+                          href={boardPageHref(board.slug)}
                           className="inline-flex items-center gap-1.5 font-bold text-[#007054] transition-colors hover:text-[#005a43] hover:underline"
                         >
                           <span>Details</span>

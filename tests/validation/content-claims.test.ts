@@ -2,7 +2,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
-import { BOARDS, publishedBoards } from '@/lib/board/registry'
+import { BOARDS, boardPageHref, publishedBoards } from '@/lib/board/registry'
 
 /**
  * What the page SAYS, checked against what is true.
@@ -328,5 +328,89 @@ describe('no result date is published that the registry does not hold', () => {
     }
     // Recorded, not asserted as a fixed number — boards will announce over time.
     expect(confirmed.length).toBeLessThanOrEqual(BOARDS.length)
+  })
+})
+
+/** Strip comments, so the note explaining a rule cannot trip the rule. */
+function codeOnly(source: string): string {
+  return source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '')
+}
+describe('the result card states only what the gazette states', () => {
+  /*
+   * This rule exists because the card once failed it in production.
+   *
+   * A redesign brought over a sibling site's card and with it a literal
+   * `const totalMarks = 1100` and a hand-written A+/A/B/C/D/E ladder. A real
+   * student's card then read `758 / 1100`, `68.91%`, grade `B` — one figure
+   * from the gazette and three from this file.
+   *
+   * The gazette prints its grade table for two mark schemes and never records
+   * which one a candidate was marked under, and 51% of this dataset sits where
+   * the two disagree. So the numbers are not merely unsourced, they are wrong
+   * for about half the students who would screenshot them.
+   */
+  const CARD = join(REPO_ROOT, 'components/result/gazette-result.tsx')
+
+  it('hard-codes no total-marks figure', () => {
+    const source = codeOnly(readFileSync(CARD, 'utf8'))
+    expect(source, 'the card is asserting a marks total the gazette does not state').not.toMatch(
+      /\b(totalMarks|total_marks)\s*=\s*\d/,
+    )
+    expect(source).not.toMatch(/\b1100\b|\b1200\b/)
+  })
+
+  it('derives no grade or percentage from marks', () => {
+    const source = codeOnly(readFileSync(CARD, 'utf8'))
+    expect(source, 'a grade ladder is back in the result card').not.toMatch(
+      /\bgrade\s*=\s*['\"`]A\+?['\"`]/i,
+    )
+    expect(source, 'the card is computing a percentage').not.toMatch(/\*\s*100\s*\)?\.toFixed/)
+  })
+})
+
+describe('every board link resolves to a page that exists', () => {
+  /*
+   * Found by driving the live homepage: Next prefetched
+   * `/results/faisalabad-board/12th-class` on every visit and got a 404,
+   * because three components built that URL straight from a slug while
+   * faisalabad's publishState is `planned`.
+   *
+   * The href must come from `boardPageHref`, which falls back to `/boards`.
+   */
+  it('builds no board result URL from a raw slug', () => {
+    const offenders: string[] = []
+    for (const file of userFacingSources()) {
+      const source = codeOnly(readFileSync(file, 'utf8'))
+      for (const line of source.split(/\r?\n/)) {
+        if (!/href\s*=\s*\{?`\/results\/\$\{/.test(line)) continue
+        /*
+         * TWO LEGITIMATE FORMS OF THE GUARD, and this rule accepts both.
+         *
+         * Either the href itself resolves through `boardPageHref`, or the list
+         * being mapped was already filtered — `routedBoards()` cannot yield a
+         * board without a page. `mobile-nav.tsx` uses the second form, and an
+         * earlier version of this test failed it, which would have taught the
+         * next person that the filter at the source does not count.
+         */
+        if (/hasPage|boardPageHref/.test(line)) continue
+        if (/routedBoards|publishedBoards/.test(source)) continue
+        offenders.push(`${relative(file)} :: ${line.trim()}`)
+      }
+    }
+    expect(
+      offenders,
+      `these build a board URL without checking the board has a page:\n  ${offenders.join('\n  ')}`,
+    ).toEqual([])
+  })
+
+  it('sends an unrouted board to the directory', () => {
+    for (const board of BOARDS) {
+      const href = boardPageHref(board.slug)
+      if (board.publishState === 'planned') {
+        expect(href, `${board.slug} is planned but links to a result page`).toBe('/boards')
+      } else {
+        expect(href).toBe(`/results/${board.slug}/12th-class`)
+      }
+    }
   })
 })

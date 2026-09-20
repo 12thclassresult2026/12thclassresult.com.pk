@@ -29,6 +29,7 @@ import {
   ZapIcon,
 } from '@/components/ui/icons'
 import type { BoardOption } from '@/components/result/board-finder'
+import { boardPageHref } from '@/lib/board/registry'
 import { getBoardSmsInfo, buildSmsHref } from '@/lib/board/sms-directory'
 
 /* -- 9 Popular Punjab Boards Matching Reference Screenshot -- */
@@ -847,7 +848,7 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
                 {PUNJAB_TOP_BOARDS.map((b) => (
                   <Link
                     key={b.slug}
-                    href={`/results/${b.slug}/12th-class`}
+                    href={boardPageHref(b.slug)}
                     className="group flex shrink-0 flex-col items-center gap-1 rounded-xl px-2 py-1.5 transition-all hover:bg-slate-50"
                   >
                     <div className="relative flex h-11 w-11 items-center justify-center rounded-full border border-slate-200/90 bg-white p-1 shadow-2xs transition-all duration-200 group-hover:scale-110 group-hover:border-[#007054] group-hover:shadow-xs sm:h-12 sm:w-12">

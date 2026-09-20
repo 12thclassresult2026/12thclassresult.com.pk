@@ -862,6 +862,21 @@ export function routedBoards(): Board[] {
   return BOARDS.filter((b) => b.publishState !== 'planned')
 }
 
+/**
+ * The href for a board's result page, or the directory when it has none.
+ *
+ * ONE RULE, ONE PLACE. Three components were building this URL from a slug
+ * with no check, and the homepage shipped a link to `faisalabad-board`, whose
+ * publishState is `planned` — so Next prefetched a 404 on every visit and any
+ * student who clicked the Faisalabad crest landed on an error page.
+ *
+ * `/boards` is the honest fallback: the board is still listed there, with its
+ * official site and the reason its page is not published yet.
+ */
+export function boardPageHref(slug: string): string {
+  const board = routedBoards().find((candidate) => candidate.slug === slug)
+  return board ? `/results/${board.slug}/12th-class` : '/boards'
+}
 export function boardsByProvince(province: Province): Board[] {
   return BOARDS.filter((b) => b.province === province)
 }

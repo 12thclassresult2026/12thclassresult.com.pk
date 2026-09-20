@@ -261,26 +261,28 @@ export function GazetteResult({
   const record = outcome.record
   const isPassing = record.resultStatus === 'passed'
   const obtainedMarks = record.obtainedMarks
-  const totalMarks = 1100
 
-  // Calculate percentage
-  let percentage = '—'
-  if (obtainedMarks != null && totalMarks > 0) {
-    percentage = ((obtainedMarks / totalMarks) * 100).toFixed(2) + '%'
-  }
-
-  // Calculate grade
-  let grade = '—'
-  if (obtainedMarks != null && totalMarks > 0) {
-    const pct = (obtainedMarks / totalMarks) * 100
-    if (pct >= 80) grade = 'A+'
-    else if (pct >= 70) grade = 'A'
-    else if (pct >= 60) grade = 'B'
-    else if (pct >= 50) grade = 'C'
-    else if (pct >= 40) grade = 'D'
-    else if (pct >= 33) grade = 'E'
-    else grade = 'F'
-  }
+  /*
+   * NO PERCENTAGE, NO GRADE, NO TOTAL. This is not an oversight.
+   *
+   * A previous version of this card printed `758 / 1100`, `68.91%` and grade
+   * `B`. Only the 758 came from the gazette. The 1100 was a literal in this
+   * file, and the grade came from an A+/A/B/C/D/E ladder invented here.
+   *
+   * The Gujranwala gazette publishes its grade table on page 4 for TWO mark
+   * schemes, 1100 and 1200, and a candidate row never records which one
+   * applies. Across this dataset 51% of students sit in the band where the
+   * two schemes disagree — so for about half of them, a printed grade would
+   * have been wrong, on a card built to be screenshotted and shared.
+   *
+   * The rest of the site already refuses this: the percentage calculator
+   * returns no grade or division for exactly this reason, and the research
+   * notes carry grade bands as 'several variants — unverified, not carried'.
+   *
+   * Percentage and grade belong on the board's DMC, which states the scheme.
+   * Restore them here only when a dataset records the total each candidate
+   * was marked out of — not before.
+   */
 
   const statusLabel = isPassing
     ? 'PASSED'
@@ -298,8 +300,7 @@ export function GazetteResult({
       `Roll No: ${record.rollNumber}`,
       `Board: ${boardName}`,
       `Status: ${statusLabel}`,
-      obtainedMarks != null ? `Marks: ${obtainedMarks} / ${totalMarks} (${percentage})` : '',
-      grade !== '—' ? `Grade: ${grade}` : '',
+      obtainedMarks != null ? `Marks obtained: ${obtainedMarks}` : '',
       record.institution ? `Institution: ${record.institution}` : '',
       `Verified at: https://12thclassresult.com.pk`,
     ]
@@ -317,7 +318,7 @@ export function GazetteResult({
 
   // Share card
   const handleShare = async () => {
-    const shareText = `🎉 12th Class Result - ${record.candidateName ?? 'Student'} | Roll No: ${record.rollNumber} | Marks: ${obtainedMarks ?? '—'}/${totalMarks} (${percentage}) | Grade: ${grade} | ${boardName}\n\nCheck at 12thclassresult.com.pk:`
+    const shareText = `🎉 12th Class Result - ${record.candidateName ?? 'Student'} | Roll No: ${record.rollNumber} | Marks obtained: ${obtainedMarks ?? '—'} | ${boardName}\n\nCheck at 12thclassresult.com.pk:`
     if (typeof navigator !== 'undefined' && navigator.share) {
       try {
         await navigator.share({
@@ -420,17 +421,18 @@ export function GazetteResult({
         ctx.fillText(label, x + w / 2, y + 80)
       }
 
+      // Two boxes, both read from the gazette. See the note above on why
+      // there is no TOTAL, PERCENTAGE or GRADE box on a shareable image.
       drawMetricBox(
         45,
         250,
         320,
         105,
         obtainedMarks != null ? String(obtainedMarks) : '—',
-        'OBTAINED',
+        'MARKS OBTAINED',
+        '#FBBF24',
       )
-      drawMetricBox(395, 250, 320, 105, String(totalMarks), 'TOTAL')
-      drawMetricBox(45, 375, 320, 105, percentage, 'PERCENTAGE', '#FBBF24')
-      drawMetricBox(395, 375, 320, 105, grade, 'GRADE', '#FBBF24')
+      drawMetricBox(395, 250, 320, 105, statusLabel, 'RESULT')
 
       // Board & Session
       ctx.fillStyle = '#FFFFFF'
@@ -540,42 +542,36 @@ export function GazetteResult({
           <p className="mt-1 text-xs font-medium text-slate-300">Roll No: {record.rollNumber}</p>
         </div>
 
-        {/* 2x2 Highlight Metric Boxes */}
+        {/*
+          Two figures, and both are in the gazette: the marks the board
+          recorded, and the status it declared. There is deliberately no
+          TOTAL, PERCENTAGE or GRADE box — see the note beside `obtainedMarks`
+          above. This card is made to be screenshotted and sent to family, so
+          a guessed grade would travel further than any correction could.
+        */}
         <div className="mt-6 grid grid-cols-2 gap-3">
-          {/* Obtained Marks */}
           <div className="rounded-2xl border border-slate-700/70 bg-slate-800/60 p-4 text-center shadow-inner backdrop-blur-sm">
-            <p className="text-2xl font-black text-white sm:text-3xl">
+            <p className="text-2xl font-black text-[#FBBF24] sm:text-3xl">
               {obtainedMarks != null ? obtainedMarks : '—'}
             </p>
             <p className="mt-1 text-[10px] font-bold tracking-widest text-slate-400 uppercase">
-              OBTAINED
+              Marks Obtained
             </p>
           </div>
 
-          {/* Total Marks */}
           <div className="rounded-2xl border border-slate-700/70 bg-slate-800/60 p-4 text-center shadow-inner backdrop-blur-sm">
-            <p className="text-2xl font-black text-white sm:text-3xl">{totalMarks}</p>
+            <p className="text-2xl font-black text-white sm:text-3xl">{statusLabel}</p>
             <p className="mt-1 text-[10px] font-bold tracking-widest text-slate-400 uppercase">
-              TOTAL
-            </p>
-          </div>
-
-          {/* Percentage */}
-          <div className="rounded-2xl border border-slate-700/70 bg-slate-800/60 p-4 text-center shadow-inner backdrop-blur-sm">
-            <p className="text-2xl font-black text-[#FBBF24] sm:text-3xl">{percentage}</p>
-            <p className="mt-1 text-[10px] font-bold tracking-widest text-slate-400 uppercase">
-              PERCENTAGE
-            </p>
-          </div>
-
-          {/* Grade */}
-          <div className="rounded-2xl border border-slate-700/70 bg-slate-800/60 p-4 text-center shadow-inner backdrop-blur-sm">
-            <p className="text-2xl font-black text-[#FBBF24] sm:text-3xl">{grade}</p>
-            <p className="mt-1 text-[10px] font-bold tracking-widest text-slate-400 uppercase">
-              GRADE
+              Result
             </p>
           </div>
         </div>
+
+        <p className="mt-3 text-center text-[11px] leading-relaxed text-slate-400">
+          Your percentage, grade and subject-wise marks are on your official DMC from the board. The
+          gazette entry above does not state which total these marks were awarded out of, so this
+          card does not calculate them.
+        </p>
 
         {/* Board & Session Details */}
         <div className="mt-5 text-center">
