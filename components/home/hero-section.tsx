@@ -153,7 +153,7 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
   }
 
   return (
-    <section className="relative overflow-hidden bg-[#F8FAF9] bg-[url('/images/hero-bg-mobile.webp')] bg-cover bg-center bg-no-repeat pt-8 pb-20 sm:bg-[url('/images/hero-bg.webp')] sm:pt-10 sm:pb-24 lg:pt-12 lg:pb-32">
+    <section className="relative overflow-hidden bg-[#F8FAF9] bg-[url('/images/hero-campus-v2-mobile.webp')] bg-cover bg-center bg-no-repeat pt-8 pb-20 sm:bg-[url('/images/hero-campus-v2.webp')] sm:pt-10 sm:pb-24 lg:pt-12 lg:pb-32">
       {/*
         THE LCP ELEMENT, AND WHY IT IS HANDLED BY HAND.
 
@@ -167,8 +167,8 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
         fall back on. The file on disk is the file a phone downloads, and the
         responsive choice has to be made here:
 
-          mobile   hero-bg-mobile.webp    768x429     44 KB
-          >= 640   hero-bg.webp          1376x768    147 KB
+          mobile   hero-campus-v2-mobile.webp    768x429     68 KB
+          >= 640   hero-campus-v2.webp           1376x768   213 KB
 
         These preload hints make the request start with the HTML instead of
         after the stylesheet. React hoists them into <head>; `media` keeps a
@@ -177,14 +177,14 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
       <link
         rel="preload"
         as="image"
-        href="/images/hero-bg-mobile.webp"
+        href="/images/hero-campus-v2-mobile.webp"
         media="(max-width: 639px)"
         fetchPriority="high"
       />
       <link
         rel="preload"
         as="image"
-        href="/images/hero-bg.webp"
+        href="/images/hero-campus-v2.webp"
         media="(min-width: 640px)"
         fetchPriority="high"
       />
