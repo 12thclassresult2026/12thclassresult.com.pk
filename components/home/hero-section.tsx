@@ -455,6 +455,10 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
                           gazetteSourceUrl={datasetForBoard(chosen.slug)?.sourceUrl ?? ''}
                           gazetteCheckedOn={datasetForBoard(chosen.slug)?.checkedAt ?? ''}
                           boardPageHref={targetHref}
+                          onReset={() => {
+                            setLookup({ status: 'idle' })
+                            setRollNumber('')
+                          }}
                         />
                       </div>
                     ) : null}
