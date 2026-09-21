@@ -209,18 +209,21 @@ describe('the unit ids are the ones Adsterra issued', () => {
   })
 })
 
-describe('the ad frame is the only place script-src is open', () => {
+describe('the Native Banner runs in a document of its own', () => {
   /*
-   * THE WHOLE SECURITY ARGUMENT FOR THE NATIVE BANNER RESTS ON THIS FILE.
+   * Adsterra rotates its delivery domains on purpose, so this unit cannot run
+   * under a named allow-list. It is framed from /ads/native.html, a static
+   * file that public/_headers gives a CSP of its own, so the loose policy it
+   * needs lives in a document holding no data rather than beside a result.
    *
-   * Adsterra rotates its delivery domains on purpose, so that unit cannot run
-   * under a named allow-list. Rather than open script-src on every page — the
-   * homepage included, which renders a named student's result — the unit is
-   * framed from /ads/native.html, a static file with a CSP of its own.
+   * The site's own script-src later had to open anyway for the Social Bar,
+   * which docks to the viewport and cannot be framed. These rules still earn
+   * their place: they keep this unit's code out of the pages that render
+   * results, and they are what lets the site policy be tightened again later
+   * without the Native Banner silently going blank.
    *
-   * If any part of that arrangement drifts, the result is not a broken ad. It
-   * is either a silently blank unit, or a site-wide policy far looser than
-   * anyone intended. Each rule below guards one part of it.
+   * Every part of the arrangement is load-bearing and fails silently when
+   * wrong — a blank unit looks exactly like Adsterra having nothing to serve.
    */
   const headers = () => read('public/_headers')
 
@@ -233,10 +236,30 @@ describe('the ad frame is the only place script-src is open', () => {
       adsRule,
       'the /ads/* header block is gone; the frame cannot run a script',
     ).toBeGreaterThan(-1)
-    // Cloudflare applies matching rules in order, so a block declared BEFORE
-    // the catch-all would be overwritten by it and the frame would inherit
-    // default-src 'none' and X-Frame-Options: DENY.
-    expect(adsRule, 'the /ads/* block moved above /*, so /* overrides it').toBeGreaterThan(catchAll)
+    expect(adsRule, 'the /ads/* block moved above /*').toBeGreaterThan(catchAll)
+  })
+
+  it('unsets the inherited policy before setting its own', () => {
+    /*
+     * THIS IS THE RULE THAT COST A DEPLOY TO LEARN.
+     *
+     * Matching rules in _headers are COMBINED, not overridden. Declaring the
+     * /ads/* block after the catch-all sent BOTH policies, and a browser given
+     * two Content-Security-Policy headers enforces the intersection — so
+     * `default-src 'none'` still refused every script, and DENY beat
+     * SAMEORIGIN. The frame answered 200 with correct markup and rendered
+     * nothing, which is indistinguishable from Adsterra having no ad to serve.
+     *
+     * The `!` lines remove the inherited headers so the values below stand
+     * alone. Without them this whole arrangement is an elaborate no-op.
+     */
+    const block = headers().slice(headers().indexOf('/ads/*'))
+    expect(block, 'the inherited CSP is not unset, so the two will intersect').toMatch(
+      /^\s*!\s*Content-Security-Policy\s*$/m,
+    )
+    expect(block, 'the inherited X-Frame-Options is not unset, so DENY still wins').toMatch(
+      /^\s*!\s*X-Frame-Options\s*$/m,
+    )
   })
 
   it('lets this site frame it, and no one else', () => {

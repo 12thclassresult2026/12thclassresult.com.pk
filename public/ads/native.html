@@ -18,8 +18,12 @@
       named student's result.
 
       A CSP applies per document. Framing the unit from here confines that
-      concession to this file, which public/_headers gives its own policy. The
-      site's pages keep a named script-src.
+      concession to this file, which public/_headers gives its own policy.
+
+      The site's own script-src has since had to open too, for the Social Bar,
+      which docks to the viewport and cannot be framed. This file is kept
+      because the Native Banner's code still runs somewhere holding no data,
+      and because it goes on working if that policy is ever tightened again.
 
       THIS FILE CONTAINS NO STUDENT DATA AND MUST NEVER BE GIVEN ANY — no query
       parameters, no roll number, nothing read from the parent page. It is a

@@ -20,24 +20,37 @@
 #
 # WHY IT IS HERE AND NOT IN next.config.ts. Adsterra rotates its delivery
 # domains on purpose to stay ahead of blocklists, so its Native Banner cannot
-# run under a named allow-list. Letting it run in the site's own pages would
-# mean opening script-src to https: on every page — including the homepage,
-# which renders a student's result. A CSP applies per document, so framing the
-# unit from /ads/native.html confines that to this one static file, which holds
-# no data of any kind.
+# run under a named allow-list. A CSP applies per document, so framing the unit
+# from /ads/native.html confines the loose policy it needs to this one static
+# file, which holds no data of any kind.
 #
-# This block must stay AFTER /* so it overrides the two headers that would
-# otherwise make the file useless: default-src 'none' (no script could run) and
-# X-Frame-Options: DENY (nothing could frame it).
+# next.config.ts has since had to open script-src for the Social Bar, which
+# docks itself to the viewport and cannot be framed. That does not make this
+# block redundant: this unit still runs somewhere with no result card in it,
+# and if the site policy is ever tightened again the Native Banner keeps
+# working rather than silently going blank.
+#
+# THE TWO `!` LINES ARE LOAD-BEARING, and this was learned the hard way.
+#
+# Matching rules here are COMBINED, not overridden. Declaring this block after
+# /* sent both policies, and a browser given two Content-Security-Policy
+# headers enforces the INTERSECTION of them — so `default-src 'none'` from the
+# catch-all still refused every script, and the two X-Frame-Options values
+# (DENY and SAMEORIGIN) resolved to the stricter one. The frame served 200 and
+# rendered nothing, which looks exactly like a no-fill.
+#
+# `!` removes the inherited header first; the value below then stands alone.
 #
 # frame-ancestors 'self' and X-Frame-Options: SAMEORIGIN together mean only
 # this site can frame it — an ad page that anyone could embed is an open
-# redirect for someone else's traffic.
+# redirect for someone else's traffic, billed to this publisher account.
 #
 # NEVER widen this to cover more than /ads/*, and never put anything under
 # /ads/ that reads a query string or renders site data.
 # ---------------------------------------------------------------------------
 /ads/*
+  ! Content-Security-Policy
+  ! X-Frame-Options
   X-Robots-Tag: noindex, nofollow
   X-Frame-Options: SAMEORIGIN
   Content-Security-Policy: default-src 'none'; script-src 'unsafe-inline' https:; connect-src https:; img-src https: data: blob:; style-src 'unsafe-inline' https:; font-src https: data:; frame-src https:; media-src https:; form-action 'none'; frame-ancestors 'self'

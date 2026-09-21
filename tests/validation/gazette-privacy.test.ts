@@ -317,52 +317,56 @@ describe('analytics can never be handed a student', () => {
     ).toEqual([])
   })
 
-  it('names every script origin, and never opens script-src to the web', () => {
+  it('keeps the protections that survive an open script-src', () => {
     /*
-     * script-src IS THE LINE. Every origin named here can execute code on a
-     * page that renders a named student's examination result.
+     * THIS RULE USED TO SAY "NEVER OPEN script-src TO THE WEB". It is written
+     * down here rather than quietly deleted, because the reversal was a real
+     * decision and the next person deserves to see it was made on purpose.
      *
-     * This rule was once simply 'no wildcard at all'. That was too blunt to
-     * survive contact with an ad network: Adsterra serves each unit from its
-     * own numbered subdomain — pl31446134, pl31446135, pl31446137 — and
-     * rotates them, so a subdomain wildcard on ONE named domain is the
-     * narrowest thing that actually works.
+     * The site owner monetises with Adsterra, whose Social Bar docks itself to
+     * the viewport and therefore cannot be framed the way the other units are.
+     * It needs to load code from domains Adsterra rotates on purpose. A named
+     * list does not fail loudly when they rotate — the markup stays right, the
+     * requests stay 200, and the units simply stop earning.
      *
-     * What stays forbidden is the wildcard that matters: a bare `https:`, or
-     * `https://*` with no domain after it, either of which would let any host
-     * on the internet run script here.
+     * So script-src is open, and what this rule now guards is everything that
+     * did NOT have to be given up along with it. Each of these still blocks a
+     * specific attack, and none of them costs the ad network anything — so
+     * there is no honest reason for any of them to follow script-src.
      */
     const config = readFileSync(join(REPO_ROOT, 'next.config.ts'), 'utf8')
-    const scriptSrc = /\"script-src ([^\"]*)\"/.exec(config)?.[1] ?? ''
+    const directive = (name: string) => new RegExp(`"${name} ([^"]*)"`).exec(config)?.[1] ?? ''
+
+    const scriptSrc = directive('script-src')
     expect(scriptSrc, 'script-src was not found in next.config.ts').not.toBe('')
 
-    const tokens = scriptSrc.split(/\s+/).filter(Boolean)
-    expect(tokens, 'script-src accepts any https host').not.toContain('https:')
-    expect(tokens).not.toContain('*')
-    expect(scriptSrc).not.toContain("'unsafe-eval'")
+    // String-to-code stays refused. An ad network does not need it, and it is
+    // what turns a content injection into arbitrary execution.
+    expect(scriptSrc, "'unsafe-eval' is back in script-src").not.toContain("'unsafe-eval'")
 
-    /* A wildcard is allowed only as `https://*.<domain>`, never `https://*`. */
-    for (const token of tokens.filter((t) => t.includes('*'))) {
-      expect(token, `${token} is a host wildcard, not a subdomain wildcard`).toMatch(
-        /^https:\/\/\*\.[a-z0-9-]+(\.[a-z0-9-]+)+$/,
-      )
-    }
+    // No plugin content, ever.
+    expect(config).toContain(`"object-src 'none'"`)
+
+    // A <base> tag would silently re-point every relative URL on the page,
+    // including the ones the lookup form posts to.
+    expect(config).toContain(`"base-uri 'self'"`)
+
+    // The lookup form carries a roll number. form-action is what stops it
+    // being made to POST that to somebody else's origin.
+    expect(config).toContain(`"form-action 'self'"`)
+
+    // The result lookup must not be clickjackable.
+    expect(config).toContain(`"frame-ancestors 'none'"`)
 
     /*
-     * The allow-list. Adding to it is a deliberate act: say what the origin is
-     * and why it needs to run code beside a result.
+     * And the decision must stay documented. A future reader finding `https:`
+     * with no explanation would reasonably assume it was careless and either
+     * tighten it — breaking the owner's revenue — or copy it somewhere it does
+     * not belong.
      */
-    const ALLOWED = [
-      'https://www.googletagmanager.com', // GA4
-      'https://*.profitableratecpmnetwork.com', // Adsterra popunder, social bar, native
-      'https://www.highrevenueformat.com', // Adsterra 300x250 loader
-      'https://*.highrevenueformat.com', // its rotating delivery subdomains
-    ]
-    for (const origin of tokens.filter((t) => t.startsWith('https://'))) {
-      expect(
-        ALLOWED,
-        `${origin} was added to script-src; confirm it should run code on a page showing a student's result`,
-      ).toContain(origin)
-    }
+    expect(
+      config,
+      'script-src is open to https: with no recorded reason; explain it or close it',
+    ).toMatch(/Adsterra/)
   })
 })

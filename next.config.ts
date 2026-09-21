@@ -51,24 +51,54 @@ const CSP = [
    * a roll number, name or marks anywhere — those stay in a Server Action
    * response and are never put in a URL an ad script could read.
    *
-   * The 300x250 is the one unit that ends up contained, though not by this
-   * policy: its loader builds a cross-origin iframe on an Adsterra delivery
-   * host, so whatever runs inside answers to that host's CSP, not ours.
+   * The 300x250 is contained, though not by this policy: its loader builds a
+   * cross-origin iframe on an Adsterra delivery host, so whatever runs inside
+   * answers to that host's CSP. The Native Banner is contained by this
+   * project's own arrangement — it is framed from /ads/native.html, a static
+   * file with no data in it that public/_headers gives a policy of its own.
    *
-   * script-src IS A NAMED LIST AND STAYS ONE, and that has a measured price.
-   * Running the live site showed Adsterra reaching for portalfluently.com,
-   * which is refused here — and that is why the Native Banner renders nothing.
-   * The delivery domains rotate by design to stay ahead of blocklists
-   * (spendsdetachment.com, zoologyfibre.com, fizzyacerbitymellow.com and
-   * workdeadlinededicate.com all appeared in one page load), so there is no
-   * list to write and no wildcard that fits: allowing them means allowing
-   * https:, which means any host on the internet can execute code on a page
-   * that renders a named student's result.
+   * script-src IS OPEN TO https:, AND THAT IS A REAL LOSS. It was a named
+   * list. Two things decided against keeping it.
    *
-   * That trade is the site owner's to make, not this file's. Three of the four
-   * units work under the list as it stands; the fourth does not.
+   * The first is that the Social Bar cannot be contained the way the other
+   * units can. It docks itself to the viewport, so it has to run in the page,
+   * and live testing showed it reaching for portalfluently.com — refused, and
+   * the unit rendered nothing.
+   *
+   * The second is the shape of the failure. Adsterra rotates its delivery
+   * domains on purpose to stay ahead of blocklists; one page load reached for
+   * portalfluently.com, spendsdetachment.com, zoologyfibre.com,
+   * fizzyacerbitymellow.com and workdeadlinededicate.com. A named list does
+   * not fail loudly when they rotate — the tags stay in the markup, the
+   * requests stay 200, and the ads simply stop earning until someone opens a
+   * console. The site owner's original complaint was ads that "stop on some
+   * weekends" with no explanation, which is exactly what a named list would
+   * produce here, forever.
+   *
+   * WHAT THIS COSTS: any https host can now execute script on these pages. The
+   * honest accounting is that this was already most of the way true — Popunder
+   * and Social Bar run in this document by the owner's deliberate choice and
+   * can read the DOM, a rendered result card included. What the named list
+   * still bought was that those scripts could not pull further code from
+   * anywhere, and that is what has been given up.
+   *
+   * WHAT STILL HOLDS, and why this is not the same as having no policy:
+   *   object-src 'none'       no plugin content
+   *   base-uri 'self'         a <base> tag cannot re-point every relative URL
+   *   form-action 'self'      a form cannot be made to POST to another origin
+   *   frame-ancestors 'none'  the site cannot be framed, so the result lookup
+   *                           cannot be clickjacked
+   *   no 'unsafe-eval'        string-to-code is still refused
+   *
+   * And the protection that actually guards students is not in this header at
+   * all: the roll number travels in a Server Action body and never enters a
+   * URL, so there is no identifier in the page address for any of this code to
+   * read, and no per-student page for it to be loaded onto.
+   *
+   * TO REVERT: restore the named list from git history for this file, and
+   * expect the Social Bar to stop rendering.
    */
-  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.profitableratecpmnetwork.com https://www.highrevenueformat.com https://*.highrevenueformat.com",
+  "script-src 'self' 'unsafe-inline' https:",
   "frame-src 'self' https:",
   /*
    * connect-src IS open to https:, and that is a smaller decision than it

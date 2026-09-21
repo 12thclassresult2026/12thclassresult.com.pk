@@ -10,17 +10,20 @@ import { NATIVE_BANNER_FRAME } from './adsterra'
  *
  * WHY IT IS FRAMED RATHER THAN MOUNTED IN THE PAGE.
  *
- * Mounted in the page, this unit renders nothing under the site's policy: its
- * loader reaches for domains Adsterra rotates on purpose to stay ahead of
- * blocklists, and script-src here is a named list. Making it work in-page
- * would mean opening script-src to https: on every page of the site, including
- * the homepage, which renders a student's result.
+ * The frame was built when the site's script-src was a named list and this
+ * unit could not run under it — its loader reaches for domains Adsterra
+ * rotates on purpose to stay ahead of blocklists. A CSP applies per document,
+ * so framing it from `/ads/native.html`, a static file with its own policy in
+ * `public/_headers`, let it run without opening the pages that render results.
  *
- * A CSP applies per document. `/ads/native.html` is a static file that holds
- * no data, and `public/_headers` gives it a policy of its own where the ad
- * scripts are allowed. The site's pages keep their named list. That is the
- * whole trick, and it is the reason this component looks more complicated than
- * pasting a script tag would have been.
+ * script-src has since had to open anyway, for the Social Bar, which docks to
+ * the viewport and cannot be framed at all. So this frame is no longer the
+ * only thing standing between an ad script and the site's pages.
+ *
+ * IT IS KEPT ANYWAY, for two reasons that survive that change. This unit's
+ * code still runs in a document holding no data rather than beside a result
+ * card — less exposure for no cost. And if script-src is ever tightened again,
+ * the Native Banner goes on working instead of quietly going blank.
  *
  * THE FRAME IS SAME-ORIGIN, DELIBERATELY. An earlier attempt used a `srcdoc`
  * iframe, where the document location is `about:srcdoc` and — sandboxed
@@ -78,12 +81,39 @@ export function AdNativeBanner({ className = '' }: { className?: string }) {
     }
 
     el.addEventListener('load', measure)
-    // The creative arrives after load, so measure again once it has had time.
-    const timers = [1500, 4000, 8000].map((ms) => window.setTimeout(measure, ms))
+
+    /*
+     * POLLED, NOT JUST OBSERVED, and the first version was wrong about this.
+     *
+     * A ResizeObserver on `body` fires when the body BOX changes. A native
+     * unit fills its container with absolutely positioned and floated items,
+     * so `scrollHeight` grew to 329px while the observed box never moved —
+     * the frame stayed at its reserved 260 and the ad was clipped.
+     *
+     * A short poll costs nothing for the seconds an ad takes to arrive, and it
+     * stops once the height has held still, so it does not idle forever on a
+     * phone.
+     */
+    let lastHeight = 0
+    let settled = 0
+    const poll = window.setInterval(() => {
+      const before = lastHeight
+      measure()
+      try {
+        lastHeight = el.contentDocument?.body?.scrollHeight ?? lastHeight
+      } catch {
+        /* unreadable; let the settle counter end the poll */
+      }
+      settled = lastHeight === before ? settled + 1 : 0
+      // Roughly three seconds of no change, or twenty seconds in total.
+      if (settled >= 6) window.clearInterval(poll)
+    }, 500)
+    const stopPolling = window.setTimeout(() => window.clearInterval(poll), 20_000)
 
     return () => {
       el.removeEventListener('load', measure)
-      for (const t of timers) window.clearTimeout(t)
+      window.clearInterval(poll)
+      window.clearTimeout(stopPolling)
       observer?.disconnect()
     }
   }, [])
