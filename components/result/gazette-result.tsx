@@ -487,7 +487,6 @@ export function GazetteResult({
       {/* Trigger celebratory confetti for passing result */}
       {isPassing && <ConfettiEffect />}
 
-
       {/* ── LUXURY DARK RESULT CARD (matching 11thclassresult house style) ── */}
       <div className="relative mx-auto max-w-md overflow-hidden rounded-3xl border border-slate-700/80 bg-gradient-to-b from-[#0F1D40] via-[#0B1329] to-[#070C1B] p-6 text-white shadow-2xl sm:p-8">
         {/* Top Bar: Brand Watermark & Status Pill */}
@@ -606,7 +605,6 @@ export function GazetteResult({
           <p className="text-[10px] text-slate-500">Check your result in one tap.</p>
         </div>
       </div>
-
 
       {/* ── ACTION BUTTONS ROW: Share Card (Green), Download (White), Copy (White) ── */}
       <div className="mx-auto flex max-w-md flex-wrap items-center justify-center gap-2 pt-0.5">

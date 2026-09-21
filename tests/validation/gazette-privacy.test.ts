@@ -317,18 +317,51 @@ describe('analytics can never be handed a student', () => {
     ).toEqual([])
   })
 
-  it('opens the CSP to named analytics origins only, never a wildcard host', () => {
+  it('names every script origin, and never opens script-src to the web', () => {
+    /*
+     * script-src IS THE LINE. Every origin named here can execute code on a
+     * page that renders a named student's examination result.
+     *
+     * This rule was once simply 'no wildcard at all'. That was too blunt to
+     * survive contact with an ad network: Adsterra serves each unit from its
+     * own numbered subdomain — pl31446134, pl31446135, pl31446137 — and
+     * rotates them, so a subdomain wildcard on ONE named domain is the
+     * narrowest thing that actually works.
+     *
+     * What stays forbidden is the wildcard that matters: a bare `https:`, or
+     * `https://*` with no domain after it, either of which would let any host
+     * on the internet run script here.
+     */
     const config = readFileSync(join(REPO_ROOT, 'next.config.ts'), 'utf8')
-    const scriptSrc = /"script-src ([^"]*)"/.exec(config)?.[1] ?? ''
+    const scriptSrc = /\"script-src ([^\"]*)\"/.exec(config)?.[1] ?? ''
+    expect(scriptSrc, 'script-src was not found in next.config.ts').not.toBe('')
 
-    // A wildcard in script-src would let anything on that domain run on a page
-    // that renders students' results.
-    expect(scriptSrc).not.toMatch(/https:\/\/\*/)
+    const tokens = scriptSrc.split(/\s+/).filter(Boolean)
+    expect(tokens, 'script-src accepts any https host').not.toContain('https:')
+    expect(tokens).not.toContain('*')
     expect(scriptSrc).not.toContain("'unsafe-eval'")
-    for (const origin of scriptSrc.split(/\s+/).filter((t) => t.startsWith('https://'))) {
+
+    /* A wildcard is allowed only as `https://*.<domain>`, never `https://*`. */
+    for (const token of tokens.filter((t) => t.includes('*'))) {
+      expect(token, `${token} is a host wildcard, not a subdomain wildcard`).toMatch(
+        /^https:\/\/\*\.[a-z0-9-]+(\.[a-z0-9-]+)+$/,
+      )
+    }
+
+    /*
+     * The allow-list. Adding to it is a deliberate act: say what the origin is
+     * and why it needs to run code beside a result.
+     */
+    const ALLOWED = [
+      'https://www.googletagmanager.com', // GA4
+      'https://*.profitableratecpmnetwork.com', // Adsterra popunder, social bar, native
+      'https://www.highrevenueformat.com', // Adsterra 300x250 loader
+      'https://*.highrevenueformat.com', // its rotating delivery subdomains
+    ]
+    for (const origin of tokens.filter((t) => t.startsWith('https://'))) {
       expect(
-        ['https://www.googletagmanager.com'],
-        `${origin} was added to script-src; confirm it should be able to run script here`,
+        ALLOWED,
+        `${origin} was added to script-src; confirm it should run code on a page showing a student's result`,
       ).toContain(origin)
     }
   })

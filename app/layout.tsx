@@ -8,6 +8,8 @@ import { FloatingSocialBar } from '@/components/layout/floating-social-bar'
 import { SiteFooter } from '@/components/layout/site-footer'
 import { SiteHeader } from '@/components/layout/site-header'
 import { JsonLdScript } from '@/components/seo/json-ld'
+import { AdBanner } from '@/components/ads/ad-banner'
+import { AdsterraSiteScripts } from '@/components/ads/adsterra-site-scripts'
 import { organizationSchema, webSiteSchema } from '@/lib/schema/json-ld'
 import { rootMetadata } from '@/lib/seo/metadata'
 
@@ -54,6 +56,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main id="main" className="flex-1">
           {children}
         </main>
+        {/*
+          One banner on every page, between the content and the footer.
+          Declared here rather than per page so a new route cannot be added
+          without it, and so interior pages carry exactly one — the homepage
+          adds its own two in app/page.tsx.
+        */}
+        <AdBanner slot="site-footer-banner" className="py-8" />
         <SiteFooter />
         {/*
           Mounted in the layout and nowhere near the result path. A roll number
@@ -62,6 +71,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           `gtag(` ever appears in a file that handles a GazetteRecord.
         */}
         <GoogleAnalytics measurementId="G-JQS6JC9MZ1" />
+        {/*
+          Popunder and Social Bar: site-wide, one each per page, neither
+          taking space in the layout. Kept out of every component that can
+          hold a student record — the privacy suite enforces that.
+        */}
+        <AdsterraSiteScripts />
         <FloatingSocialBar />
         <JsonLdScript nodes={[organizationSchema(), webSiteSchema()]} />
       </body>

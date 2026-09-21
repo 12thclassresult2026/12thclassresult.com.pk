@@ -3,6 +3,8 @@ import type { Metadata } from 'next'
 import type { BoardOption } from '@/components/result/board-finder'
 import type { FaqItem } from '@/components/ui/faq-accordion'
 
+import { AdBanner } from '@/components/ads/ad-banner'
+import { AdNativeBanner } from '@/components/ads/ad-native-banner'
 import { AfterResultSection } from '@/components/home/after-result-section'
 import { BoardCardsGrid } from '@/components/home/board-cards-grid'
 import { CurrentStatusSection } from '@/components/home/current-status-section'
@@ -110,6 +112,17 @@ export default function HomePage() {
       {/* 1. HERO SECTION (Daylight Pakistan Campus Theme) */}
       <HeroSection boards={boardOptions} />
 
+      {/*
+        AD 1 of 3 — directly below the hero, so it sits under the roll-number
+        tool rather than beside it. Loaded eagerly because it is above the
+        fold on most phones; the other two are lazy.
+
+        It is OUTSIDE HeroSection on purpose. The hero renders the result
+        card, so it handles candidate records, and no ad component may be
+        imported into a file that does — see tests/validation/ad-units.
+      */}
+      <AdBanner slot="home-below-hero" lazy={false} className="bg-white py-8" />
+
       {/* 2. CURRENT RESULT STATUS SECTION */}
       <CurrentStatusSection lastVerifiedAt={PAGE.lastVerifiedAt} />
 
@@ -142,6 +155,9 @@ export default function HomePage() {
           <GazetteSection />
         </div>
       </section>
+
+      {/* AD 2 of 3 — mid-page break between two long content sections. */}
+      <AdNativeBanner className="bg-white py-10" />
 
       {/* 9. RESULT SCHEDULE (When Will 12th Class Result Be Announced?) */}
       <ResultScheduleSection />

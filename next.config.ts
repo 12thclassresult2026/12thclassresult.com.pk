@@ -21,9 +21,10 @@ const CSP = [
   "object-src 'none'",
   "frame-ancestors 'none'",
   "form-action 'self'",
-  // google-analytics.com is here for GA's pixel fallback, which some browsers
-  // and blockers still take instead of the fetch beacon.
-  "img-src 'self' data: blob: https://www.google-analytics.com",
+  // https: because ad creatives are served from hosts nobody can list in
+  // advance. An image cannot execute, so this is the cheapest of the
+  // concessions below; script-src is where the real line is held.
+  "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
   "style-src 'self' 'unsafe-inline'",
   /*
@@ -34,13 +35,35 @@ const CSP = [
    * a formality: every origin named here can execute script on a page that
    * renders students' results.
    *
-   * What is NOT added: no wildcard, no tag-manager container, no ad or
-   * remarketing origin. If a fourth origin ever seems necessary, that is the
-   * moment to ask what it would be reading.
+   * What is NOT added for GA: no tag-manager container, no ad or remarketing
+   * origin. The ad-network origins below are a separate, later decision with
+   * its own reasoning — they are not GA's, and neither list should be used
+   * to justify widening the other.
    */
-  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",
-  "frame-src 'self'",
-  "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com",
+  /*
+   * ADSTERRA (publisher site 6067805, four units).
+   *
+   * This is the largest concession this policy makes, and it is worth being
+   * plain about what it costs. Popunder and Social Bar run as script in the
+   * top-level document: they can read the DOM, which on this site can include
+   * a rendered result card. That is inherent to running an ad network, not a
+   * mistake in how they are mounted, and it is the reason nothing here sends
+   * a roll number, name or marks anywhere — those stay in a Server Action
+   * response and are never put in a URL an ad script could read.
+   *
+   * The 300x250 is the one unit that can be contained, and it is: it renders
+   * in a sandboxed srcdoc iframe with no allow-same-origin, so it gets an
+   * opaque origin and cannot reach this document at all.
+   *
+   * Ad CREATIVES come from hosts nobody can enumerate in advance, so img-src
+   * and frame-src take https: while script-src stays a named list. If a unit
+   * stops filling, check the console for a script-src violation and add the
+   * ORIGIN it names — never widen script-src to https:, which would let any
+   * host on the internet run code on a page that renders students' results.
+   */
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.profitableratecpmnetwork.com https://www.highrevenueformat.com https://*.highrevenueformat.com",
+  "frame-src 'self' https:",
+  "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://*.profitableratecpmnetwork.com https://*.highrevenueformat.com",
   'upgrade-insecure-requests',
 ].join('; ')
 
