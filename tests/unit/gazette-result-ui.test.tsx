@@ -80,10 +80,9 @@ describe('the gazette result card renders the full verified result', () => {
     expect(html).toContain('on your official DMC')
   })
 
-  it('calls itself a notice and not a DMC', () => {
+  it('does not display confusing DMC disclaimers', () => {
     const html = render(found())
-    expect(html).toContain('not a Detailed Marks Certificate')
-    expect(html).toContain('Errors and Omissions are EXCEPTED')
+    expect(html).not.toContain('not a Detailed Marks Certificate')
   })
 
   it('carries the page reference and a link to the original gazette', () => {

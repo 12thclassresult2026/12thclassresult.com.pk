@@ -487,23 +487,6 @@ export function GazetteResult({
       {/* Trigger celebratory confetti for passing result */}
       {isPassing && <ConfettiEffect />}
 
-      {/* Official Roll Number Notice Banner */}
-      <div className="mx-auto flex max-w-md items-center gap-2.5 rounded-xl border border-emerald-200 bg-emerald-50/90 px-3.5 py-2 text-left text-xs text-emerald-900 shadow-2xs">
-        <svg
-          className="h-4 w-4 shrink-0 text-emerald-600"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
-        >
-          <circle cx="12" cy="12" r="10" />
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4" />
-        </svg>
-        <span className="text-[11.5px] leading-snug">
-          Use your official roll number as mentioned on your admit card. Verified from official
-          board gazette records.
-        </span>
-      </div>
 
       {/* ── LUXURY DARK RESULT CARD (matching 11thclassresult house style) ── */}
       <div className="relative mx-auto max-w-md overflow-hidden rounded-3xl border border-slate-700/80 bg-gradient-to-b from-[#0F1D40] via-[#0B1329] to-[#070C1B] p-6 text-white shadow-2xl sm:p-8">
@@ -624,11 +607,6 @@ export function GazetteResult({
         </div>
       </div>
 
-      {/* Gazette Reference Subtext */}
-      <p className="mx-auto max-w-md text-center text-[11px] leading-relaxed text-slate-500">
-        Gazette declared reference — not a Detailed Marks Certificate (DMC). Errors and Omissions
-        are EXCEPTED. Verify important details on your board’s official website.
-      </p>
 
       {/* ── ACTION BUTTONS ROW: Share Card (Green), Download (White), Copy (White) ── */}
       <div className="mx-auto flex max-w-md flex-wrap items-center justify-center gap-2 pt-0.5">
