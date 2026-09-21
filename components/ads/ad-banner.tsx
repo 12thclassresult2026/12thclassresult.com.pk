@@ -1,83 +1,85 @@
+'use client'
+
+import { useEffect, useRef } from 'react'
+
 import { AdSlot } from './ad-slot'
 import { BANNER_HEIGHT, BANNER_KEY, BANNER_SRC, BANNER_WIDTH } from './adsterra'
 
 /**
- * Adsterra 300x250 banner, isolated in its own document.
+ * Adsterra 300x250 banner.
  *
- * TWO PROBLEMS, ONE SOLUTION.
+ * ONE PER PAGE. Adsterra's loader reads a GLOBAL `atOptions` when it
+ * evaluates, so two of these in one document are two scripts racing over one
+ * variable. The layout therefore skips this slot on the homepage, which places
+ * its own below the hero — see `layout-ad-banner.tsx`.
  *
- * 1. Adsterra's loader reads a GLOBAL `atOptions` when it evaluates. Put two
- *    banners on one page and they race over one variable; the usual outcome is
- *    a blank second slot. Inside an iframe each banner gets its own `window`,
- *    so there is no shared variable to race over and a page can carry as many
- *    as it likes — which is what makes the three homepage placements possible.
+ * WHY THIS IS NOT IN AN IFRAME, THOUGH IT WAS AT FIRST.
  *
- * 2. Ad creatives ship their own CSS. A `srcdoc` document cannot style, reflow
- *    or overflow its parent, and the page's stylesheet cannot reach in and
- *    resize the creative.
+ * A `srcdoc` iframe looked like a free win: a private `window` per banner, so
+ * any number could share a page, and CSS that physically cannot reach the
+ * page. It renders nothing. Inside `srcdoc` the document's location is
+ * `about:srcdoc` and, sandboxed without `allow-same-origin`, its origin is
+ * opaque — so a loader that checks which publisher domain it is running on
+ * finds no answer it can use.
  *
- * NOTE ON CSP: a `srcdoc` iframe INHERITS the parent document's policy, so
- * `www.highrevenueformat.com` has to be named in `script-src` in
- * next.config.ts for this to render at all. It is, deliberately and by name.
+ * Serving the same markup from a real file under `/ads/` was the obvious next
+ * move and is also a dead end here: `public/_headers` gives every static asset
+ * `X-Frame-Options: DENY` and `default-src 'none'`, so the file could neither
+ * be framed nor run a script, and loosening that rule would loosen it for
+ * every asset on the site.
+ *
+ * So the unit is mounted the way Adsterra documents it — in the page, on the
+ * real hostname. Containment comes from `AdSlot` instead of from an origin
+ * boundary: `isolation` and `contain` stop the creative reflowing or painting
+ * outside its box, and the box reserves its height so nothing below it shifts.
  */
 
-const SRC_DOC = `<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<style>
-  html,body{margin:0;padding:0;overflow:hidden;background:transparent}
-</style>
-</head>
-<body>
-<script type="text/javascript">
-  atOptions = {
-    'key' : '${BANNER_KEY}',
-    'format' : 'iframe',
-    'height' : ${BANNER_HEIGHT},
-    'width' : ${BANNER_WIDTH},
-    'params' : {}
-  };
-</script>
-<script type="text/javascript" src="${BANNER_SRC}"></script>
-</body>
-</html>`
+declare global {
+  interface Window {
+    atOptions?: Record<string, unknown>
+  }
+}
 
 export function AdBanner({
   /** Names the placement, so slots can be told apart when debugging. */
   slot,
-  /** Below-the-fold slots defer the request until the reader nears them. */
-  lazy = true,
   className = '',
 }: {
   slot: string
-  lazy?: boolean
   className?: string
 }) {
+  const host = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const container = host.current
+    if (!container) return
+    // React strict mode runs effects twice in development, and a second loader
+    // would render a second creative into the same box.
+    if (container.childElementCount > 0) return
+
+    window.atOptions = {
+      key: BANNER_KEY,
+      format: 'iframe',
+      height: BANNER_HEIGHT,
+      width: BANNER_WIDTH,
+      params: {},
+    }
+
+    const script = document.createElement('script')
+    script.src = BANNER_SRC
+    script.async = true
+    script.dataset.adUnit = `banner-${slot}`
+    container.appendChild(script)
+  }, [slot])
+
   return (
     <AdSlot minHeight={BANNER_HEIGHT} className={className}>
       <div
-        className="overflow-hidden rounded-xl"
+        ref={host}
         data-ad-slot={slot}
-        style={{ width: BANNER_WIDTH, height: BANNER_HEIGHT }}
-      >
-        <iframe
-          title="Advertisement"
-          srcDoc={SRC_DOC}
-          width={BANNER_WIDTH}
-          height={BANNER_HEIGHT}
-          loading={lazy ? 'lazy' : 'eager'}
-          scrolling="no"
-          /*
-           * No `allow-same-origin`. With it, this frame would be same-origin
-           * with the page and its script could read the document — including a
-           * result card showing a named student's marks. Without it the frame
-           * gets an opaque origin and can render an ad and nothing else.
-           */
-          sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox allow-forms"
-          style={{ border: 0, display: 'block' }}
-        />
-      </div>
+        className="overflow-hidden"
+        style={{ width: BANNER_WIDTH, minHeight: BANNER_HEIGHT }}
+      />
     </AdSlot>
   )
 }

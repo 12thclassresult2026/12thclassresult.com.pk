@@ -8,7 +8,7 @@ import { FloatingSocialBar } from '@/components/layout/floating-social-bar'
 import { SiteFooter } from '@/components/layout/site-footer'
 import { SiteHeader } from '@/components/layout/site-header'
 import { JsonLdScript } from '@/components/seo/json-ld'
-import { AdBanner } from '@/components/ads/ad-banner'
+import { LayoutAdBanner } from '@/components/ads/layout-ad-banner'
 import { AdsterraSiteScripts } from '@/components/ads/adsterra-site-scripts'
 import { organizationSchema, webSiteSchema } from '@/lib/schema/json-ld'
 import { rootMetadata } from '@/lib/seo/metadata'
@@ -57,12 +57,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         {/*
-          One banner on every page, between the content and the footer.
-          Declared here rather than per page so a new route cannot be added
-          without it, and so interior pages carry exactly one — the homepage
-          adds its own two in app/page.tsx.
+          One 300x250 on every page, between the content and the footer.
+          Declared here so a route added later inherits it. It stands aside on
+          the homepage, which places its own under the lookup tool — only one
+          banner may run per document, see layout-ad-banner.tsx.
         */}
-        <AdBanner slot="site-footer-banner" className="py-8" />
+        <LayoutAdBanner />
         <SiteFooter />
         {/*
           Mounted in the layout and nowhere near the result path. A roll number

@@ -77,16 +77,41 @@ describe('all four Adsterra units stay mounted', () => {
      * later inherits the slot instead of being forgotten. If this moves into
      * the individual pages, every new page becomes an unpaid page.
      */
-    expect(layout(), 'the every-page banner is no longer in the layout').toMatch(
-      /<AdBanner[^>]*slot=/,
+    expect(layout(), 'the every-page banner is no longer in the layout').toContain(
+      '<LayoutAdBanner />',
     )
   })
 
-  it('keeps three distinct placements on the homepage', () => {
+  it('runs at most one 300x250 per document', () => {
     /*
-     * The homepage takes most of the traffic, so it carries three: one under
-     * the hero where the lookup tool is, a native unit mid-page, and the
-     * layout's banner above the footer. Two here plus one inherited.
+     * THE CONSTRAINT THAT SHAPES EVERY PLACEMENT DECISION HERE.
+     *
+     * The Adsterra banner loader reads a GLOBAL atOptions when it evaluates.
+     * Two banners in one document are two scripts racing over one variable,
+     * and the usual outcome is a slot that looks placed and earns nothing.
+     *
+     * So the shared layout banner steps aside on any path that renders its
+     * own. A page listed in PLACES_ITS_OWN must render exactly one AdBanner;
+     * a page not listed must render none, because it inherits the layout one.
+     */
+    const shared = codeOnly(read('components/ads/layout-ad-banner.tsx'))
+    expect(shared, 'the shared banner no longer steps aside anywhere').toContain('PLACES_ITS_OWN')
+    expect(shared, 'the homepage is no longer exempt, so it would run two banners').toMatch(
+      /PLACES_ITS_OWN = new Set\(\[[^\]]*'\/'/,
+    )
+
+    for (const file of sourceFiles(['app'])) {
+      const count = codeOnly(readFileSync(file, 'utf8')).split('<AdBanner').length - 1
+      expect(count, `${file} renders ${count} banners; only one may run per page`).toBeLessThan(2)
+    }
+  })
+
+  it('keeps both homepage placements', () => {
+    /*
+     * The homepage takes most of the traffic and carries two in-page units:
+     * a 300x250 under the hero, where the lookup tool is, and a native unit
+     * mid-page. The Social Bar and Popunder run over those from the layout,
+     * so all four units are live on this one page.
      */
     const page = homepage()
     expect(page, 'the below-hero banner is gone').toMatch(/<AdBanner[^>]*slot="home-below-hero"/)

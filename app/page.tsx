@@ -113,15 +113,15 @@ export default function HomePage() {
       <HeroSection boards={boardOptions} />
 
       {/*
-        AD 1 of 3 — directly below the hero, so it sits under the roll-number
-        tool rather than beside it. Loaded eagerly because it is above the
-        fold on most phones; the other two are lazy.
+        AD 1 of 2 in-page — directly below the hero, so it sits under the
+        roll-number tool rather than beside it. This is the homepage's own
+        300x250, which is why the layout's shared one stands aside here.
 
         It is OUTSIDE HeroSection on purpose. The hero renders the result
         card, so it handles candidate records, and no ad component may be
         imported into a file that does — see tests/validation/ad-units.
       */}
-      <AdBanner slot="home-below-hero" lazy={false} className="bg-white py-8" />
+      <AdBanner slot="home-below-hero" className="bg-white py-8" />
 
       {/* 2. CURRENT RESULT STATUS SECTION */}
       <CurrentStatusSection lastVerifiedAt={PAGE.lastVerifiedAt} />
@@ -156,7 +156,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* AD 2 of 3 — mid-page break between two long content sections. */}
+      {/* AD 2 of 2 in-page — a native unit, mid-page between two long sections. */}
       <AdNativeBanner className="bg-white py-10" />
 
       {/* 9. RESULT SCHEDULE (When Will 12th Class Result Be Announced?) */}
