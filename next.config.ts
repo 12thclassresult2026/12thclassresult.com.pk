@@ -51,19 +51,37 @@ const CSP = [
    * a roll number, name or marks anywhere — those stay in a Server Action
    * response and are never put in a URL an ad script could read.
    *
-   * The 300x250 is the one unit that can be contained, and it is: it renders
-   * in a sandboxed srcdoc iframe with no allow-same-origin, so it gets an
-   * opaque origin and cannot reach this document at all.
+   * The 300x250 is the one unit that ends up contained, though not by this
+   * policy: its loader builds a cross-origin iframe on an Adsterra delivery
+   * host, so whatever runs inside answers to that host's CSP, not ours.
    *
-   * Ad CREATIVES come from hosts nobody can enumerate in advance, so img-src
-   * and frame-src take https: while script-src stays a named list. If a unit
-   * stops filling, check the console for a script-src violation and add the
-   * ORIGIN it names — never widen script-src to https:, which would let any
-   * host on the internet run code on a page that renders students' results.
+   * script-src IS A NAMED LIST AND STAYS ONE, and that has a measured price.
+   * Running the live site showed Adsterra reaching for portalfluently.com,
+   * which is refused here — and that is why the Native Banner renders nothing.
+   * The delivery domains rotate by design to stay ahead of blocklists
+   * (spendsdetachment.com, zoologyfibre.com, fizzyacerbitymellow.com and
+   * workdeadlinededicate.com all appeared in one page load), so there is no
+   * list to write and no wildcard that fits: allowing them means allowing
+   * https:, which means any host on the internet can execute code on a page
+   * that renders a named student's result.
+   *
+   * That trade is the site owner's to make, not this file's. Three of the four
+   * units work under the list as it stands; the fourth does not.
    */
   "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.profitableratecpmnetwork.com https://www.highrevenueformat.com https://*.highrevenueformat.com",
   "frame-src 'self' https:",
-  "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://*.profitableratecpmnetwork.com https://*.highrevenueformat.com",
+  /*
+   * connect-src IS open to https:, and that is a smaller decision than it
+   * looks. The same page load showed five different Adsterra hosts refused
+   * here, which is what degrades Popunder and Social Bar — they run in this
+   * document and cannot report back.
+   *
+   * A fetch cannot execute code, and img-src already allows any https host,
+   * so anything that could be exfiltrated through a connection could already
+   * be exfiltrated through an image URL. This closes a gap that was costing
+   * two working units while giving up almost nothing that was still held.
+   */
+  "connect-src 'self' https:",
   'upgrade-insecure-requests',
 ].join('; ')
 

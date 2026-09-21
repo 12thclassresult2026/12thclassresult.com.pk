@@ -7,6 +7,7 @@ import {
   BANNER_KEY,
   BANNER_SRC,
   NATIVE_BANNER_CONTAINER,
+  NATIVE_BANNER_FRAME,
   NATIVE_BANNER_SRC,
   POPUNDER_SRC,
   SOCIAL_BAR_SRC,
@@ -181,19 +182,113 @@ describe('the unit ids are the ones Adsterra issued', () => {
     const scriptSrc = /"script-src ([^"]*)"/.exec(config)?.[1] ?? ''
     const connectSrc = /"connect-src ([^"]*)"/.exec(config)?.[1] ?? ''
 
-    for (const origin of AD_ORIGINS) {
-      const host = new URL(origin).hostname
-      const domain = host.split('.').slice(-2).join('.')
-      const allowed = scriptSrc.includes(origin) || scriptSrc.includes(`https://*.${domain}`)
-      expect(allowed, `${origin} is blocked by script-src, so its unit will render blank`).toBe(
-        true,
-      )
+    /*
+     * PERMITTED, NOT NAMED. An earlier version required each origin to appear
+     * literally, and failed the moment connect-src became `'self' https:` —
+     * which permits every one of them. A rule that fails on a policy strictly
+     * more permissive than the one it was written for is testing the spelling,
+     * not the behaviour.
+     */
+    const permits = (directive: string, origin: string): boolean => {
+      const tokens = directive.split(/\s+/).filter(Boolean)
+      if (tokens.includes('https:') || tokens.includes('*')) return true
+      const domain = new URL(origin).hostname.split('.').slice(-2).join('.')
+      return tokens.includes(origin) || tokens.includes(`https://*.${domain}`)
     }
 
-    // The banner's srcdoc iframe INHERITS this policy, so the loader host has
-    // to be here too or the 300x250 never renders.
-    expect(scriptSrc).toContain('highrevenueformat.com')
-    expect(connectSrc).toContain('profitableratecpmnetwork.com')
+    for (const origin of AD_ORIGINS) {
+      expect(
+        permits(scriptSrc, origin),
+        `${origin} is blocked by script-src, so its unit will render blank`,
+      ).toBe(true)
+      expect(
+        permits(connectSrc, origin),
+        `${origin} is blocked by connect-src, so its unit cannot report back`,
+      ).toBe(true)
+    }
+  })
+})
+
+describe('the ad frame is the only place script-src is open', () => {
+  /*
+   * THE WHOLE SECURITY ARGUMENT FOR THE NATIVE BANNER RESTS ON THIS FILE.
+   *
+   * Adsterra rotates its delivery domains on purpose, so that unit cannot run
+   * under a named allow-list. Rather than open script-src on every page — the
+   * homepage included, which renders a named student's result — the unit is
+   * framed from /ads/native.html, a static file with a CSP of its own.
+   *
+   * If any part of that arrangement drifts, the result is not a broken ad. It
+   * is either a silently blank unit, or a site-wide policy far looser than
+   * anyone intended. Each rule below guards one part of it.
+   */
+  const headers = () => read('public/_headers')
+
+  it('gives /ads/* its own policy, declared after the catch-all', () => {
+    const source = headers()
+    const catchAll = source.indexOf('/*')
+    const adsRule = source.indexOf('/ads/*')
+
+    expect(
+      adsRule,
+      'the /ads/* header block is gone; the frame cannot run a script',
+    ).toBeGreaterThan(-1)
+    // Cloudflare applies matching rules in order, so a block declared BEFORE
+    // the catch-all would be overwritten by it and the frame would inherit
+    // default-src 'none' and X-Frame-Options: DENY.
+    expect(adsRule, 'the /ads/* block moved above /*, so /* overrides it').toBeGreaterThan(catchAll)
+  })
+
+  it('lets this site frame it, and no one else', () => {
+    const block = headers().slice(headers().indexOf('/ads/*'))
+    expect(block).toContain('X-Frame-Options: SAMEORIGIN')
+    expect(block).toContain("frame-ancestors 'self'")
+    // An ad page anyone could embed is an open redirect for someone else's
+    // traffic, billed to this publisher account.
+    expect(block).not.toContain('frame-ancestors *')
+  })
+
+  it('keeps the frame out of search results', () => {
+    expect(headers().slice(headers().indexOf('/ads/*'))).toContain('X-Robots-Tag: noindex')
+  })
+
+  it('serves the native unit from a static file holding no data', () => {
+    const frame = read('public/ads/native.html')
+
+    expect(frame, 'the frame no longer loads the native unit').toContain(NATIVE_BANNER_SRC)
+    expect(frame, 'the container id the loader looks up is gone').toContain(
+      `id="${NATIVE_BANNER_CONTAINER}"`,
+    )
+
+    /*
+     * The frame's looser CSP is only defensible while the file is inert. The
+     * moment it reads a query string it becomes a way to get attacker-chosen
+     * content into a document where any https host may execute script.
+     */
+    expect(frame, 'the ad frame is reading the URL').not.toMatch(
+      /location\s*\.\s*(search|href|hash)|URLSearchParams|document\s*\.\s*referrer/,
+    )
+    expect(frame, 'the ad frame is reaching into the page that framed it').not.toMatch(
+      /\b(parent|top)\s*\./,
+    )
+  })
+
+  it('points the component at that file and nothing else', () => {
+    expect(NATIVE_BANNER_FRAME).toBe('/ads/native.html')
+    const component = codeOnly(read('components/ads/ad-native-banner.tsx'))
+    expect(component).toContain('NATIVE_BANNER_FRAME')
+    // A query string here is the same hole as one inside the frame.
+    expect(component, 'the frame src is being built with a query string').not.toMatch(
+      /NATIVE_BANNER_FRAME\s*\+|\$\{NATIVE_BANNER_FRAME\}[^`'"]/,
+    )
+  })
+
+  it('still allows the site itself to frame it', () => {
+    // frame-src governs the parent page, not the frame: 'self' is what lets
+    // /ads/native.html be embedded at all.
+    const frameSrc = /"frame-src ([^"]*)"/.exec(read('next.config.ts'))?.[1] ?? ''
+    const tokens = frameSrc.split(/\s+/).filter(Boolean)
+    expect(tokens.includes("'self'") || tokens.includes('https:')).toBe(true)
   })
 })
 

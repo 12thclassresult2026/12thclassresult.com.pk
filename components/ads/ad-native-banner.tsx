@@ -1,50 +1,111 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { AdSlot } from './ad-slot'
-import { NATIVE_BANNER_CONTAINER, NATIVE_BANNER_SRC } from './adsterra'
+import { NATIVE_BANNER_FRAME } from './adsterra'
 
 /**
- * Adsterra Native Banner.
+ * Adsterra Native Banner, served from a document of its own.
  *
- * ONE PER PAGE. The container id is fixed by Adsterra, so a second copy would
- * put a duplicate id in the document and the loader would fill only the first.
- * It is mounted on the homepage only; other pages carry the 300x250 instead.
+ * WHY IT IS FRAMED RATHER THAN MOUNTED IN THE PAGE.
  *
- * Unlike the 300x250 this one CANNOT be iframed — the loader looks up its
- * container by id in the host document and renders into it. So it runs in the
- * page and brings its own stylesheet. `AdSlot` contains that: `isolation`
- * keeps its stacking context local and `contain` stops it reflowing anything
- * around it.
+ * Mounted in the page, this unit renders nothing under the site's policy: its
+ * loader reaches for domains Adsterra rotates on purpose to stay ahead of
+ * blocklists, and script-src here is a named list. Making it work in-page
+ * would mean opening script-src to https: on every page of the site, including
+ * the homepage, which renders a student's result.
  *
- * The script is appended by hand rather than through `next/script` for the
- * same reason as the site-wide units: this component owns the node, so it can
- * tell whether the node is still there.
+ * A CSP applies per document. `/ads/native.html` is a static file that holds
+ * no data, and `public/_headers` gives it a policy of its own where the ad
+ * scripts are allowed. The site's pages keep their named list. That is the
+ * whole trick, and it is the reason this component looks more complicated than
+ * pasting a script tag would have been.
+ *
+ * THE FRAME IS SAME-ORIGIN, DELIBERATELY. An earlier attempt used a `srcdoc`
+ * iframe, where the document location is `about:srcdoc` and — sandboxed
+ * without `allow-same-origin` — the origin is opaque. Nothing rendered: a
+ * loader that checks which publisher domain it is running on had no answer it
+ * could use. Served from a real path on the real host, that check passes.
+ *
+ * Being same-origin also means the height can simply be read, with no
+ * postMessage protocol: a native unit's height depends on how many items it
+ * fills with, so the frame is measured and resized rather than guessed at.
  */
+
+/** Reserved before the ad arrives, so nothing below the slot jumps. */
+const MIN_HEIGHT = 260
+/** A native unit that reports something absurd is capped rather than trusted. */
+const MAX_HEIGHT = 900
+
 export function AdNativeBanner({ className = '' }: { className?: string }) {
-  const started = useRef(false)
+  const frame = useRef<HTMLIFrameElement>(null)
+  const [height, setHeight] = useState(MIN_HEIGHT)
 
   useEffect(() => {
-    // React strict mode invokes effects twice in development, and a second
-    // loader would race the first over the same container.
-    if (started.current) return
-    started.current = true
+    const el = frame.current
+    if (!el) return
 
-    if (document.querySelector('script[data-ad-unit="native-banner"]')) return
+    let observer: ResizeObserver | undefined
 
-    const script = document.createElement('script')
-    script.src = NATIVE_BANNER_SRC
-    script.async = true
-    script.dataset.cfasync = 'false'
-    script.dataset.adUnit = 'native-banner'
-    document.body.appendChild(script)
+    const measure = () => {
+      /*
+       * Same-origin, so this is a plain read. It can still throw — a browser
+       * with third-party restrictions, or a frame swapped to a cross-origin
+       * document by the ad — and a throw here must not break the page, so the
+       * slot simply keeps its reserved height.
+       */
+      try {
+        const body = el.contentDocument?.body
+        if (!body) return
+        const next = Math.min(Math.max(body.scrollHeight, MIN_HEIGHT), MAX_HEIGHT)
+        setHeight(next)
+
+        if (!observer) {
+          observer = new ResizeObserver(() => {
+            try {
+              const h = el.contentDocument?.body?.scrollHeight
+              if (h) setHeight(Math.min(Math.max(h, MIN_HEIGHT), MAX_HEIGHT))
+            } catch {
+              /* frame became unreadable; keep the last known height */
+            }
+          })
+          observer.observe(body)
+        }
+      } catch {
+        /* keep the reserved height */
+      }
+    }
+
+    el.addEventListener('load', measure)
+    // The creative arrives after load, so measure again once it has had time.
+    const timers = [1500, 4000, 8000].map((ms) => window.setTimeout(measure, ms))
+
+    return () => {
+      el.removeEventListener('load', measure)
+      for (const t of timers) window.clearTimeout(t)
+      observer?.disconnect()
+    }
   }, [])
 
   return (
-    <AdSlot minHeight={250} className={className}>
-      <div className="w-full max-w-3xl">
-        <div id={NATIVE_BANNER_CONTAINER} />
+    <AdSlot minHeight={MIN_HEIGHT} className={className}>
+      <div className="w-full max-w-3xl" data-ad-slot="native-banner">
+        <iframe
+          ref={frame}
+          title="Advertisement"
+          src={NATIVE_BANNER_FRAME}
+          loading="lazy"
+          scrolling="no"
+          /*
+           * `allow-same-origin` is required — without it the loader cannot tell
+           * which publisher domain it is on. What the sandbox still buys is the
+           * absence of `allow-top-navigation`: a creative cannot navigate the
+           * page out from under a reader without a click of their own.
+           */
+          sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
+          style={{ width: '100%', height, border: 0, display: 'block' }}
+        />
       </div>
     </AdSlot>
   )

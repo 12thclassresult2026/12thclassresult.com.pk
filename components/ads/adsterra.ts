@@ -52,6 +52,19 @@ export const NATIVE_BANNER_ID = '50156e7baa67ad87f69475093bc71a7f'
 export const NATIVE_BANNER_SRC = `https://pl31446137.profitableratecpmnetwork.com/${NATIVE_BANNER_ID}/invoke.js`
 export const NATIVE_BANNER_CONTAINER = `container-${NATIVE_BANNER_ID}`
 
+/**
+ * The document the Native Banner is framed from.
+ *
+ * It is a static file, not a route, so it is served straight from the asset
+ * CDN and gets its headers — including its own, deliberately looser CSP — from
+ * `public/_headers`. That per-document policy is the entire reason the frame
+ * exists: it keeps `script-src https:` off every page that renders a result.
+ *
+ * The file must stay free of query strings and site data. See the note at the
+ * top of `public/ads/native.html`.
+ */
+export const NATIVE_BANNER_FRAME = '/ads/native.html'
+
 /** Every remote origin the four units load from, for the CSP allow-list. */
 export const AD_ORIGINS = [
   'https://pl31446134.profitableratecpmnetwork.com',

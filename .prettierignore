@@ -23,3 +23,8 @@ docs/research/evidence/
 
 scratch/
 worker-configuration.d.ts
+
+# Per-machine editor state, written by the tool rather than by a person. It is
+# git-ignored, so it can never be committed — but prettier still read it and
+# failed the format gate on a file nobody can fix in a commit.
+.claude/settings.local.json

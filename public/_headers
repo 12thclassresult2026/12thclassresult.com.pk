@@ -14,3 +14,31 @@
   Content-Security-Policy: default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; frame-ancestors 'none'
   Cross-Origin-Resource-Policy: same-origin
   X-Permitted-Cross-Domain-Policies: none
+
+# ---------------------------------------------------------------------------
+# The ad frame, and the one place on this site where script-src is open.
+#
+# WHY IT IS HERE AND NOT IN next.config.ts. Adsterra rotates its delivery
+# domains on purpose to stay ahead of blocklists, so its Native Banner cannot
+# run under a named allow-list. Letting it run in the site's own pages would
+# mean opening script-src to https: on every page — including the homepage,
+# which renders a student's result. A CSP applies per document, so framing the
+# unit from /ads/native.html confines that to this one static file, which holds
+# no data of any kind.
+#
+# This block must stay AFTER /* so it overrides the two headers that would
+# otherwise make the file useless: default-src 'none' (no script could run) and
+# X-Frame-Options: DENY (nothing could frame it).
+#
+# frame-ancestors 'self' and X-Frame-Options: SAMEORIGIN together mean only
+# this site can frame it — an ad page that anyone could embed is an open
+# redirect for someone else's traffic.
+#
+# NEVER widen this to cover more than /ads/*, and never put anything under
+# /ads/ that reads a query string or renders site data.
+# ---------------------------------------------------------------------------
+/ads/*
+  X-Robots-Tag: noindex, nofollow
+  X-Frame-Options: SAMEORIGIN
+  Content-Security-Policy: default-src 'none'; script-src 'unsafe-inline' https:; connect-src https:; img-src https: data: blob:; style-src 'unsafe-inline' https:; font-src https: data:; frame-src https:; media-src https:; form-action 'none'; frame-ancestors 'self'
+  Cross-Origin-Resource-Policy: same-origin
