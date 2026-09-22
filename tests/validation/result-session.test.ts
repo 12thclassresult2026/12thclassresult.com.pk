@@ -128,3 +128,35 @@ describe('the current session is honest about having no data', () => {
     }
   })
 })
+
+describe('the session is named once, not twice', () => {
+  it('keeps the year out of the label printed beside a year', () => {
+    /*
+     * THIS SHIPPED AND READ AS A TYPO, WHICH IS WHY IT IS WORTH A RULE:
+     * the "no 2026 gazette" card said "BISE Gujranwala's Annual 2026 2026
+     * gazette has not been published here yet."
+     *
+     * The selector needs the year in its option text — "Annual 2026" and
+     * "Annual 2025 (archive)" are only distinguishable that way. The result
+     * card prints the year in its own field. One label cannot serve both, so
+     * there are two: `label` for the dropdown, `examLabel` for anywhere a year
+     * is already on screen.
+     */
+    for (const s of RESULT_SESSIONS) {
+      expect(s.label, `${s.year} option does not say which year it is`).toContain(String(s.year))
+      expect(
+        s.examLabel,
+        `${s.year} examLabel carries a year, so it will double up wherever the year is printed`,
+      ).not.toMatch(/\b(19|20)\d{2}\b/)
+    }
+  })
+
+  it('uses examLabel wherever the card already prints a year', () => {
+    const hero = read('components/home/hero-section.tsx')
+    expect(hero).toContain('lookup.session.examLabel')
+    // `session.label` beside `session.year` is the bug itself.
+    expect(hero, 'the dropdown label is being printed next to the year again').not.toMatch(
+      /examinationLabel=\{[^}]*session\.label/,
+    )
+  })
+})

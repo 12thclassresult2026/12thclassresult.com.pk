@@ -140,8 +140,15 @@ export const LOADED_DATASETS: LoadedDataset[] = [
 export type ResultSession = {
   year: number
   examination: string
-  /** What the student sees in the selector. */
+  /** What the student sees in the SELECTOR. Carries the year. */
   label: string
+  /**
+   * The examination WITHOUT the year, for anywhere the year is printed beside
+   * it. Both are needed: the dropdown has to say which year an option is, and
+   * the result card already prints the year separately — using `label` in both
+   * places produced "Annual 2026 2026 gazette" on the live site.
+   */
+  examLabel: string
   /** True for the session currently being declared. */
   isCurrent: boolean
 }
@@ -157,8 +164,20 @@ export type ResultSession = {
  * last year.
  */
 export const RESULT_SESSIONS: ResultSession[] = [
-  { year: 2026, examination: 'first-annual', label: 'Annual 2026', isCurrent: true },
-  { year: 2025, examination: 'first-annual', label: 'Annual 2025 (archive)', isCurrent: false },
+  {
+    year: 2026,
+    examination: 'first-annual',
+    label: 'Annual 2026',
+    examLabel: 'HSSC Part-II Annual',
+    isCurrent: true,
+  },
+  {
+    year: 2025,
+    examination: 'first-annual',
+    label: 'Annual 2025 (archive)',
+    examLabel: 'HSSC Part-II Annual',
+    isCurrent: false,
+  },
 ]
 
 export const CURRENT_SESSION: ResultSession =

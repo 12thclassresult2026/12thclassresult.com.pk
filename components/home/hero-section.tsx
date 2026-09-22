@@ -508,7 +508,7 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
                           year={lookup.session.year}
                           examinationLabel={
                             datasetFor(chosen.slug, lookup.session)?.examinationLabel ??
-                            lookup.session.label
+                            lookup.session.examLabel
                           }
                           gazetteSourceUrl={
                             datasetFor(chosen.slug, lookup.session)?.sourceUrl ?? ''
