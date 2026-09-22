@@ -10,6 +10,8 @@ import { metadata as percentageToolMetadata } from '@/app/tools/percentage-calcu
 import { metadata as aboutMetadata } from '@/app/about/page'
 import { metadata as methodologyMetadata } from '@/app/methodology/page'
 import { metadata as gazetteMetadata } from '@/app/gazette/page'
+import { metadata as punjabHubMetadata } from '@/app/results/punjab/12th-class/page'
+import { metadata as kpkHubMetadata } from '@/app/results/kpk/12th-class/page'
 import { generateStaticParams } from '@/app/results/[board]/12th-class/page'
 import { getPageByPath, indexablePages } from '@/lib/content/registry'
 import { canonicalUrl } from '@/lib/seo/site'
@@ -31,6 +33,8 @@ const ROUTE_MODULES = [
   { path: '/about', metadata: aboutMetadata },
   { path: '/methodology', metadata: methodologyMetadata },
   { path: '/gazette', metadata: gazetteMetadata },
+  { path: '/results/punjab/12th-class', metadata: punjabHubMetadata },
+  { path: '/results/kpk/12th-class', metadata: kpkHubMetadata },
 ] as const
 
 describe('route metadata matches the registry', () => {
@@ -85,9 +89,20 @@ describe('route metadata matches the registry', () => {
     // The dynamic route is closed (`dynamicParams = false`), so an indexable
     // board page missing from generateStaticParams would 404 in production.
     const params = new Set(generateStaticParams().map((p) => p.board))
+
+    /*
+     * Region hubs sit at the same shape as a board page — `/results/punjab/
+     * 12th-class` looks exactly like `/results/lahore-board/12th-class` — but
+     * they are STATIC routes with files of their own, not `[board]` params.
+     * Next matches a static segment before a dynamic one, so they resolve to
+     * their own page and must not be expected in generateStaticParams.
+     */
+    const REGION_HUBS = new Set(['punjab', 'kpk'])
+
     for (const page of indexablePages()) {
       const match = page.path.match(new RegExp('^/results/([a-z0-9-]+)/12th-class$'))
       if (!match) continue
+      if (REGION_HUBS.has(match[1]!)) continue
       expect(params, `${page.path} is indexable but has no static param`).toContain(match[1])
     }
   })

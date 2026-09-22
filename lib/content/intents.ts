@@ -65,6 +65,26 @@ export const INTENTS: readonly Intent[] = [
     ownership: 'owned',
   },
   {
+    /*
+     * A REGION IS A REAL INTENT HERE, NOT A FILTER.
+     *
+     * Punjab's nine boards share one committee calendar and declare together.
+     * KPK's eight announce on their own dates — Peshawar first, others after,
+     * one still unconfirmed. Those are different answers to "is my result out",
+     * and neither is served by a national list of twenty-eight boards or by a
+     * `?region=` query parameter, which is a control rather than a destination.
+     */
+    id: 'region.punjab',
+    description:
+      'Find the right Punjab board and whether its HSSC Part-II result has been declared.',
+    ownership: 'owned',
+  },
+  {
+    id: 'region.kpk',
+    description: 'Find the right KPK board and whether its HSSC Annual-I result has been declared.',
+    ownership: 'owned',
+  },
+  {
     id: 'result.head',
     description:
       'The head result intent: 12th class result, 2nd year result, HSSC Part-II result, inter part 2 result. Live search returns the same domains and frequently the same URLs across all of them — one intent, not four.',

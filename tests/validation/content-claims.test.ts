@@ -235,10 +235,20 @@ describe('navigation never points at a page that does not exist', () => {
       } catch {
         continue // the nav was reorganised; the remaining files still apply
       }
+      /*
+       * Region hubs share the board-page URL shape — `/results/punjab/
+       * 12th-class` reads exactly like `/results/lahore-board/12th-class` —
+       * but they are static routes with pages of their own, and Next resolves
+       * a static segment before a dynamic one. They are not board slugs and
+       * must not be measured against the board registry.
+       */
+      const REGION_HUBS = new Set(['punjab', 'kpk'])
+
       const copy = copyOnly(source)
       for (const match of copy.matchAll(/\/results\/([a-z0-9-]+)\/12th-class/g)) {
         const slug = match[1]
-        if (slug && !routedSlugs.has(slug)) offenders.push(`${file} -> ${slug}`)
+        if (!slug || REGION_HUBS.has(slug)) continue
+        if (!routedSlugs.has(slug)) offenders.push(`${file} -> ${slug}`)
       }
     }
 

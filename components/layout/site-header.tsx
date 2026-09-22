@@ -358,11 +358,21 @@ export function SiteHeader() {
                 )}
               </li>
 
-              {/* Punjab Boards - Triggers Mega Menu */}
+              {/*
+                Punjab Boards — A REAL LINK, NOT A BARE BUTTON.
+
+                This was a `<button>` with no href, so the region it names had
+                no destination: a keyboard user could open the menu but never
+                reach a Punjab page, and a crawler saw nothing at all. It now
+                goes to the Punjab hub and still opens the mega menu on hover
+                or click, which is the same pattern All Boards already used.
+              */}
               <li className="relative" onMouseEnter={() => setOpenDropdown('punjab')}>
-                <button
-                  type="button"
-                  onClick={() => setOpenDropdown(openDropdown === 'punjab' ? null : 'punjab')}
+                <Link
+                  href="/results/punjab/12th-class"
+                  aria-haspopup="true"
+                  aria-expanded={openDropdown === 'punjab'}
+                  onClick={() => setOpenDropdown(null)}
                   className={`flex items-center gap-1 px-3.5 py-2 text-[13px] font-semibold transition-colors ${
                     openDropdown === 'punjab'
                       ? 'rounded-t-xl bg-emerald-50 text-[#007054] shadow-xs'
@@ -375,7 +385,27 @@ export function SiteHeader() {
                     height={12}
                     className={openDropdown === 'punjab' ? 'text-[#007054]' : 'text-slate-400'}
                   />
-                </button>
+                </Link>
+              </li>
+
+              {/*
+                KPK Results — PROMOTED TO THE FIRST LEVEL.
+
+                KPK had no header item at all while its results were already
+                out: Peshawar declared on 21 September, and several other
+                boards followed on their own dates. A student in Mardan or
+                Bannu arriving on this site found Punjab in the navigation and
+                their own region nowhere, reachable only by opening a menu and
+                scanning twenty-eight boards.
+              */}
+              <li className="relative">
+                <Link
+                  href="/results/kpk/12th-class"
+                  onClick={() => setOpenDropdown(null)}
+                  className="flex items-center gap-1 rounded-md px-3.5 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
+                >
+                  <span>KPK Results</span>
+                </Link>
               </li>
 
               {/* All Boards - Triggers Mega Menu with all provinces */}

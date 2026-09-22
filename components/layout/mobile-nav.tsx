@@ -78,6 +78,53 @@ const SECTIONS = [
   {
     title: 'BOARDS',
     links: [
+      /*
+        REGIONS FIRST, AND KPK IS NOT OPTIONAL HERE.
+
+        Most of this site's readers are on a phone, and the only board entry in
+        this menu was a list of twenty-eight. A student in Peshawar whose result
+        was already out had to recognise their board in that list; a student in
+        Lahore had to do the same on the morning nine boards declare at once.
+        Both now have one tap to their own region.
+      */
+      {
+        label: 'Punjab 12th results',
+        href: '/results/punjab/12th-class',
+        icon: (
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 21a9 9 0 100-18 9 9 0 000 18zm0 0V3m9 9H3"
+            />
+          </svg>
+        ),
+      },
+      {
+        label: 'KPK 12th results',
+        href: '/results/kpk/12th-class',
+        icon: (
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 21a9 9 0 100-18 9 9 0 000 18zm0 0V3m9 9H3"
+            />
+          </svg>
+        ),
+      },
       {
         label: 'All Pakistan boards',
         href: '/boards',
