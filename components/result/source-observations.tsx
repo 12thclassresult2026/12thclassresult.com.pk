@@ -1,6 +1,7 @@
 import type { Board } from '@/lib/board/types'
 import type { ResultSource } from '@/lib/result-sources/types'
 
+import { statusFor } from '@/lib/board/result-status'
 import { linkableSources } from '@/lib/result-sources/registry'
 
 /**
@@ -19,6 +20,7 @@ import { linkableSources } from '@/lib/result-sources/registry'
  * recognise the screen in front of them.
  */
 export function SourceObservations({ board }: { board: Board }) {
+  const status = statusFor(board.id)
   const sources = linkableSources(board.id).filter(
     (source) => source.observedVia !== 'not-observed' && hasSomethingToShow(source),
   )
@@ -74,9 +76,41 @@ export function SourceObservations({ board }: { board: Board }) {
               ) : null}
             </dl>
 
-            <p className="mt-4 border-t border-[var(--border-subtle)] pt-3 text-xs text-[var(--text-muted)]">
-              {source.provenanceNote}
-            </p>
+            {/*
+              WHAT USED TO BE HERE: `source.provenanceNote`, rendered raw.
+              That field is an operator's working note — it carries field names
+              in backticks, redirect chains and parser caveats — and on the
+              Peshawar page it told students, in our voice:
+
+                "The portal exposes ONE session at a time and was serving SSC
+                 Annual-I 2026, so no HSSC entry point was present at all.
+                 `examLevelsObserved` is therefore empty"
+
+              A student wanting their 12th result read that as "there is no
+              12th result here". It was also, by then, wrong: the board had
+              been serving HSSC Annual-I 2026 since 21 September.
+
+              The operator note stays in the registry where it belongs. What a
+              reader gets instead is the session observed on that board's
+              portal today, which is the thing they are actually trying to
+              recognise on screen.
+            */}
+            {status?.portalSessionObserved ? (
+              <div className="mt-4 border-t border-[var(--border-subtle)] pt-3">
+                <p className="text-xs text-[var(--text-muted)]">
+                  <span className="font-semibold text-[var(--text-strong)]">
+                    Currently showing:
+                  </span>{' '}
+                  {status.portalSessionObserved}
+                  <span className="block">Checked {status.lastVerifiedAt}.</span>
+                </p>
+                {status.captcha === 'required' ? (
+                  <p className="mt-1.5 text-xs text-[var(--text-muted)]">
+                    Complete the security check on the official website.
+                  </p>
+                ) : null}
+              </div>
+            ) : null}
           </article>
         ))}
       </div>

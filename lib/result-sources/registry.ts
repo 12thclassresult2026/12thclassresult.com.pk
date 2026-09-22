@@ -480,7 +480,7 @@ export const RESULT_SOURCES: readonly ResultSource[] = [
     lastSuccessfulCheckAt: CHECKED_AT,
     status: 'online',
     provenanceNote:
-      'Loaded 2026-09-14, reached by a 301 from the board’s own /results/ path, which is itself linked from a provincial government department page. A single roll-number field with search and reset; no name, CNIC, year, session or class selector. The portal exposes ONE session at a time and was serving SSC Annual-I 2026, so no HSSC entry point was present at all. `examLevelsObserved` is therefore empty: the rotation means a level seen today is not a level offered tomorrow.',
+      'Loaded 2026-09-14 and re-checked 2026-09-22. The portal exposes ONE session at a time, which is why a snapshot of it dates quickly: on 14 September it was serving SSC Annual-I 2026 and carried no HSSC entry point at all, and by 22 September it was serving HSSC Annual-I Examination 2026 for 11th and 12th classes, the board having announced on 21 September at 3 PM. A single roll-number field with search and reset; no name, CNIC, year, session or class selector. `examLevelsObserved` stays empty deliberately: the rotation means a level seen today is not a level offered tomorrow.',
   },
   {
     id: 'mardan-result-portal',
@@ -509,7 +509,7 @@ export const RESULT_SOURCES: readonly ResultSource[] = [
     lastSuccessfulCheckAt: CHECKED_AT,
     status: 'online',
     provenanceNote:
-      'Loaded 2026-09-14. A required roll-number field only. Like Peshawar it offers one session at a time and was serving SSC Annual-I 2026. The board’s most recent HSSC result notice was for the Annual-II 2025 session, declared 5 February 2026 — no HSSC Annual-I 2026 result notice existed.',
+      'Loaded 2026-09-14 and re-checked 2026-09-22. Like Peshawar it offers one session at a time. On 14 September that was SSC Annual-I 2026, with the board’s most recent HSSC notice being Annual-II 2025 declared 5 February 2026. By 22 September the result host was serving the Intermediate Part-I and Part-II Annual-I 2026 session. A required roll-number field only.',
   },
   {
     id: 'abbottabad-result-portal',

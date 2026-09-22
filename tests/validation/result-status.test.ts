@@ -1,4 +1,8 @@
+import { readdirSync, readFileSync, statSync } from 'node:fs'
+import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
+
+const REPO_ROOT = process.cwd()
 
 import { BOARDS } from '@/lib/board/registry'
 import {
@@ -196,5 +200,81 @@ describe('a region card counts only its own region', () => {
       announcementTally(statusesForBoards(kpk)).scheduled,
       'a KPK board picked up the Punjab schedule',
     ).toBe(0)
+  })
+})
+
+describe('operator notes never reach a student', () => {
+  it('renders no provenance note in any page or component', () => {
+    /*
+     * THIS SHIPPED, AND IT READ AS AN INSTRUCTION.
+     *
+     * `provenanceNote` is an operator's working record — redirect chains,
+     * parser caveats, field names in backticks. The board page rendered it
+     * raw, so the Peshawar page told students, in this site's own voice:
+     *
+     *   "The portal exposes ONE session at a time and was serving SSC
+     *    Annual-I 2026, so no HSSC entry point was present at all.
+     *    `examLevelsObserved` is therefore empty"
+     *
+     * A student looking for their 12th result reads that as "there is no 12th
+     * result here". By the time it was found it was also false — the board had
+     * been serving HSSC Annual-I 2026 for a day.
+     *
+     * The field stays in the registry. It must not be rendered.
+     */
+    const offenders: string[] = []
+    const walk = (dir: string) => {
+      for (const entry of readdirSync(dir)) {
+        const full = join(dir, entry)
+        if (statSync(full).isDirectory()) {
+          walk(full)
+          continue
+        }
+        if (!entry.endsWith('.tsx')) continue
+        const code = readFileSync(full, 'utf8')
+          .replace(/\{?\/\*[\s\S]*?\*\/\}?/g, '')
+          .replace(/^\s*\/\/.*$/gm, '')
+        // Rendered, not merely imported: `{something.provenanceNote}`.
+        if (/\{\s*[\w.]*provenanceNote\s*\}/.test(code)) {
+          offenders.push(full.replace(REPO_ROOT, '').replace(/\\/g, '/'))
+        }
+      }
+    }
+    /*
+     * SCOPED TO THE PAGES THAT INSTRUCT, and the distinction is real.
+     *
+     * A board page tells a student what to do next, so an operator note there
+     * is read as an instruction in this site's voice. The rechecking guide
+     * renders the same field under a heading that says 'Where this came from',
+     * beside the source link it describes — that is a provenance section, the
+     * thing this site is built on, and a reader there has asked to see how a
+     * fee was sourced.
+     *
+     * If a provenance note ever needs to appear on a result page, it needs
+     * rewriting for a student first, not an exemption added here.
+     */
+    for (const dir of [
+      'app/results',
+      'components/result',
+      'components/home',
+      'components/region',
+    ]) {
+      walk(join(REPO_ROOT, dir))
+    }
+
+    expect(
+      offenders,
+      `an operator note is rendered to readers:\n  ${offenders.join('\n  ')}\n` +
+        `Show lib/board/result-status.ts's portalSessionObserved instead — it is written for a student and carries a check date.`,
+    ).toEqual([])
+  })
+
+  it('writes the portal session in language a student can act on', () => {
+    // No backticks, no field names, no redirect chains.
+    for (const s of BOARD_RESULT_STATUS) {
+      if (!s.portalSessionObserved) continue
+      expect(s.portalSessionObserved, `${s.boardId} quotes code at the reader`).not.toMatch(/`/)
+      expect(s.portalSessionObserved).not.toMatch(/\b\w+Observed\b|\b301\b|parser/i)
+    }
   })
 })
