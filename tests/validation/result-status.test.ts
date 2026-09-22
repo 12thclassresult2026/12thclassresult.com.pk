@@ -278,3 +278,73 @@ describe('operator notes never reach a student', () => {
     }
   })
 })
+
+describe('the seventeen priority boards all have somewhere to land', () => {
+  /*
+   * Nine Punjab boards and eight KPK boards. Punjab declares tomorrow on one
+   * calendar; KPK has already declared, board by board. Between them they are
+   * where essentially all of this site's result-day traffic goes.
+   *
+   * Two of the seventeen had no page at all — Faisalabad and Kohat, both
+   * marked `planned` because automated checks were refused on 2026-09-14. That
+   * is a fact about one afternoon's fetches, not about the boards: re-checked
+   * on 2026-09-22, Faisalabad serves an Intermediate roll-number search and
+   * Kohat's own homepage links its Intermediate Annual 2026 result. A failed
+   * fetch is not evidence a board has no result route, and leaving two boards
+   * unreachable on that basis cost their students a destination.
+   */
+  const PRIORITY = [
+    'bise-lahore',
+    'bise-gujranwala',
+    'bise-faisalabad',
+    'bise-multan',
+    'bise-rawalpindi',
+    'bise-sargodha',
+    'bise-bahawalpur',
+    'bise-dg-khan',
+    'bise-sahiwal',
+    'bise-peshawar',
+    'bise-mardan',
+    'bise-abbottabad',
+    'bise-swat',
+    'bise-kohat',
+    'bise-bannu',
+    'bise-malakand',
+    'bise-dera-ismail-khan',
+  ]
+
+  it('covers exactly the seventeen, with none missing from the registry', () => {
+    const known = new Set(BOARDS.map((b) => b.id))
+    const missing = PRIORITY.filter((id) => !known.has(id))
+    expect(missing, `not in the board registry: ${missing.join(', ')}`).toEqual([])
+    expect(PRIORITY.length).toBe(17)
+  })
+
+  it('gives each of them a published page', () => {
+    const unpublished = PRIORITY.filter(
+      (id) => BOARDS.find((b) => b.id === id)?.publishState !== 'published',
+    )
+    expect(
+      unpublished,
+      `these priority boards have no page, so their students have nowhere to land: ${unpublished.join(', ')}`,
+    ).toEqual([])
+  })
+
+  it('gives each of them a status record and an official destination', () => {
+    for (const id of PRIORITY) {
+      const status = statusFor(id)
+      expect(status, `${id} has no result status record`).not.toBeNull()
+      // Even a board we know nothing else about must have somewhere to send a
+      // student — its own website, at minimum.
+      expect(status!.officialHomeUrl, `${id} has no official destination`).toMatch(/^https:\/\//)
+    }
+  })
+
+  it('splits them nine Punjab and eight KPK, from the registry not a literal', () => {
+    const byProvince = (province: string) =>
+      PRIORITY.filter((id) => BOARDS.find((b) => b.id === id)?.province === province)
+
+    expect(byProvince('punjab')).toHaveLength(9)
+    expect(byProvince('khyber-pakhtunkhwa')).toHaveLength(8)
+  })
+})
