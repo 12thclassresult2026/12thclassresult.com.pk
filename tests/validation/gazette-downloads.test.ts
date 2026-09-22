@@ -9,6 +9,8 @@ import {
   GAZETTE_FILES,
   GAZETTE_INDEX_PAGES,
   gazetteFileFor,
+  gazetteFilesFor,
+  boardsWithGazettes,
 } from '@/lib/gazettes/files'
 
 /**
@@ -77,12 +79,62 @@ describe('every gazette download points at a real file on a board domain', () =>
     }
   })
 
-  it('serves each board at most one file, so no two rows contradict', () => {
+  it('registers each examination once, so no two rows contradict', () => {
+    /*
+     * A board may have many gazettes — Gujranwala publishes nine years of
+     * Part-II annuals plus its second annuals. What must never repeat is one
+     * examination: two rows for "HSSC Part-II Annual 2025" would mean two
+     * different files claiming to be the same document, and whichever sorted
+     * first would win silently.
+     */
     const seen = new Set<string>()
     for (const file of GAZETTE_FILES) {
-      expect(seen, `${file.boardId} has two gazette files registered`).not.toContain(file.boardId)
-      seen.add(file.boardId)
+      const key = `${file.boardId}:${file.year}:${file.session}`
+      expect(seen, `${key} is registered twice`).not.toContain(key)
+      seen.add(key)
     }
+  })
+
+  it('offers the newest annual first when only one button fits', () => {
+    /*
+     * The homepage card has room for one download. A student arriving from a
+     * search wants the most recent annual — not a second annual, and not a
+     * file from 2017 that happened to sort first.
+     */
+    for (const boardId of boardsWithGazettes()) {
+      const files = gazetteFilesFor(boardId)
+      const featured = gazetteFileFor(boardId)
+      expect(featured, `${boardId} has files but none featured`).not.toBeNull()
+
+      const newestYear = Math.max(...files.map((f) => f.year))
+      expect(featured!.year, `${boardId} features ${featured!.year}, not ${newestYear}`).toBe(
+        newestYear,
+      )
+      // With both sessions in the newest year, the annual is the one to show.
+      if (files.some((f) => f.year === newestYear && f.session === 'annual')) {
+        expect(featured!.session).toBe('annual')
+      }
+    }
+  })
+
+  it('labels a card with the year of the file it offers', () => {
+    /*
+     * THIS ONE SHIPPED. Every homepage gazette card read
+     * "12th Class • HSSC Part-II • 2026" while the button under it downloaded
+     * a 2025 gazette. The 2026 session is not announced until 23 September
+     * 2026 and no board has published its gazette, so the card was describing
+     * a document that does not exist.
+     *
+     * The year must be read from the file, never typed beside it.
+     */
+    const source = read('components/home/gazette-section.tsx')
+      .replace(/\{?\/\*[\s\S]*?\*\/\}?/g, '')
+      .replace(/^\s*\/\/.*$/gm, '')
+
+    expect(source, 'a hard-coded year is back on the gazette cards').not.toMatch(
+      /HSSC Part-II\s*•\s*20\d{2}/,
+    )
+    expect(source, 'the card no longer reads its year from the file').toContain('gazetteFile.year')
   })
 
   it('formats sizes from the real number rather than a literal', () => {

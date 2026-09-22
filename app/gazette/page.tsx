@@ -6,7 +6,7 @@ import { JsonLdScript } from '@/components/seo/json-ld'
 import { boardPageHref, BOARDS, routedBoards } from '@/lib/board/registry'
 import { requirePage } from '@/lib/content/registry'
 import { datasetForBoard } from '@/lib/gazettes/datasets'
-import { formatBytes, gazetteFileFor, gazetteIndexFor } from '@/lib/gazettes/files'
+import { formatBytes, GAZETTE_FILES, gazetteFilesFor, gazetteIndexFor } from '@/lib/gazettes/files'
 import { breadcrumbSchema, webPageSchema } from '@/lib/schema/json-ld'
 import { metadataForPage } from '@/lib/seo/metadata'
 
@@ -39,16 +39,16 @@ export default function GazetteDownloadsPage() {
   /* Boards with a file first, then boards we can at least point somewhere. */
   const rows = BOARDS.map((board) => ({
     board,
-    file: gazetteFileFor(board.id),
+    files: gazetteFilesFor(board.id),
     index: gazetteIndexFor(board.id),
     dataset: datasetForBoard(board.slug),
     routed: routed.has(board.id),
   })).sort((a, b) => {
-    const rank = (r: typeof a) => (r.file ? 0 : r.index ? 1 : 2)
+    const rank = (r: typeof a) => (r.files.length > 0 ? 0 : r.index ? 1 : 2)
     return rank(a) - rank(b) || a.board.shortName.localeCompare(b.board.shortName)
   })
 
-  const withFile = rows.filter((r) => r.file)
+  const withFile = rows.filter((r) => r.files.length > 0)
 
   return (
     <>
@@ -94,70 +94,72 @@ export default function GazetteDownloadsPage() {
             </div>
           </header>
 
-          {/* ---- Boards with a downloadable file ------------------------- */}
+          {/* ---- Boards with downloadable files -------------------------- */}
           <section className="mt-10">
             <h2 className="text-xl font-bold tracking-tight text-slate-900">
               Available to download now
             </h2>
             <p className="mt-1.5 text-sm text-slate-600">
-              {withFile.length} board{withFile.length === 1 ? '' : 's'} publish a gazette file we
-              could open and confirm.
+              {GAZETTE_FILES.length} gazette files across {withFile.length} board
+              {withFile.length === 1 ? '' : 's'}, each one opened and confirmed to be a PDF.
             </p>
 
-            <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
-              {withFile.map(({ board, file }) =>
-                file === null ? null : (
-                  <article
-                    key={board.id}
-                    className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-2xs"
-                  >
+            <div className="mt-5 space-y-6">
+              {withFile.map(({ board, files }) => (
+                <article
+                  key={board.id}
+                  className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xs"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 bg-slate-50/70 px-5 py-3.5">
                     <div>
                       <h3 className="text-base font-bold text-slate-900">{board.shortName}</h3>
-                      <p className="mt-1 text-[13px] text-slate-600">
-                        {file.examinationLabel} {file.year}
+                      <p className="mt-0.5 text-[12px] text-slate-500">
+                        {files.length} gazette{files.length === 1 ? '' : 's'} published on the
+                        board’s own site
                       </p>
-                      <dl className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-[12px] text-slate-500">
-                        <div className="flex gap-1.5">
-                          <dt className="font-semibold text-slate-600">Size</dt>
-                          <dd>{formatBytes(file.bytes)}</dd>
-                        </div>
-                        <div className="flex gap-1.5">
-                          <dt className="font-semibold text-slate-600">Format</dt>
-                          <dd>PDF</dd>
-                        </div>
-                        <div className="flex gap-1.5">
-                          <dt className="font-semibold text-slate-600">Link checked</dt>
-                          <dd>{file.verifiedAt}</dd>
-                        </div>
-                      </dl>
                     </div>
-
-                    <div className="mt-4 flex flex-wrap items-center gap-2">
-                      {/*
-                        `rel="nofollow"` and a new tab: this is the board's file
-                        on the board's server, not ours, and we do not pass link
-                        equity to a URL that may be rotated without notice.
-                      */}
-                      <a
-                        href={file.url}
-                        target="_blank"
-                        rel="noopener nofollow"
-                        className="inline-flex items-center gap-2 rounded-xl bg-[#007054] px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-[#005842]"
+                    {routed.has(board.id) ? (
+                      <Link
+                        href={boardPageHref(board.slug)}
+                        className="inline-flex items-center rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 transition-colors hover:bg-slate-50"
                       >
-                        Download gazette ({formatBytes(file.bytes)})
-                      </a>
-                      {board.id && routed.has(board.id) ? (
-                        <Link
-                          href={boardPageHref(board.slug)}
-                          className="inline-flex items-center rounded-xl border border-slate-300 px-4 py-2.5 text-xs font-bold text-slate-700 transition-colors hover:bg-slate-50"
+                        Search by roll number
+                      </Link>
+                    ) : null}
+                  </div>
+
+                  <ul className="divide-y divide-slate-100">
+                    {files.map((file) => (
+                      <li
+                        key={file.url}
+                        className="flex flex-wrap items-center justify-between gap-3 px-5 py-3.5"
+                      >
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold text-slate-900">
+                            {file.examinationLabel} {file.year}
+                          </p>
+                          <p className="mt-0.5 text-[11.5px] text-slate-500">
+                            PDF · {formatBytes(file.bytes)} · link checked {file.verifiedAt}
+                          </p>
+                        </div>
+                        {/*
+                          `rel="nofollow"` and a new tab: this is the board's
+                          file on the board's server, not ours, and we do not
+                          vouch for a URL that may be renamed without notice.
+                        */}
+                        <a
+                          href={file.url}
+                          target="_blank"
+                          rel="noopener nofollow"
+                          className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[#007054] px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-[#005842]"
                         >
-                          Search by roll number
-                        </Link>
-                      ) : null}
-                    </div>
-                  </article>
-                ),
-              )}
+                          Download · {formatBytes(file.bytes)}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
             </div>
           </section>
 
@@ -182,7 +184,7 @@ export default function GazetteDownloadsPage() {
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {rows
-                    .filter((r) => !r.file)
+                    .filter((r) => r.files.length === 0)
                     .map(({ board, index, dataset }) => (
                       <tr key={board.id} className="align-top">
                         <td className="px-5 py-3.5">

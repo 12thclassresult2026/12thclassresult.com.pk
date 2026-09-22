@@ -604,8 +604,19 @@ export function GazetteSection() {
                     <h3 className="truncate text-sm font-black text-slate-900 transition-colors group-hover:text-[#007054]">
                       {board.shortName}
                     </h3>
+                    {/*
+                      THE YEAR MUST MATCH THE FILE. This line read
+                      "12th Class • HSSC Part-II • 2026" on every card while
+                      the button beneath it downloaded a 2025 gazette — the
+                      2026 session is not announced until 23 September 2026 and
+                      no board has published its gazette yet. A card that
+                      labels a 2025 file as 2026 is telling a student the
+                      document covers an examination it does not.
+                    */}
                     <p className="text-[11px] font-medium text-slate-500">
-                      12th Class • HSSC Part-II • 2026
+                      {gazetteFile
+                        ? `${gazetteFile.examinationLabel} • ${gazetteFile.year}`
+                        : '12th Class • HSSC Part-II'}
                     </p>
                   </div>
                 </div>
