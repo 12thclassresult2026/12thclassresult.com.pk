@@ -3,6 +3,7 @@ import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
 import { BOARDS, boardPageHref, publishedBoards } from '@/lib/board/registry'
+import { PUNJAB_HSSC_PART2_ANNOUNCEMENT } from '@/lib/result/announcement'
 
 /**
  * What the page SAYS, checked against what is true.
@@ -309,6 +310,95 @@ describe('no result date is published that the registry does not hold', () => {
       offenders,
       `a result date is typed into a component instead of coming from the registry:\n  ${offenders.join('\n  ')}\nUse board.resultDate — it carries a status and a source, and is 'unknown' for every board that has not announced one.`,
     ).toEqual([])
+  })
+
+  it('hard-codes no calendar date at all, keyword or not', () => {
+    /*
+     * THE RULE ABOVE WAS NOT ENOUGH, and the site shipped a wrong date for a
+     * week because of the gap.
+     *
+     * The header read `Official PBCC Date (Tentative): {' '}` followed by
+     * `<strong>22 October 2026</strong>`, and the ticker held
+     * `const dateFormatted = '22 October 2026'`. Neither matched: the rule
+     * above wants a keyword within twenty characters of the month and refuses
+     * to cross a `<`, so a date in its own element or its own variable walked
+     * straight past it. Students were told the result was a month later than
+     * it was, under the word "Official".
+     *
+     * So this one takes no view on wording. Any `22 October 2026` or `October
+     * 2026` in a component is a date somebody typed, and a typed date has no
+     * status, no source and no way to be re-verified. They belong in
+     * lib/result/announcement.ts or the board registry, where they carry both.
+     */
+    const MONTH = String.raw`(?:January|February|March|April|May|June|July|August|September|October|November|December)`
+    const ANY_DATE = new RegExp(String.raw`(?:\b\d{1,2}\s+)?${MONTH}\s+20\d{2}`, 'g')
+
+    /*
+     * ONE EXEMPTION, AND IT IS NOT A LOOPHOLE. "Checked on 14 September 2026"
+     * is a statement about when WE read a source — our own provenance, which is
+     * the opposite of an unsourced claim and which the methodology pages are
+     * built on. A date about the boards' calendar is the thing being guarded.
+     *
+     * The test for it is what comes immediately BEFORE the date, so the
+     * exemption cannot be claimed by putting the word somewhere else in the
+     * file. A fallback like `return '14 September 2026'` has no such lead-in
+     * and is still caught — that one shipped, inventing a day on which we were
+     * supposed to have checked the sources.
+     */
+    const PROVENANCE = /\b(?:checked|verified|read|reviewed|updated|published|as of)\b[^.<]{0,40}$/i
+
+    const offenders: string[] = []
+    for (const file of userFacingSources()) {
+      const copy = copyOnly(readFileSync(file, 'utf8'))
+      const flagged = new Set<string>()
+      for (const match of copy.matchAll(ANY_DATE)) {
+        const lead = copy.slice(Math.max(0, match.index - 60), match.index)
+        if (PROVENANCE.test(lead)) continue
+        flagged.add(match[0])
+      }
+      if (flagged.size > 0) offenders.push(`${relative(file)}: ${[...flagged].join(', ')}`)
+    }
+
+    expect(
+      offenders,
+      `a calendar date is typed into a component:\n  ${offenders.join('\n  ')}\n` +
+        `Move it to lib/result/announcement.ts or the board registry, where a date carries a status, a source URL and the date that source was published.`,
+    ).toEqual([])
+  })
+
+  it('carries a source and an honest status for the announcement it does publish', () => {
+    /*
+     * The site publishes ONE date site-wide, in the header and the ticker. It
+     * is press reporting of a PBCC common calendar, checked against BISE
+     * Lahore's own site on 2026-09-22 and not found there.
+     *
+     * `tentative` is what that is. The word "Official" must not appear beside
+     * it — the previous copy managed to say "Official ... (Tentative)" in one
+     * breath, which tells a reader nothing except that it is official.
+     */
+    expect(PUNJAB_HSSC_PART2_ANNOUNCEMENT.value, 'the announcement has no date').toBeTruthy()
+    expect(
+      PUNJAB_HSSC_PART2_ANNOUNCEMENT.sourceUrl,
+      'the announcement date cites no source; an unsourced date is not a date',
+    ).toBeTruthy()
+    expect(PUNJAB_HSSC_PART2_ANNOUNCEMENT.sourcePublishedAt).toBeTruthy()
+    expect(PUNJAB_HSSC_PART2_ANNOUNCEMENT.checkedAt).toBeTruthy()
+
+    // `confirmed` is reserved for a notification read on a board's own domain.
+    expect(
+      ['tentative', 'expected', 'confirmed'],
+      'the announcement status is not one a reader can be shown',
+    ).toContain(PUNJAB_HSSC_PART2_ANNOUNCEMENT.status)
+
+    if (PUNJAB_HSSC_PART2_ANNOUNCEMENT.status !== 'confirmed') {
+      for (const file of ['components/layout/site-header.tsx']) {
+        const copy = copyOnly(readFileSync(join(REPO_ROOT, file), 'utf8'))
+        expect(
+          copy,
+          `${file} calls an unconfirmed date official; say "Expected" until a board publishes it`,
+        ).not.toMatch(/Official[^<]{0,40}Date/i)
+      }
+    }
   })
 
   it('agrees with the registry about how many dates are actually known', () => {

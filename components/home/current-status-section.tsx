@@ -16,7 +16,13 @@ interface CurrentStatusSectionProps {
 }
 
 function formatVerifiedDate(isoDate?: string | null): string {
-  if (!isoDate) return '14 September 2026'
+  /*
+   * NO FALLBACK DATE. This used to `return '14 September 2026'` when no date
+   * was passed — a day we would then be claiming to have checked the sources,
+   * chosen by whoever last edited the file. The caller having no date is not
+   * evidence of anything, so the line says so instead of inventing a day.
+   */
+  if (!isoDate) return 'not recorded'
   try {
     const parts = isoDate.split('-').map(Number)
     const year = parts[0]

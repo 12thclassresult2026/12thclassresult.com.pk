@@ -1,11 +1,22 @@
 import Link from 'next/link'
 
+import {
+  formatAnnouncementDate,
+  PUNJAB_HSSC_PART2_ANNOUNCEMENT,
+  PUNJAB_HSSC_PART2_ANNOUNCEMENT_TIME,
+} from '@/lib/result/announcement'
+
 /**
  * Premium Slim "Latest Result Update" Scrolling Ticker for 12th Class.
  * Seamless, hardware-accelerated infinite marquee with hover-pause.
  */
 export function ResultUpdateTicker() {
-  const dateFormatted = '22 October 2026'
+  /*
+   * Read from the registry, never typed here. This line used to read
+   * `const dateFormatted = '22 October 2026'` — an unsourced literal that told
+   * students the wrong month for a week. See lib/result/announcement.ts.
+   */
+  const dateFormatted = formatAnnouncementDate(PUNJAB_HSSC_PART2_ANNOUNCEMENT.value ?? '')
 
   const tickerItem = (
     <div className="inline-flex items-center gap-2.5 text-xs font-medium text-slate-800 sm:text-[13px]">
@@ -15,12 +26,12 @@ export function ResultUpdateTicker() {
       <span className="font-bold text-slate-400" aria-hidden="true">
         ✦
       </span>
-      <span className="text-slate-700">Tentative Date:</span>
+      <span className="text-slate-700">Expected:</span>
       <Link
         href="/results/12th-class"
         className="inline-flex items-center rounded-sm bg-emerald-50 px-2 py-0.5 font-bold text-[#005B4C] ring-1 ring-emerald-300/70 transition-colors hover:bg-emerald-100 hover:text-[#00473B]"
       >
-        {dateFormatted}
+        {dateFormatted} · {PUNJAB_HSSC_PART2_ANNOUNCEMENT_TIME}
       </Link>
       <span className="font-bold text-emerald-500" aria-hidden="true">
         ✦

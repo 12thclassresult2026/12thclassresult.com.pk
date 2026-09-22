@@ -8,6 +8,11 @@ import { HeaderMegaMenu } from '@/components/layout/header-mega-menu'
 import { MobileNav } from '@/components/layout/mobile-nav'
 import { ResultUpdateTicker } from '@/components/layout/result-update-ticker'
 import {
+  formatAnnouncementDate,
+  PUNJAB_HSSC_PART2_ANNOUNCEMENT,
+  PUNJAB_HSSC_PART2_ANNOUNCEMENT_TIME,
+} from '@/lib/result/announcement'
+import {
   CalendarIcon,
   ChevronDownIcon,
   ChevronRightIcon,
@@ -86,9 +91,23 @@ export function SiteHeader() {
             className="hidden items-center gap-1.5 rounded-full border border-emerald-400/30 bg-black/25 px-3.5 py-1 text-[11px] font-semibold text-white transition-colors hover:bg-black/35 md:inline-flex"
           >
             <CalendarIcon width={12} height={12} className="shrink-0 text-emerald-300" />
+            {/*
+              NOT "Official". This read "Official PBCC Date (Tentative): 22
+              October 2026" — a contradiction on its face, wrapped around a
+              date that cited nothing and was a month wrong.
+
+              The date now comes from lib/result/announcement.ts, where its
+              status is `tentative` because it is press reporting of a PBCC
+              calendar, not a notification read on a board's own domain. The
+              wording has to match that: "Expected" is what we can support, and
+              the badge links to the page where the source is named.
+            */}
             <span>
-              Official PBCC Date (Tentative):{' '}
-              <strong className="font-bold text-emerald-300">22 October 2026</strong>
+              Expected:{' '}
+              <strong className="font-bold text-emerald-300">
+                {formatAnnouncementDate(PUNJAB_HSSC_PART2_ANNOUNCEMENT.value ?? '')} ·{' '}
+                {PUNJAB_HSSC_PART2_ANNOUNCEMENT_TIME}
+              </strong>
             </span>
           </Link>
 
