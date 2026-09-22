@@ -9,11 +9,14 @@ import type { LookupActionState } from '@/app/results/[board]/12th-class/lookup-
 
 import { lookupRollNumber } from '@/app/results/[board]/12th-class/lookup-action'
 import { GazetteResult } from '@/components/result/gazette-result'
-import { datasetForBoard } from '@/lib/gazettes/datasets'
+import type { ResultSession } from '@/lib/gazettes/datasets'
+
+import { CURRENT_SESSION, datasetFor, RESULT_SESSIONS } from '@/lib/gazettes/datasets'
 
 import {
   AlertTriangleIcon,
   ArrowRightIcon,
+  CalendarIcon,
   CheckIcon,
   ChevronDownIcon,
   CopyIcon,
@@ -95,6 +98,7 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
    */
   const [lookup, setLookup] = useState<LookupActionState>({ status: 'idle' })
   const [looking, setLooking] = useState(false)
+  const [session, setSession] = useState<ResultSession>(CURRENT_SESSION)
 
   function handleRollSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -113,6 +117,8 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
     const form = new FormData()
     form.set('board', chosen.slug)
     form.set('rollNumber', rollNumber)
+    form.set('year', String(session.year))
+    form.set('examination', session.examination)
 
     setLooking(true)
     startTransition(async () => {
@@ -347,7 +353,57 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
               {/* -- Tab 1: By Roll Number -- */}
               {activeTab === 'roll' && (
                 <form onSubmit={handleRollSubmit} className="mt-6 space-y-4">
-                  <div className="grid grid-cols-1 items-end gap-3 sm:grid-cols-2 md:grid-cols-[1.2fr_1.2fr_auto]">
+                  <div className="grid grid-cols-1 items-end gap-3 sm:grid-cols-2 md:grid-cols-[1.1fr_0.9fr_1.1fr_auto]">
+                    {/* Field 0: Which examination session */}
+                    <div className="text-left">
+                      {/*
+                        THE FIELD THAT WAS MISSING, and its absence was the
+                        worst defect on this page. The lookup hard-coded
+                        `year: 2025` while the heading above it read
+                        "12th Class Result 2026". On result morning a student
+                        would have had last year's gazette searched under this
+                        year's roll number — finding whoever held that number
+                        in 2025, or nothing at all. Both answers look right.
+
+                        The session is now asked for, sent, validated, and
+                        stated back in the answer.
+                      */}
+                      <label
+                        htmlFor="session-select"
+                        className="mb-1.5 block text-xs font-bold text-slate-800"
+                      >
+                        Examination
+                      </label>
+                      <div className="relative">
+                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                          <CalendarIcon width={16} height={16} />
+                        </div>
+                        <select
+                          id="session-select"
+                          value={`${session.year}:${session.examination}`}
+                          onChange={(e) => {
+                            const next = RESULT_SESSIONS.find(
+                              (s) => `${s.year}:${s.examination}` === e.target.value,
+                            )
+                            if (next) setSession(next)
+                          }}
+                          className="h-[48px] w-full appearance-none rounded-xl border border-slate-300 bg-white py-2.5 pr-8 pl-10 text-xs font-semibold text-slate-900 shadow-2xs transition-all focus:border-[#007054] focus:ring-2 focus:ring-[#007054]/20 focus:outline-none sm:text-sm"
+                        >
+                          {RESULT_SESSIONS.map((s) => (
+                            <option
+                              key={`${s.year}:${s.examination}`}
+                              value={`${s.year}:${s.examination}`}
+                            >
+                              {s.label}
+                            </option>
+                          ))}
+                        </select>
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
+                          <ChevronDownIcon width={15} height={15} />
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Field 1: Select Board */}
                     <div className="text-left">
                       <label
@@ -417,9 +473,9 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
                   <div className="flex items-center justify-center gap-2 pt-1 text-center text-[11px] text-slate-500 sm:text-xs">
                     <ShieldCheckIcon width={15} height={15} className="shrink-0 text-[#007054]" />
                     <span>
-                      {datasetForBoard(chosen?.slug ?? '')
-                        ? 'Read from this board’s own gazette. Your roll number is sent once to look it up — it is never stored, logged, or put in the page address.'
-                        : 'We have not published this board’s gazette yet. Search anyway — the answer will say so right here, with a link to the board’s own portal.'}
+                      {datasetFor(chosen?.slug ?? '', session)
+                        ? `Read from this board’s own ${session.label} gazette. Your roll number is sent once to look it up — it is never stored, logged, or put in the page address.`
+                        : `No ${session.label} gazette is published here for this board yet. Search anyway — the answer will say so, with a link to the board’s own portal.`}
                     </span>
                   </div>
 
@@ -449,12 +505,17 @@ export function HeroSection({ boards }: { boards: BoardOption[] }) {
                         <GazetteResult
                           outcome={lookup.outcome}
                           boardName={chosen.shortName}
-                          year={datasetForBoard(chosen.slug)?.year ?? 2025}
+                          year={lookup.session.year}
                           examinationLabel={
-                            datasetForBoard(chosen.slug)?.examinationLabel ?? 'HSSC Part-II'
+                            datasetFor(chosen.slug, lookup.session)?.examinationLabel ??
+                            lookup.session.label
                           }
-                          gazetteSourceUrl={datasetForBoard(chosen.slug)?.sourceUrl ?? ''}
-                          gazetteCheckedOn={datasetForBoard(chosen.slug)?.checkedAt ?? ''}
+                          gazetteSourceUrl={
+                            datasetFor(chosen.slug, lookup.session)?.sourceUrl ?? ''
+                          }
+                          gazetteCheckedOn={
+                            datasetFor(chosen.slug, lookup.session)?.checkedAt ?? ''
+                          }
                           boardPageHref={targetHref}
                           onReset={() => {
                             setLookup({ status: 'idle' })

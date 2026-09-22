@@ -5,7 +5,10 @@ import { headers } from 'next/headers'
 
 import type { LookupOutcome } from '@/lib/gazettes/lookup'
 
+import type { ResultSession } from '@/lib/gazettes/datasets'
+
 import { getBoardBySlug } from '@/lib/board/registry'
+import { CURRENT_SESSION, resolveSession } from '@/lib/gazettes/datasets'
 import { lookupResult } from '@/lib/gazettes/lookup'
 import { createD1Store } from '@/lib/gazettes/store-d1'
 import { clientKey, rateLimit } from '@/lib/security/rate-limit'
@@ -36,7 +39,8 @@ export type LookupActionState =
   | { status: 'idle' }
   | { status: 'rate-limited'; retryAfterSeconds: number }
   | { status: 'unconfigured' }
-  | { status: 'done'; outcome: LookupOutcome }
+  /** The session that was actually searched travels back with the answer. */
+  | { status: 'done'; outcome: LookupOutcome; session: ResultSession }
 
 export async function lookupRollNumber(
   _previous: LookupActionState,
@@ -45,9 +49,35 @@ export async function lookupRollNumber(
   const boardSlug = String(formData.get('board') ?? '')
   const rollNumber = String(formData.get('rollNumber') ?? '')
 
+  /*
+   * THE SESSION COMES FROM THE FORM AND IS VALIDATED, never assumed.
+   *
+   * This used to read `year: 2025, examination: 'first-annual'` as literals
+   * while every page around it was headed "12th Class Result 2026". A student
+   * checking on result morning would have had the 2025 gazette searched under
+   * their 2026 roll number — which either finds a different candidate who held
+   * that number last year, or reports "no result" for one that has just been
+   * declared. Neither answer looks wrong on screen.
+   *
+   * `resolveSession` accepts only a session this site offers, so a crafted
+   * form cannot ask for an arbitrary year.
+   */
+  const session = resolveSession(formData.get('year'), formData.get('examination'))
+  if (!session) {
+    return {
+      status: 'done',
+      outcome: { kind: 'invalid-request', reason: 'unrecognised examination session' },
+      session: CURRENT_SESSION,
+    }
+  }
+
   const board = getBoardBySlug(boardSlug)
   if (!board) {
-    return { status: 'done', outcome: { kind: 'invalid-request', reason: 'unrecognised board' } }
+    return {
+      status: 'done',
+      outcome: { kind: 'invalid-request', reason: 'unrecognised board' },
+      session,
+    }
   }
 
   /*
@@ -76,10 +106,10 @@ export async function lookupRollNumber(
 
   const outcome = await lookupResult(createD1Store(db), {
     boardId: board.id,
-    year: 2025,
-    examination: 'first-annual',
+    year: session.year,
+    examination: session.examination,
     rollNumber,
   })
 
-  return { status: 'done', outcome }
+  return { status: 'done', outcome, session }
 }
