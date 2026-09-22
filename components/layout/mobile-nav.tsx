@@ -56,7 +56,7 @@ const SECTIONS = [
       },
       {
         label: 'Gazette lookup',
-        href: '/#gazette',
+        href: '/gazette',
         icon: (
           <svg
             className="h-4 w-4"

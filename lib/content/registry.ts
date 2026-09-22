@@ -84,7 +84,7 @@ const BUILT_PAGES: PageEntry[] = [
     contentUpdatedAt: UPDATED_AT,
     lastVerifiedAt: UPDATED_AT,
     lastReviewedAt: UPDATED_AT,
-    internalLinksOut: ['/results/12th-class', '/boards', '/about', '/methodology'],
+    internalLinksOut: ['/results/12th-class', '/boards', '/gazette', '/about', '/methodology'],
     isEntryPoint: true,
   },
   {
@@ -138,6 +138,7 @@ const BUILT_PAGES: PageEntry[] = [
     internalLinksOut: [
       '/boards',
       '/',
+      '/gazette',
       '/guides/rechecking',
       '/guides/how-percentage-is-calculated',
     ],
@@ -366,6 +367,42 @@ const BUILT_PAGES: PageEntry[] = [
     lastVerifiedAt: UPDATED_AT,
     lastReviewedAt: UPDATED_AT,
     internalLinksOut: ['/methodology', '/results/12th-class'],
+  },
+  {
+    id: 'gazette-downloads',
+    path: '/gazette',
+    pageType: 'guide',
+    intentId: 'gazette.downloads',
+    sitemapSegment: 'core',
+    status: 'published',
+    index: true,
+    title: 'Official Gazette Downloads — 12th Class Result Gazettes by Board',
+    h1: 'Download your board’s official result gazette',
+    description:
+      'Direct links to HSSC Part-II result gazette PDFs published on the education boards’ own websites, with file sizes and the date each link was checked.',
+    seoTarget: {
+      primaryKeyword: '12th class result gazette download',
+      secondaryKeywords: [
+        'hssc part 2 gazette pdf',
+        'bise gazette download',
+        'result gazette 2026',
+      ],
+      semanticEntities: ['result gazette', 'HSSC Part-II', 'Pakistan education boards'],
+      searchIntent:
+        'Transactional — a student or college wants the board’s gazette file itself, not a lookup.',
+      queryVariants: [],
+    },
+    breadcrumb: [
+      { name: 'Home', path: '/' },
+      { name: 'Gazette Downloads', path: '/gazette' },
+    ],
+    sourceRequirementMode: 'derived',
+    sourceIds: [],
+    freshnessClass: 'B',
+    contentUpdatedAt: UPDATED_AT,
+    lastVerifiedAt: UPDATED_AT,
+    lastReviewedAt: UPDATED_AT,
+    internalLinksOut: ['/boards', '/methodology'],
   },
   {
     id: 'methodology',

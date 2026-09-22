@@ -52,6 +52,19 @@ export const INTENTS: readonly Intent[] = [
     ownership: 'owned',
   },
   {
+    /*
+     * A separate intent from the roll-number lookup, not a variant of it. The
+     * student searching "gazette download" wants the board's own file — to
+     * check a sibling's roll number without typing each one, or to hand a
+     * college the board's document. A lookup result does not answer that, and
+     * the two should not compete for the same query.
+     */
+    id: 'gazette.downloads',
+    description:
+      'Get the education board’s own result gazette file, rather than looking up one roll number.',
+    ownership: 'owned',
+  },
+  {
     id: 'result.head',
     description:
       'The head result intent: 12th class result, 2nd year result, HSSC Part-II result, inter part 2 result. Live search returns the same domains and frequently the same URLs across all of them — one intent, not four.',

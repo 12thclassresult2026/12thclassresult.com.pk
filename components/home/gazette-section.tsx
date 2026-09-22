@@ -16,6 +16,7 @@ import {
   ZapIcon,
 } from '@/components/ui/icons'
 import { routedBoards } from '@/lib/board/registry'
+import { formatBytes, gazetteFileFor } from '@/lib/gazettes/files'
 
 export type GazetteState =
   'gazette-available' | 'lookup-active' | 'processing' | 'official-source-only' | 'not-yet-verified'
@@ -566,7 +567,7 @@ export function GazetteSection() {
           const guideHref = hasPage ? `/results/${board.slug}/12th-class` : '/boards'
 
           const isOfficialSource = board.status === 'official-source-only'
-          const hasVerifiedDownload = Boolean(board.hasVerifiedDownload)
+          const gazetteFile = gazetteFileFor(board.id)
           const primaryHref = isOfficialSource ? officialHref : targetHref
 
           return (
@@ -637,15 +638,28 @@ export function GazetteSection() {
               {/* Bottom Action Area */}
               <div className="border-t border-slate-100 bg-[#FAFCFB] px-4 py-3">
                 <div className="flex items-center gap-2">
-                  {/* Primary Action Button */}
-                  {hasVerifiedDownload ? (
-                    <Link
-                      href={primaryHref}
+                  {/*
+                    Primary Action Button.
+
+                    "Download Gazette" now means a download. It used to point
+                    at `/results/<board>/12th-class#gazette` — an anchor on one
+                    of our own pages — so a student who tapped it got a page
+                    about the gazette instead of the gazette. The button only
+                    appears when `lib/gazettes/files.ts` holds a URL that was
+                    fetched and confirmed to return a PDF, and it carries the
+                    real size because these files run to tens of megabytes and
+                    most of this audience is on mobile data.
+                  */}
+                  {gazetteFile ? (
+                    <a
+                      href={gazetteFile.url}
+                      target="_blank"
+                      rel="noopener nofollow"
                       className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-[#007054] px-3 py-2 text-center text-xs font-bold text-white shadow-2xs transition-colors hover:bg-[#005a43] active:scale-95"
                     >
                       <DownloadIcon width={13} height={13} />
-                      <span>Download Gazette</span>
-                    </Link>
+                      <span>Download PDF · {formatBytes(gazetteFile.bytes)}</span>
+                    </a>
                   ) : isOfficialSource ? (
                     <Link
                       href={primaryHref}

@@ -9,6 +9,7 @@ import { metadata as percentageGuideMetadata } from '@/app/guides/how-percentage
 import { metadata as percentageToolMetadata } from '@/app/tools/percentage-calculator/page'
 import { metadata as aboutMetadata } from '@/app/about/page'
 import { metadata as methodologyMetadata } from '@/app/methodology/page'
+import { metadata as gazetteMetadata } from '@/app/gazette/page'
 import { generateStaticParams } from '@/app/results/[board]/12th-class/page'
 import { getPageByPath, indexablePages } from '@/lib/content/registry'
 import { canonicalUrl } from '@/lib/seo/site'
@@ -29,6 +30,7 @@ const ROUTE_MODULES = [
   { path: '/tools/percentage-calculator', metadata: percentageToolMetadata },
   { path: '/about', metadata: aboutMetadata },
   { path: '/methodology', metadata: methodologyMetadata },
+  { path: '/gazette', metadata: gazetteMetadata },
 ] as const
 
 describe('route metadata matches the registry', () => {

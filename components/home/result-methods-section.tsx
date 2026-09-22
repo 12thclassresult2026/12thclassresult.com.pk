@@ -27,7 +27,7 @@ export function ResultMethodsSection() {
       heading: 'Check from Gazette',
       text: 'A result Gazette contains examination records published or provided through an approved source. Where supported, Gazette data can be processed into a searchable result dataset.',
       ctaText: 'Browse Gazettes',
-      ctaHref: '/#gazette',
+      ctaHref: '/gazette',
       icon: FileTextIcon,
       highlighted: false,
     },

@@ -156,7 +156,7 @@ const QUICK_LINKS = [
   {
     title: 'Gazette',
     subtitle: 'Download official gazettes',
-    href: '/#gazette',
+    href: '/gazette',
     icon: BookOpenIcon,
     bgColor: 'bg-blue-50 text-blue-700',
   },
