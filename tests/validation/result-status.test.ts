@@ -348,3 +348,49 @@ describe('the seventeen priority boards all have somewhere to land', () => {
     expect(byProvince('khyber-pakhtunkhwa')).toHaveLength(8)
   })
 })
+
+describe('the header mega menu keeps up with the registry', () => {
+  /*
+   * The menu's province lists are hand-written for presentation order. A
+   * second list of boards is a second truth and it drifts: Faisalabad and
+   * Kohat were published and stayed missing from it, so two boards had pages
+   * that the navigation never pointed at.
+   *
+   * The menu already filters OUT boards with no page. Nothing was checking the
+   * other direction.
+   */
+  const menu = readFileSync(join(REPO_ROOT, 'components/layout/header-mega-menu.tsx'), 'utf8')
+  const listed = new Set(
+    [...menu.matchAll(/href: '\/results\/([a-z0-9-]+)\/12th-class'/g)].map((m) => m[1]!),
+  )
+
+  it.each([
+    ['punjab', 'Punjab'],
+    ['khyber-pakhtunkhwa', 'KPK'],
+    ['sindh', 'Sindh'],
+  ])('lists every routed %s board', (province) => {
+    const missing = BOARDS.filter(
+      (b) => b.province === province && b.publishState === 'published' && !listed.has(b.slug),
+    ).map((b) => b.slug)
+
+    expect(
+      missing,
+      `these boards have pages but are not in the header menu: ${missing.join(', ')}`,
+    ).toEqual([])
+  })
+
+  it('offers the province switcher only where a region was not already chosen', () => {
+    /*
+     * "Punjab Boards" opening a panel that asks Punjab, KPK, Sindh,
+     * Balochistan or AJK makes the reader answer a question they just
+     * answered, and pushes the boards they came for into a narrow column.
+     */
+    const header = readFileSync(join(REPO_ROOT, 'components/layout/site-header.tsx'), 'utf8')
+    expect(header, 'the region menus no longer suppress the province switcher').toMatch(
+      /showProvinceSwitcher=\{openDropdown === 'all-boards'\}/,
+    )
+    expect(menu, 'the mega menu no longer accepts showProvinceSwitcher').toContain(
+      'showProvinceSwitcher',
+    )
+  })
+})

@@ -551,6 +551,13 @@ export function SiteHeader() {
           ) && (
             <HeaderMegaMenu
               initialProvince={openDropdown === 'all-boards' ? 'all' : (openDropdown ?? 'punjab')}
+              /*
+                Only "All Boards" gets the province switcher. A reader who
+                clicked "Punjab Boards" has already answered that question, and
+                showing it again puts four provinces they did not ask for above
+                the boards they did.
+              */
+              showProvinceSwitcher={openDropdown === 'all-boards'}
               onClose={() => setOpenDropdown(null)}
             />
           )}

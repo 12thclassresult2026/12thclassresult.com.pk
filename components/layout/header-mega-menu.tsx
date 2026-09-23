@@ -66,6 +66,7 @@ const PROVINCES: ProvinceData[] = [
     boards: [
       { name: 'BISE Lahore', href: '/results/lahore-board/12th-class' },
       { name: 'BISE Multan', href: '/results/multan-board/12th-class' },
+      { name: 'BISE Faisalabad', href: '/results/faisalabad-board/12th-class' },
       { name: 'BISE Gujranwala', href: '/results/gujranwala-board/12th-class' },
       { name: 'BISE Rawalpindi', href: '/results/rawalpindi-board/12th-class' },
       { name: 'BISE Sargodha', href: '/results/sargodha-board/12th-class' },
@@ -87,6 +88,7 @@ const PROVINCES: ProvinceData[] = [
       { name: 'BISE Mardan', href: '/results/mardan-board/12th-class' },
       { name: 'BISE Abbottabad', href: '/results/abbottabad-board/12th-class' },
       { name: 'BISE Swat', href: '/results/swat-board/12th-class' },
+      { name: 'BISE Kohat', href: '/results/kohat-board/12th-class' },
       { name: 'BISE Bannu', href: '/results/bannu-board/12th-class' },
       { name: 'BISE Malakand', href: '/results/malakand-board/12th-class' },
       { name: 'BISE DI Khan', href: '/results/dera-ismail-khan-board/12th-class' },
@@ -104,6 +106,13 @@ const PROVINCES: ProvinceData[] = [
       { name: 'BIEK Karachi', href: '/results/karachi-board/12th-class' },
       { name: 'BISE Hyderabad', href: '/results/hyderabad-board/12th-class' },
       { name: 'BISE Larkana', href: '/results/larkana-board/12th-class' },
+      /*
+        A NATIONAL PRIVATE BOARD, registered under Sindh because it is based in
+        Karachi. It is listed here rather than left out: a candidate sitting
+        AKU-EB has a page on this site, and a menu that hides it sends them to
+        a BISE they do not belong to.
+      */
+      { name: 'AKU-EB', href: '/results/aku-eb/12th-class' },
     ],
   },
   {
@@ -186,9 +195,20 @@ const QUICK_LINKS = [
 export function HeaderMegaMenu({
   onClose,
   initialProvince = 'punjab',
+  showProvinceSwitcher = true,
 }: {
   onClose: () => void
   initialProvince?: string
+  /**
+   * FALSE WHEN THE HEADER ITEM ALREADY NAMED THE REGION.
+   *
+   * "Punjab Boards" opening a menu whose first column offers Punjab, KPK,
+   * Sindh, Balochistan and AJK asks the reader to choose something they just
+   * chose, and pushes the boards they actually came for into a narrow middle
+   * column. The switcher belongs to "All Boards", which is the item that has
+   * not named a region.
+   */
+  showProvinceSwitcher?: boolean
 }) {
   /*
    * A board appears in this menu only if it has a page.
@@ -245,58 +265,71 @@ export function HeaderMegaMenu({
     >
       <div className="overflow-hidden rounded-3xl border border-slate-200/90 bg-white p-5 shadow-2xl backdrop-blur-md">
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
-          {/* -- Panel 1: Leftmost Provinces Nav (Cols 1-3) -- */}
-          <div className="space-y-1.5 border-slate-200/70 pr-2 lg:col-span-3 lg:border-r">
-            {provinces.map((prov) => {
-              const isSelected = prov.id === selectedProvinceId
-              return (
-                <button
-                  key={prov.id}
-                  type="button"
-                  onClick={() => setSelectedProvinceId(prov.id)}
-                  onMouseEnter={() => setSelectedProvinceId(prov.id)}
-                  className={`flex w-full items-center justify-between rounded-2xl p-2.5 text-left transition-all ${
-                    isSelected
-                      ? 'border-l-4 border-[#007054] bg-emerald-50 text-[#007054] shadow-xs'
-                      : 'border-l-4 border-transparent text-slate-700 hover:bg-slate-50'
-                  }`}
-                >
-                  <div className="flex min-w-0 items-center gap-3">
-                    <div
-                      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${prov.iconBg} ${prov.iconColor}`}
-                    >
-                      {prov.id === 'all' ? (
-                        <GridIcon width={16} height={16} />
-                      ) : (
-                        <LandmarkIcon width={16} height={16} />
-                      )}
-                    </div>
-                    <div className="min-w-0">
-                      <span
-                        className={`block truncate text-xs font-bold ${
-                          isSelected ? 'text-[#007054]' : 'text-slate-900'
-                        }`}
+          {/*
+            Panel 1: the province switcher, shown only when the header item
+            did NOT already name a region. See `showProvinceSwitcher`.
+          */}
+          {showProvinceSwitcher ? (
+            <div className="space-y-1.5 border-slate-200/70 pr-2 lg:col-span-3 lg:border-r">
+              {provinces.map((prov) => {
+                const isSelected = prov.id === selectedProvinceId
+                return (
+                  <button
+                    key={prov.id}
+                    type="button"
+                    onClick={() => setSelectedProvinceId(prov.id)}
+                    onMouseEnter={() => setSelectedProvinceId(prov.id)}
+                    className={`flex w-full items-center justify-between rounded-2xl p-2.5 text-left transition-all ${
+                      isSelected
+                        ? 'border-l-4 border-[#007054] bg-emerald-50 text-[#007054] shadow-xs'
+                        : 'border-l-4 border-transparent text-slate-700 hover:bg-slate-50'
+                    }`}
+                  >
+                    <div className="flex min-w-0 items-center gap-3">
+                      <div
+                        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${prov.iconBg} ${prov.iconColor}`}
                       >
-                        {prov.title}
-                      </span>
-                      <span className="block truncate text-[10px] text-slate-500">
-                        {prov.subtitle}
-                      </span>
+                        {prov.id === 'all' ? (
+                          <GridIcon width={16} height={16} />
+                        ) : (
+                          <LandmarkIcon width={16} height={16} />
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <span
+                          className={`block truncate text-xs font-bold ${
+                            isSelected ? 'text-[#007054]' : 'text-slate-900'
+                          }`}
+                        >
+                          {prov.title}
+                        </span>
+                        <span className="block truncate text-[10px] text-slate-500">
+                          {prov.subtitle}
+                        </span>
+                      </div>
                     </div>
-                  </div>
 
-                  <ChevronRightIcon
-                    width={14}
-                    height={14}
-                    className={`shrink-0 ${isSelected ? 'text-[#007054]' : 'text-slate-400'}`}
-                  />
-                </button>
-              )
-            })}
-          </div>
+                    <ChevronRightIcon
+                      width={14}
+                      height={14}
+                      className={`shrink-0 ${isSelected ? 'text-[#007054]' : 'text-slate-400'}`}
+                    />
+                  </button>
+                )
+              })}
+            </div>
+          ) : null}
 
-          {/* -- Panel 2: Middle Boards Grid (Cols 4-7) -- */}
-          <div className="flex flex-col justify-between border-slate-200/70 pr-2 lg:col-span-4 lg:border-r">
+          {/*
+            Panel 2: the boards themselves. It takes the switcher’s three
+            columns when there is no switcher, so a region opened by name gets
+            a wide grid instead of the narrow one it used to share.
+          */}
+          <div
+            className={`flex flex-col justify-between border-slate-200/70 pr-2 lg:border-r ${
+              showProvinceSwitcher ? 'lg:col-span-4' : 'lg:col-span-7'
+            }`}
+          >
             <div>
               {/* Province Header */}
               <div className="mb-3.5 flex items-center gap-2.5">
