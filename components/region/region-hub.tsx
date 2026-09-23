@@ -68,7 +68,7 @@ function formatPkt(iso: string): string {
     year: 'numeric',
     timeZone: 'Asia/Karachi',
   })
-  const time = date.toLocaleTimeString('en-GB', {
+  const time = date.toLocaleTimeString('en-US', {
     hour: 'numeric',
     minute: '2-digit',
     hour12: true,
