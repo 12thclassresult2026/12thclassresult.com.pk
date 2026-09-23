@@ -243,6 +243,32 @@ export const GAZETTE_FILES: GazetteFile[] = [
     bytes: 28_115_427,
     verifiedAt: CHECKED,
   },
+
+  /*
+   * BISE HYDERABAD — THE FIRST 2026 GAZETTE ON THIS SITE, and a different
+   * shape from the Punjab ones.
+   *
+   * Sindh declares group by group. Hyderabad published HSC-II Annual 2026
+   * separately for Commerce, Home Economics and Medical, so this is one
+   * group’s result rather than a whole cohort, and the label says so.
+   *
+   * Only the Medical file is carried. The Commerce PDF on the same page is
+   * 265 KB — far too small to be a full candidate gazette, so it is almost
+   * certainly position holders or a notification, and calling it a gazette
+   * without opening it would be exactly the guess this file exists to stop.
+   * The Home Economics result is published as a JPEG, which is not a
+   * downloadable document in any useful sense.
+   */
+  {
+    boardId: 'bise-hyderabad',
+    boardSlug: 'hyderabad-board',
+    year: 2026,
+    examinationLabel: 'HSC-II Annual — Medical group',
+    session: 'annual',
+    url: 'https://www.biseh.edu.pk/hsc26medresult.pdf',
+    bytes: 15_725_281,
+    verifiedAt: '2026-09-23',
+  },
 ]
 
 export const GAZETTE_INDEX_PAGES: GazetteIndexPage[] = [

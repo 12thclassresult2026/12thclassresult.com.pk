@@ -80,6 +80,12 @@ export const INTENTS: readonly Intent[] = [
     ownership: 'owned',
   },
   {
+    id: 'region.sindh',
+    description:
+      'Find the right Sindh board, and whether the group being asked about has been declared.',
+    ownership: 'owned',
+  },
+  {
     id: 'region.kpk',
     description: 'Find the right KPK board and whether its HSSC Annual-I result has been declared.',
     ownership: 'owned',

@@ -308,6 +308,81 @@ export const BOARD_RESULT_STATUS: BoardResultStatus[] = [
     sources: ['https://www.bisess.edu.pk/site/home/results-section'],
     lastVerifiedAt: CHECKED,
   },
+
+  // ---- Sindh: a different model again, and the third one on this site ----
+  {
+    /*
+     * SINDH DECLARES GROUP BY GROUP, and Hyderabad is the proof. Its homepage
+     * carries separate HSC-II Annual 2026 announcements for Commerce, Home
+     * Economics and Medical, each with its own file. That is not a keyword
+     * variant of one result — it is several declarations on several dates, and
+     * a student in the group that has not gone yet is not served by a page
+     * saying Sindh results are out.
+     */
+    boardId: 'bise-hyderabad',
+    class: 12,
+    year: 2026,
+    session: 'annual-1',
+    announcementStatus: 'announced',
+    dateConfidence: 'unknown',
+    announcedAt: null,
+    scheduledAt: null,
+    officialHomeUrl: 'https://www.biseh.edu.pk/',
+    officialResultUrl: 'https://www.biseh.edu.pk/',
+    portalSessionObserved:
+      'HSC-II Annual Examination 2026 — declared by group; Commerce, Home Economics and Medical published so far',
+    captcha: 'unverified',
+    nameSearch: 'unverified',
+    lookupMode: 'official-link',
+    sources: ['https://www.biseh.edu.pk/'],
+    lastVerifiedAt: '2026-09-23',
+  },
+  {
+    // The intermediate board for Karachi. Its site still shows 2025 examination
+    // activity and a 2024 supplementary declaration; nothing names HSSC 2026.
+    boardId: 'biek',
+    class: 12,
+    year: 2026,
+    session: 'annual-1',
+    announcementStatus: 'unverified',
+    dateConfidence: 'unknown',
+    announcedAt: null,
+    scheduledAt: null,
+    officialHomeUrl: 'https://www.biek.edu.pk/',
+    officialResultUrl: null,
+    portalSessionObserved: null,
+    captcha: 'unverified',
+    nameSearch: 'unverified',
+    lookupMode: 'official-link',
+    sources: ['https://www.biek.edu.pk/'],
+    lastVerifiedAt: '2026-09-23',
+  },
+  {
+    /*
+     * RECORDED WITH ITS REDIRECT. biselrk.edu.pk answers 301 to biselrk.com —
+     * a .com for a government board, which is the shape of a hijacked domain
+     * and is worth flagging. It is carried here only because the redirect
+     * comes FROM the board’s own .edu.pk address, which is what authenticates
+     * it. The board’s latest notices are Part-I bio-data and fee matters; no
+     * Part-II 2026 result is announced.
+     */
+    boardId: 'bise-larkana',
+    class: 12,
+    year: 2026,
+    session: 'annual-1',
+    announcementStatus: 'unverified',
+    dateConfidence: 'unknown',
+    announcedAt: null,
+    scheduledAt: null,
+    officialHomeUrl: 'https://biselrk.edu.pk/',
+    officialResultUrl: null,
+    portalSessionObserved: null,
+    captcha: 'unverified',
+    nameSearch: 'unverified',
+    lookupMode: 'official-link',
+    sources: ['https://biselrk.edu.pk/'],
+    lastVerifiedAt: '2026-09-23',
+  },
 ]
 
 export function statusFor(boardId: string, year = 2026): BoardResultStatus | null {

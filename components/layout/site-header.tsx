@@ -389,22 +389,59 @@ export function SiteHeader() {
               </li>
 
               {/*
-                KPK Results — PROMOTED TO THE FIRST LEVEL.
+                KPK and Sindh, BESIDE PUNJAB AND BUILT THE SAME WAY.
 
                 KPK had no header item at all while its results were already
-                out: Peshawar declared on 21 September, and several other
-                boards followed on their own dates. A student in Mardan or
-                Bannu arriving on this site found Punjab in the navigation and
-                their own region nowhere, reachable only by opening a menu and
-                scanning twenty-eight boards.
+                out — Peshawar declared on 21 September and others followed on
+                their own dates — so a student in Mardan or Bannu found Punjab
+                in the navigation and their own region nowhere. Sindh had the
+                same gap while Hyderabad was publishing HSC-II 2026 group by
+                group.
+
+                Each is a link AND a menu trigger: the link is what a keyboard
+                user and a crawler get, the menu is the shortcut for a mouse.
+                A trigger with no href gives the first two nothing, which is
+                what Punjab used to be.
               */}
-              <li className="relative">
+              <li className="relative" onMouseEnter={() => setOpenDropdown('kpk')}>
                 <Link
                   href="/results/kpk/12th-class"
+                  aria-haspopup="true"
+                  aria-expanded={openDropdown === 'kpk'}
                   onClick={() => setOpenDropdown(null)}
-                  className="flex items-center gap-1 rounded-md px-3.5 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
+                  className={`flex items-center gap-1 px-3.5 py-2 text-[13px] font-semibold transition-colors ${
+                    openDropdown === 'kpk'
+                      ? 'rounded-t-xl bg-emerald-50 text-[#007054] shadow-xs'
+                      : 'rounded-md text-slate-700 hover:bg-slate-50 hover:text-[#007054]'
+                  }`}
                 >
-                  <span>KPK Results</span>
+                  <span>KPK Boards</span>
+                  <ChevronDownIcon
+                    width={12}
+                    height={12}
+                    className={openDropdown === 'kpk' ? 'text-[#007054]' : 'text-slate-400'}
+                  />
+                </Link>
+              </li>
+
+              <li className="relative" onMouseEnter={() => setOpenDropdown('sindh')}>
+                <Link
+                  href="/results/sindh/12th-class"
+                  aria-haspopup="true"
+                  aria-expanded={openDropdown === 'sindh'}
+                  onClick={() => setOpenDropdown(null)}
+                  className={`flex items-center gap-1 px-3.5 py-2 text-[13px] font-semibold transition-colors ${
+                    openDropdown === 'sindh'
+                      ? 'rounded-t-xl bg-emerald-50 text-[#007054] shadow-xs'
+                      : 'rounded-md text-slate-700 hover:bg-slate-50 hover:text-[#007054]'
+                  }`}
+                >
+                  <span>Sindh Boards</span>
+                  <ChevronDownIcon
+                    width={12}
+                    height={12}
+                    className={openDropdown === 'sindh' ? 'text-[#007054]' : 'text-slate-400'}
+                  />
                 </Link>
               </li>
 
@@ -502,10 +539,18 @@ export function SiteHeader() {
             <MobileNav />
           </div>
 
-          {/* Full Mega Menu Dropdown */}
-          {(openDropdown === 'punjab' || openDropdown === 'all-boards') && (
+          {/*
+            Full Mega Menu Dropdown.
+
+            One menu, opened on the province the trigger names. The menu
+            already filtered itself to boards that have a page, so a region
+            with nothing published cannot open an empty panel.
+          */}
+          {(['punjab', 'kpk', 'sindh', 'all-boards'] as const).some(
+            (id) => openDropdown === id,
+          ) && (
             <HeaderMegaMenu
-              initialProvince={openDropdown === 'all-boards' ? 'all' : 'punjab'}
+              initialProvince={openDropdown === 'all-boards' ? 'all' : (openDropdown ?? 'punjab')}
               onClose={() => setOpenDropdown(null)}
             />
           )}

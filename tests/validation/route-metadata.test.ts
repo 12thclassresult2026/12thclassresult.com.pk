@@ -12,6 +12,7 @@ import { metadata as methodologyMetadata } from '@/app/methodology/page'
 import { metadata as gazetteMetadata } from '@/app/gazette/page'
 import { metadata as punjabHubMetadata } from '@/app/results/punjab/12th-class/page'
 import { metadata as kpkHubMetadata } from '@/app/results/kpk/12th-class/page'
+import { metadata as sindhHubMetadata } from '@/app/results/sindh/12th-class/page'
 import { generateStaticParams } from '@/app/results/[board]/12th-class/page'
 import { getPageByPath, indexablePages } from '@/lib/content/registry'
 import { canonicalUrl } from '@/lib/seo/site'
@@ -35,6 +36,7 @@ const ROUTE_MODULES = [
   { path: '/gazette', metadata: gazetteMetadata },
   { path: '/results/punjab/12th-class', metadata: punjabHubMetadata },
   { path: '/results/kpk/12th-class', metadata: kpkHubMetadata },
+  { path: '/results/sindh/12th-class', metadata: sindhHubMetadata },
 ] as const
 
 describe('route metadata matches the registry', () => {
@@ -97,7 +99,7 @@ describe('route metadata matches the registry', () => {
      * Next matches a static segment before a dynamic one, so they resolve to
      * their own page and must not be expected in generateStaticParams.
      */
-    const REGION_HUBS = new Set(['punjab', 'kpk'])
+    const REGION_HUBS = new Set(['punjab', 'kpk', 'sindh'])
 
     for (const page of indexablePages()) {
       const match = page.path.match(new RegExp('^/results/([a-z0-9-]+)/12th-class$'))

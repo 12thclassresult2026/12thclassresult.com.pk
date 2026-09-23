@@ -242,7 +242,7 @@ describe('navigation never points at a page that does not exist', () => {
        * a static segment before a dynamic one. They are not board slugs and
        * must not be measured against the board registry.
        */
-      const REGION_HUBS = new Set(['punjab', 'kpk'])
+      const REGION_HUBS = new Set(['punjab', 'kpk', 'sindh'])
 
       const copy = copyOnly(source)
       for (const match of copy.matchAll(/\/results\/([a-z0-9-]+)\/12th-class/g)) {
