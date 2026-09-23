@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
+import { BoardSidebar } from '@/components/result/board-sidebar'
 import { BoardStatusHero } from '@/components/result/board-status-hero'
-import { ResultCommandCenter } from '@/components/result/command-center'
 import { RollNumberLookup } from '@/components/result/roll-number-lookup'
 import { SourceObservations } from '@/components/result/source-observations'
 import { Breadcrumbs } from '@/components/seo/breadcrumbs'
@@ -82,6 +82,15 @@ export default async function BoardResultPage({ params }: { params: Promise<{ bo
         <p className="mt-3 text-[var(--text-muted)]">{board.officialName}</p>
 
         {/*
+          TWO COLUMNS FROM lg, because one was leaving forty per cent of a
+          1440 viewport empty beside a narrow ribbon of text. The sidebar holds
+          what a reader on a board page wants next — the neighbouring boards,
+          this board’s gazettes, its region — all derived from the same
+          registries the main column reads, so the two cannot disagree.
+        */}
+        <div className="mt-2 grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-10">
+          <div className="min-w-0">
+            {/*
           THE ANSWER FIRST, from lib/board/result-status.ts.
 
           This used to open with StatusSentence, which reads the board
@@ -90,31 +99,38 @@ export default async function BoardResultPage({ params }: { params: Promise<{ bo
           last checked on 14 September”. The hero reads the status registry,
           which is checked against the boards’ own sites.
         */}
-        <div className="mt-8 max-w-3xl">
-          <BoardStatusHero board={board} />
-        </div>
+            <div className="mt-8">
+              <BoardStatusHero board={board} />
+            </div>
 
-        <div className="mt-8 max-w-3xl">
-          <ResultCommandCenter board={board} />
-        </div>
+            {/*
+          THE COMMAND CENTRE IS GONE FROM THIS PAGE, not disabled.
 
-        {board.studentCautions?.length ? (
-          <section className="mt-10 max-w-3xl">
-            <h2 className="text-xl font-bold tracking-tight">Before you start</h2>
-            <ul className="mt-4 space-y-3 text-[var(--text-body)]">
-              {board.studentCautions.map((caution) => (
-                <li key={caution} className="flex gap-3">
-                  <span aria-hidden="true" className="text-accent-600">
-                    !
-                  </span>
-                  <span>{caution}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
+          It rendered a card headed “Check on the board’s own portal” with the
+          same explanation, the same security-check line and a second button to
+          the same URL — directly under a hero that had just said all of it.
+          Two calls to action to one destination is not emphasis, it is a
+          reader wondering which one is the real one. Its one unique part, the
+          fallback to the board’s main site, moved into the hero.
+        */}
 
-        {/*
+            {board.studentCautions?.length ? (
+              <section className="mt-10">
+                <h2 className="text-xl font-bold tracking-tight">Before you start</h2>
+                <ul className="mt-4 space-y-3 text-[var(--text-body)]">
+                  {board.studentCautions.map((caution) => (
+                    <li key={caution} className="flex gap-3">
+                      <span aria-hidden="true" className="text-accent-600">
+                        !
+                      </span>
+                      <span>{caution}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
+
+            {/*
           SHOWN FOR EVERY BOARD, not only those with a dataset.
 
           The form used to appear only where a gazette was loaded, and it was
@@ -124,67 +140,67 @@ export default async function BoardResultPage({ params }: { params: Promise<{ bo
           session with no gazette answers plainly and links the board’s portal,
           which is a better answer than no box at all.
         */}
-        <RollNumberLookup boardSlug={board.slug} boardName={board.shortName} />
+            <RollNumberLookup boardSlug={board.slug} boardName={board.shortName} />
 
-        <PerGroupStatus board={board} year={year} />
+            <PerGroupStatus board={board} year={year} />
 
-        <SourceObservations board={board} />
+            <SourceObservations board={board} />
 
-        <section className="mt-10">
-          <h2 className="text-2xl font-bold tracking-tight">What this board’s portal offers</h2>
-          <div className="table-responsive-wrapper mt-6">
-            <table className="w-full min-w-[42rem] border-collapse text-sm">
-              <caption className="sr-only">
-                Verified capabilities of {board.shortName} official sources
-              </caption>
-              <thead>
-                <tr className="border-b border-[var(--border-card)] text-left">
-                  <th scope="col" className="py-3 pr-4 font-semibold">
-                    Official source
-                  </th>
-                  <th scope="col" className="py-3 pr-4 font-semibold">
-                    Roll number
-                  </th>
-                  <th scope="col" className="py-3 pr-4 font-semibold">
-                    Name search
-                  </th>
-                  <th scope="col" className="py-3 pr-4 font-semibold">
-                    Security check
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {sources.map((source) => (
-                  <tr key={source.id} className="border-b border-[var(--border-subtle)]">
-                    <th scope="row" className="py-3 pr-4 text-left font-medium">
-                      <a
-                        href={source.url}
-                        rel="noopener nofollow"
-                        className="text-primary-700 underline underline-offset-4"
-                      >
-                        {source.name}
-                      </a>
-                    </th>
-                    {/*
+            <section className="mt-10">
+              <h2 className="text-2xl font-bold tracking-tight">What this board’s portal offers</h2>
+              <div className="table-responsive-wrapper mt-6">
+                <table className="w-full min-w-[42rem] border-collapse text-sm">
+                  <caption className="sr-only">
+                    Verified capabilities of {board.shortName} official sources
+                  </caption>
+                  <thead>
+                    <tr className="border-b border-[var(--border-card)] text-left">
+                      <th scope="col" className="py-3 pr-4 font-semibold">
+                        Official source
+                      </th>
+                      <th scope="col" className="py-3 pr-4 font-semibold">
+                        Roll number
+                      </th>
+                      <th scope="col" className="py-3 pr-4 font-semibold">
+                        Name search
+                      </th>
+                      <th scope="col" className="py-3 pr-4 font-semibold">
+                        Security check
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sources.map((source) => (
+                      <tr key={source.id} className="border-b border-[var(--border-subtle)]">
+                        <th scope="row" className="py-3 pr-4 text-left font-medium">
+                          <a
+                            href={source.url}
+                            rel="noopener nofollow"
+                            className="text-primary-700 underline underline-offset-4"
+                          >
+                            {source.name}
+                          </a>
+                        </th>
+                        {/*
                       Every cell goes through `capabilityLabel`. There is no
                       boolean coercion anywhere here, which is what stops an
                       unverified capability rendering as a flat "No".
                     */}
-                    <td className="py-3 pr-4">{capabilityLabel(source.supportsRollNumber)}</td>
-                    <td className="py-3 pr-4">{capabilityLabel(source.supportsName)}</td>
-                    <td className="py-3 pr-4">{capabilityLabel(source.hasCaptcha)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p className="mt-4 max-w-3xl text-sm text-[var(--text-muted)]">
-            “Not verified” means exactly that — not that the board lacks the feature. Where a
-            board’s site refused an automated check, nothing is claimed about it either way.
-          </p>
-        </section>
+                        <td className="py-3 pr-4">{capabilityLabel(source.supportsRollNumber)}</td>
+                        <td className="py-3 pr-4">{capabilityLabel(source.supportsName)}</td>
+                        <td className="py-3 pr-4">{capabilityLabel(source.hasCaptcha)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-4 max-w-3xl text-sm text-[var(--text-muted)]">
+                “Not verified” means exactly that — not that the board lacks the feature. Where a
+                board’s site refused an automated check, nothing is claimed about it either way.
+              </p>
+            </section>
 
-        {/*
+            {/*
           THE “WHERE THIS CAME FROM” BLOCK IS GONE, not moved.
 
           It rendered `board.resultDate`, which is `unknown` for every board
@@ -195,6 +211,12 @@ export default async function BoardResultPage({ params }: { params: Promise<{ bo
 
           The hero carries its own sources and links the methodology page.
         */}
+          </div>
+
+          <div className="lg:pt-8">
+            <BoardSidebar board={board} />
+          </div>
+        </div>
 
         <p className="mt-10">
           <Link

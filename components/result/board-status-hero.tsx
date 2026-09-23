@@ -158,8 +158,30 @@ export function BoardStatusHero({ board }: { board: Board }) {
         ) : null}
       </div>
 
+      {/*
+        THE FALLBACK, folded in from the block this hero replaced.
+        Several boards run a separate host for results, and a search result can
+        drop someone on a main site that never loads. Offering the board's home
+        page as a second door is the one genuinely useful thing the old
+        "Check on the board's own portal" card said that this hero did not.
+      */}
       <p className="mt-2.5 text-[11.5px] text-slate-500">
         Opens {board.shortName}’s own site. This page links to the board; it is not the board.
+        {status.officialResultUrl ? (
+          <>
+            {' '}
+            If it does not load, try the{' '}
+            <a
+              href={status.officialHomeUrl}
+              target="_blank"
+              rel="noopener nofollow"
+              className="underline underline-offset-2 hover:text-slate-700"
+            >
+              board’s main website
+            </a>
+            .
+          </>
+        ) : null}
       </p>
 
       {/* What the reader will actually see when they get there. */}
