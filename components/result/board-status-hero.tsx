@@ -78,6 +78,22 @@ export function BoardStatusHero({ board }: { board: Board }) {
   const announced = status.announcementStatus === 'announced'
   const scheduled = status.announcementStatus === 'scheduled'
 
+  /*
+   * THE CLOCK ANNOUNCES NOTHING, and this is where that rule earns its keep.
+   *
+   * At 10:00 on 23 September the Punjab schedule ran out. Five boards had
+   * their portals serving the session within the hour; four had not been
+   * confirmed either way. Leaving those four reading "is due to announce at
+   * 10:00 AM" at half past eleven is plainly wrong, and flipping them to
+   * "announced" because the time arrived would be worse — it would be this
+   * site asserting something no board had said.
+   *
+   * So a passed schedule says exactly that: the time has gone, we have not
+   * confirmed it, go and look at the board's own portal.
+   */
+  const scheduleHasPassed =
+    scheduled && status.scheduledAt !== null && new Date(status.scheduledAt) <= new Date()
+
   const tone = announced
     ? 'border-emerald-300 bg-emerald-50'
     : scheduled
@@ -86,9 +102,11 @@ export function BoardStatusHero({ board }: { board: Board }) {
 
   const pill = announced
     ? { text: 'Result announced', cls: 'border-emerald-400 bg-emerald-100 text-emerald-900' }
-    : scheduled
-      ? { text: 'Scheduled', cls: 'border-amber-400 bg-amber-100 text-amber-900' }
-      : { text: 'Not confirmed', cls: 'border-slate-300 bg-slate-100 text-slate-700' }
+    : scheduleHasPassed
+      ? { text: 'Due now — not yet confirmed', cls: 'border-amber-400 bg-amber-100 text-amber-900' }
+      : scheduled
+        ? { text: 'Scheduled', cls: 'border-amber-400 bg-amber-100 text-amber-900' }
+        : { text: 'Not confirmed', cls: 'border-slate-300 bg-slate-100 text-slate-700' }
 
   /*
    * The headline sentence. Written per state rather than templated, because
@@ -99,9 +117,11 @@ export function BoardStatusHero({ board }: { board: Board }) {
     ? status.announcedAt
       ? `${board.shortName} announced this result on ${formatPkt(status.announcedAt)}. It is available now on the board’s own portal.`
       : `${board.shortName} has announced this result. It is available now on the board’s own portal.`
-    : scheduled && status.scheduledAt
-      ? `${board.shortName} is due to announce this result on ${formatPkt(status.scheduledAt)}.`
-      : `Nothing has been published by ${board.shortName} that confirms this result either way.`
+    : scheduleHasPassed && status.scheduledAt
+      ? `${board.shortName} was due to announce this result on ${formatPkt(status.scheduledAt)}. That time has passed and the board has not been confirmed here since — open its portal below, which is where it appears first.`
+      : scheduled && status.scheduledAt
+        ? `${board.shortName} is due to announce this result on ${formatPkt(status.scheduledAt)}.`
+        : `Nothing has been published by ${board.shortName} that confirms this result either way.`
 
   return (
     <div className={`rounded-2xl border p-5 sm:p-6 ${tone}`}>
@@ -124,7 +144,7 @@ export function BoardStatusHero({ board }: { board: Board }) {
         of the committee calendar; the boards had published nothing when this
         was checked.
       */}
-      {scheduled && status.dateConfidence === 'reported' ? (
+      {scheduled && !scheduleHasPassed && status.dateConfidence === 'reported' ? (
         <p className="mt-2 text-[13px] leading-relaxed text-amber-900/80">
           That date is reported from the Punjab Boards Committee of Chairmen’s calendar. It was not
           on {board.shortName}’s own site when checked, so treat it as expected rather than

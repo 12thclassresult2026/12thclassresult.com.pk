@@ -122,17 +122,132 @@ function punjab(
 export const BOARD_RESULT_STATUS: BoardResultStatus[] = [
   // ---- Punjab: nine boards, one common calendar, none declared yet --------
   punjab('bise-lahore', 'https://www.biselahore.com/', 'https://result.biselahore.com/'),
-  punjab('bise-gujranwala', 'https://bisegrw.edu.pk/', 'https://result.bisegrw.edu.pk/Index.php'),
+  {
+    boardId: 'bise-gujranwala',
+    class: 12,
+    year: 2026,
+    session: 'annual-1',
+    announcementStatus: 'announced',
+    /*
+     * `announcedAt` stays null. The committee calendar said 10:00 AM and the
+     * portals were serving the session when checked at 11:30 — but no board
+     * published a time of its own, and copying the calendar’s time into a
+     * per-board record would turn a schedule into a board statement.
+     */
+    dateConfidence: 'official',
+    announcedAt: null,
+    scheduledAt: null,
+    officialHomeUrl: 'https://bisegrw.edu.pk/',
+    officialResultUrl: 'https://result.bisegrw.edu.pk/Index.php',
+    portalSessionObserved: 'HSSC Part-II (12th Class) — 1st Annual Examination 2026',
+    captcha: 'required',
+    nameSearch: 'unverified',
+    lookupMode: 'official-link',
+    sources: ['https://result.bisegrw.edu.pk/Index.php'],
+    lastVerifiedAt: '2026-09-23',
+  },
   punjab(
     'bise-faisalabad',
     'https://www.bisefsd.edu.pk/',
     'https://www.bisefsd.edu.pk/InterResults.aspx',
   ),
-  punjab('bise-multan', 'https://web.bisemultan.edu.pk/', 'https://results.bisemultan.edu.pk/'),
-  punjab('bise-rawalpindi', 'https://www.biserawalpindi.edu.pk/'),
+  {
+    boardId: 'bise-multan',
+    class: 12,
+    year: 2026,
+    session: 'annual-1',
+    announcementStatus: 'announced',
+    /*
+     * `announcedAt` stays null. The committee calendar said 10:00 AM and the
+     * portals were serving the session when checked at 11:30 — but no board
+     * published a time of its own, and copying the calendar’s time into a
+     * per-board record would turn a schedule into a board statement.
+     */
+    dateConfidence: 'official',
+    announcedAt: null,
+    scheduledAt: null,
+    officialHomeUrl: 'https://web.bisemultan.edu.pk/',
+    officialResultUrl: 'https://results.bisemultan.edu.pk/',
+    portalSessionObserved: 'Part-II / Combined Results — 1st Annual 2026',
+    captcha: 'unverified',
+    nameSearch: 'unverified',
+    lookupMode: 'official-link',
+    sources: ['https://results.bisemultan.edu.pk/'],
+    lastVerifiedAt: '2026-09-23',
+  },
+  {
+    boardId: 'bise-rawalpindi',
+    class: 12,
+    year: 2026,
+    session: 'annual-1',
+    announcementStatus: 'announced',
+    /*
+     * `announcedAt` stays null. The committee calendar said 10:00 AM and the
+     * portals were serving the session when checked at 11:30 — but no board
+     * published a time of its own, and copying the calendar’s time into a
+     * per-board record would turn a schedule into a board statement.
+     */
+    dateConfidence: 'official',
+    announcedAt: null,
+    scheduledAt: null,
+    officialHomeUrl: 'https://www.biserawalpindi.edu.pk/',
+    officialResultUrl: 'https://biserwp.edu.pk/',
+    portalSessionObserved: 'RESULT OF HSSC FIRST ANNUAL EXAMINATION, 2026',
+    captcha: 'unverified',
+    nameSearch: 'unverified',
+    lookupMode: 'official-link',
+    sources: ['https://www.biserawalpindi.edu.pk/', 'https://biserwp.edu.pk/'],
+    lastVerifiedAt: '2026-09-23',
+  },
   punjab('bise-sargodha', 'https://bisesargodha.edu.pk/', 'https://results.bisesargodha.edu.pk/'),
-  punjab('bise-bahawalpur', 'https://bisebwp.edu.pk/'),
-  punjab('bise-dg-khan', 'https://www.bisedgkhan.edu.pk/'),
+  {
+    boardId: 'bise-bahawalpur',
+    class: 12,
+    year: 2026,
+    session: 'annual-1',
+    announcementStatus: 'announced',
+    /*
+     * `announcedAt` stays null. The committee calendar said 10:00 AM and the
+     * portals were serving the session when checked at 11:30 — but no board
+     * published a time of its own, and copying the calendar’s time into a
+     * per-board record would turn a schedule into a board statement.
+     */
+    dateConfidence: 'official',
+    announcedAt: null,
+    scheduledAt: null,
+    officialHomeUrl: 'https://bisebwp.edu.pk/',
+    officialResultUrl: 'https://bisebwp.edu.pk/',
+    portalSessionObserved: 'HIGHER SECONDARY SCHOOL (FIRST ANNUAL) EXAMINATION, 2026',
+    captcha: 'required',
+    nameSearch: 'unverified',
+    lookupMode: 'official-link',
+    sources: ['https://bisebwp.edu.pk/'],
+    lastVerifiedAt: '2026-09-23',
+  },
+  {
+    boardId: 'bise-dg-khan',
+    class: 12,
+    year: 2026,
+    session: 'annual-1',
+    announcementStatus: 'announced',
+    /*
+     * `announcedAt` stays null. The committee calendar said 10:00 AM and the
+     * portals were serving the session when checked at 11:30 — but no board
+     * published a time of its own, and copying the calendar’s time into a
+     * per-board record would turn a schedule into a board statement.
+     */
+    dateConfidence: 'official',
+    announcedAt: null,
+    scheduledAt: null,
+    officialHomeUrl: 'https://www.bisedgkhan.edu.pk/',
+    officialResultUrl: 'https://www.bisedgkhan.edu.pk/',
+    portalSessionObserved: 'Part-II & Combined — 1st Annual Examination 2026',
+    captcha: 'unverified',
+    nameSearch: 'unverified',
+    lookupMode: 'official-link',
+    sources: ['https://www.bisedgkhan.edu.pk/'],
+    lastVerifiedAt: '2026-09-23',
+  },
   punjab('bise-sahiwal', 'https://bisesahiwal.edu.pk/', 'https://bisesahiwal.edu.pk/result.php'),
 
   // ---- KPK: already out, and NOT on one shared date ----------------------
