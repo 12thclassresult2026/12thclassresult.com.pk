@@ -200,7 +200,19 @@ export function SiteHeader() {
 
           {/* Desktop Navigation Links */}
           <nav aria-label="Primary" className="hidden items-center gap-0.5 lg:flex xl:gap-1">
-            <ul className="flex items-center gap-0.5 xl:gap-1">
+            {/*
+              `whitespace-nowrap` IS THE WHOLE FIX FOR THE WRAPPING.
+
+              Seven of the ten items rendered on two lines at EVERY desktop
+              width, 1920 included — "Punjab / Boards", "Date / Schedule" — so
+              this was never a question of screen size. The labels were simply
+              allowed to break, and a flex row will happily squeeze its items
+              and let the text wrap rather than overflow.
+
+              With breaking off, the row needs a real plan for narrow screens,
+              which is the tiering below.
+            */}
+            <ul className="flex items-center gap-0.5 whitespace-nowrap xl:gap-1">
               {/* Home */}
               <li>
                 <Link
@@ -335,7 +347,7 @@ export function SiteHeader() {
 
                       {/* Item 5: Result Gazette Archives */}
                       <Link
-                        href="/#gazette"
+                        href="/gazette"
                         onClick={() => setOpenDropdown(null)}
                         className="group flex items-center justify-between rounded-xl p-2.5 transition-all hover:bg-slate-50"
                       >
@@ -467,7 +479,7 @@ export function SiteHeader() {
 
               {/* Date Schedule */}
               <li
-                className="relative"
+                className="relative hidden xl:block"
                 onMouseEnter={() => setOpenDropdown('schedule')}
                 onMouseLeave={() => setOpenDropdown(null)}
               >
@@ -482,12 +494,12 @@ export function SiteHeader() {
 
               {/* Gazette */}
               <li
-                className="relative"
+                className="relative hidden xl:block"
                 onMouseEnter={() => setOpenDropdown('gazette')}
                 onMouseLeave={() => setOpenDropdown(null)}
               >
                 <Link
-                  href="/#gazette"
+                  href="/gazette"
                   className="flex items-center gap-1 rounded-md px-3 py-2 text-[13px] font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007054]"
                 >
                   <span>Gazette</span>
@@ -497,7 +509,7 @@ export function SiteHeader() {
 
               {/* SMS Codes */}
               <li
-                className="relative"
+                className="relative hidden xl:block"
                 onMouseEnter={() => setOpenDropdown('sms')}
                 onMouseLeave={() => setOpenDropdown(null)}
               >
@@ -512,7 +524,7 @@ export function SiteHeader() {
 
               {/* FAQs */}
               <li
-                className="relative"
+                className="relative hidden xl:block"
                 onMouseEnter={() => setOpenDropdown('faqs')}
                 onMouseLeave={() => setOpenDropdown(null)}
               >

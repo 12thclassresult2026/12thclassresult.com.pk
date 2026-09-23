@@ -166,6 +166,75 @@ const SECTIONS = [
     ],
   },
   {
+    /*
+      WHAT THE DESKTOP NAV DROPS BELOW xl LIVES HERE.
+
+      Between 1024 and 1279 the header shows the six core items and tiers the
+      rest away, so this drawer is the only route to them at those widths —
+      which is why its toggle is xl:hidden rather than lg:hidden.
+    */
+    title: 'DATES & METHODS',
+    links: [
+      {
+        label: 'Result date schedule',
+        href: '/results/12th-class',
+        icon: (
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+            />
+          </svg>
+        ),
+      },
+      {
+        label: 'Check result by SMS',
+        href: '/#check-result',
+        icon: (
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+            />
+          </svg>
+        ),
+      },
+      {
+        label: 'Frequently asked questions',
+        href: '/#faq-section',
+        icon: (
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        ),
+      },
+    ],
+  },
+  {
     title: 'GUIDES & TOOLS',
     links: [
       {
@@ -334,7 +403,7 @@ export function MobileNav() {
         aria-expanded={open}
         aria-controls={panelId}
         aria-label={open ? 'Close menu' : 'Open menu'}
-        className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-2xs transition-colors hover:border-[#007054] hover:text-[#007054] active:scale-95 lg:hidden"
+        className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-2xs transition-colors hover:border-[#007054] hover:text-[#007054] active:scale-95 xl:hidden"
       >
         {open ? <XIcon width={20} height={20} /> : <MenuIcon width={20} height={20} />}
       </button>
@@ -342,7 +411,7 @@ export function MobileNav() {
       {open ? (
         <div
           id={panelId}
-          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-900/60 p-2.5 backdrop-blur-xs sm:p-5 lg:hidden"
+          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-900/60 p-2.5 backdrop-blur-xs sm:p-5 xl:hidden"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               setOpen(false)
