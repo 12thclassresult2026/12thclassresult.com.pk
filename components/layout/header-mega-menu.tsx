@@ -261,7 +261,9 @@ export function HeaderMegaMenu({
   return (
     <div
       onMouseLeave={onClose}
-      className="absolute top-full left-1/2 z-50 w-[96vw] max-w-6xl -translate-x-1/2 pt-1.5 transition-all"
+      className={`absolute top-full left-1/2 z-50 w-[96vw] -translate-x-1/2 pt-1.5 transition-all ${
+        showProvinceSwitcher ? 'max-w-6xl' : 'max-w-2xl'
+      }`}
     >
       <div className="overflow-hidden rounded-3xl border border-slate-200/90 bg-white p-5 shadow-2xl backdrop-blur-md">
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
@@ -326,9 +328,9 @@ export function HeaderMegaMenu({
             a wide grid instead of the narrow one it used to share.
           */}
           <div
-            className={`flex flex-col justify-between border-slate-200/70 pr-2 lg:border-r ${
-              showProvinceSwitcher ? 'lg:col-span-4' : 'lg:col-span-7'
-            }`}
+            className={`flex flex-col justify-between border-slate-200/70 ${
+              showProvinceSwitcher ? 'pr-2 lg:border-r' : ''
+            } ${showProvinceSwitcher ? 'lg:col-span-4' : 'lg:col-span-12'}`}
           >
             <div>
               {/* Province Header */}
@@ -347,7 +349,11 @@ export function HeaderMegaMenu({
               </div>
 
               {/* 2-Column Grid of Boards */}
-              <div className="grid grid-cols-2 gap-2">
+              <div
+                className={`grid gap-2 ${
+                  showProvinceSwitcher ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-3'
+                }`}
+              >
                 {activeProvince.boards.map((b) => (
                   <Link
                     key={b.name}
@@ -379,104 +385,115 @@ export function HeaderMegaMenu({
             </div>
           </div>
 
-          {/* -- Panel 3: Quick Links List (Cols 8-10) -- */}
-          <div className="flex flex-col justify-between border-slate-200/70 pr-2 lg:col-span-3 lg:border-r">
-            <div>
-              {/* Header */}
-              <div className="mb-3.5 flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100/80 text-[#007054]">
-                  <GridIcon width={16} height={16} />
-                </div>
+          {/*
+            Panels 3 and 4 — Quick Links and the promotion card — belong to
+            the full menu only. A reader who clicked “Sindh Boards” asked for
+            Sindh boards; answering with four of them on the left and two
+            unrelated columns filling the rest of a very wide panel is noise
+            around the thing they came for.
+          */}
+          {showProvinceSwitcher ? (
+            <>
+              {/* -- Panel 3: Quick Links List (Cols 8-10) -- */}
+              <div className="flex flex-col justify-between border-slate-200/70 pr-2 lg:col-span-3 lg:border-r">
                 <div>
-                  <h4 className="text-sm leading-none font-extrabold text-slate-900">
-                    Quick Links
-                  </h4>
-                  <p className="mt-1 text-[11px] text-slate-500">
-                    Access important sections quickly.
+                  {/* Header */}
+                  <div className="mb-3.5 flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100/80 text-[#007054]">
+                      <GridIcon width={16} height={16} />
+                    </div>
+                    <div>
+                      <h4 className="text-sm leading-none font-extrabold text-slate-900">
+                        Quick Links
+                      </h4>
+                      <p className="mt-1 text-[11px] text-slate-500">
+                        Access important sections quickly.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* 6 Quick Link Rows */}
+                  <div className="space-y-2">
+                    {QUICK_LINKS.map((item) => {
+                      const Icon = item.icon
+                      return (
+                        <Link
+                          key={item.title}
+                          href={item.href}
+                          onClick={onClose}
+                          className="group flex items-center justify-between rounded-xl p-2 transition-all hover:bg-slate-50"
+                        >
+                          <div className="flex min-w-0 items-center gap-2.5">
+                            <div
+                              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${item.bgColor}`}
+                            >
+                              <Icon width={15} height={15} />
+                            </div>
+                            <div className="min-w-0 text-left">
+                              <span className="block truncate text-xs font-bold text-slate-800 transition-colors group-hover:text-[#007054]">
+                                {item.title}
+                              </span>
+                              <span className="block truncate text-[10px] text-slate-500">
+                                {item.subtitle}
+                              </span>
+                            </div>
+                          </div>
+
+                          <ChevronRightIcon
+                            width={13}
+                            height={13}
+                            className="shrink-0 text-slate-400 transition-transform group-hover:translate-x-0.5 group-hover:text-[#007054]"
+                          />
+                        </Link>
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {/* -- Panel 4: Right Promotion Feature Card (Cols 11-12) -- */}
+              <div className="flex flex-col items-center justify-between rounded-2xl border border-emerald-200/70 bg-gradient-to-b from-[#EBF6F2] via-[#E6F3EE] to-[#DCEDE7] p-4 text-center lg:col-span-2">
+                {/* Top Illustration: Books & Graduation Cap */}
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-white/40 shadow-inner">
+                  <Image
+                    src="/images/faq-books.jpg"
+                    alt="Higher Education Pakistan"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 180px"
+                    className="rounded-xl object-cover"
+                  />
+                </div>
+
+                {/* Middle Message */}
+                <div className="mt-3">
+                  <span className="text-[10px] font-bold tracking-wider text-emerald-800 uppercase">
+                    Higher Education
+                  </span>
+                  <h5 className="mt-0.5 text-xs font-black tracking-tight text-[#005B44]">
+                    A Brighter Pakistan
+                  </h5>
+                  <div className="mx-auto mt-1.5 h-0.5 w-8 rounded-full bg-[#007054]" />
+
+                  <p className="mt-2 text-[10.5px] leading-snug text-slate-600 italic">
+                    &ldquo;Education today,
+                    <br />a stronger tomorrow.&rdquo;
                   </p>
                 </div>
+
+                {/* Bottom Button */}
+                <div className="mt-3.5 w-full">
+                  <Link
+                    href="/#check-result"
+                    onClick={onClose}
+                    className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#007054] py-2.5 text-xs font-bold text-white shadow-md transition-all hover:bg-[#005842] active:scale-95"
+                  >
+                    <span>Check Your Result</span>
+                    <span>&rarr;</span>
+                  </Link>
+                </div>
               </div>
-
-              {/* 6 Quick Link Rows */}
-              <div className="space-y-2">
-                {QUICK_LINKS.map((item) => {
-                  const Icon = item.icon
-                  return (
-                    <Link
-                      key={item.title}
-                      href={item.href}
-                      onClick={onClose}
-                      className="group flex items-center justify-between rounded-xl p-2 transition-all hover:bg-slate-50"
-                    >
-                      <div className="flex min-w-0 items-center gap-2.5">
-                        <div
-                          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${item.bgColor}`}
-                        >
-                          <Icon width={15} height={15} />
-                        </div>
-                        <div className="min-w-0 text-left">
-                          <span className="block truncate text-xs font-bold text-slate-800 transition-colors group-hover:text-[#007054]">
-                            {item.title}
-                          </span>
-                          <span className="block truncate text-[10px] text-slate-500">
-                            {item.subtitle}
-                          </span>
-                        </div>
-                      </div>
-
-                      <ChevronRightIcon
-                        width={13}
-                        height={13}
-                        className="shrink-0 text-slate-400 transition-transform group-hover:translate-x-0.5 group-hover:text-[#007054]"
-                      />
-                    </Link>
-                  )
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* -- Panel 4: Right Promotion Feature Card (Cols 11-12) -- */}
-          <div className="flex flex-col items-center justify-between rounded-2xl border border-emerald-200/70 bg-gradient-to-b from-[#EBF6F2] via-[#E6F3EE] to-[#DCEDE7] p-4 text-center lg:col-span-2">
-            {/* Top Illustration: Books & Graduation Cap */}
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-white/40 shadow-inner">
-              <Image
-                src="/images/faq-books.jpg"
-                alt="Higher Education Pakistan"
-                fill
-                sizes="(max-width: 768px) 100vw, 180px"
-                className="rounded-xl object-cover"
-              />
-            </div>
-
-            {/* Middle Message */}
-            <div className="mt-3">
-              <span className="text-[10px] font-bold tracking-wider text-emerald-800 uppercase">
-                Higher Education
-              </span>
-              <h5 className="mt-0.5 text-xs font-black tracking-tight text-[#005B44]">
-                A Brighter Pakistan
-              </h5>
-              <div className="mx-auto mt-1.5 h-0.5 w-8 rounded-full bg-[#007054]" />
-
-              <p className="mt-2 text-[10.5px] leading-snug text-slate-600 italic">
-                &ldquo;Education today,
-                <br />a stronger tomorrow.&rdquo;
-              </p>
-            </div>
-
-            {/* Bottom Button */}
-            <div className="mt-3.5 w-full">
-              <Link
-                href="/#check-result"
-                onClick={onClose}
-                className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#007054] py-2.5 text-xs font-bold text-white shadow-md transition-all hover:bg-[#005842] active:scale-95"
-              >
-                <span>Check Your Result</span>
-                <span>&rarr;</span>
-              </Link>
-            </div>
-          </div>
+            </>
+          ) : null}
         </div>
       </div>
     </div>
