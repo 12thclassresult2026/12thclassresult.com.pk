@@ -2,19 +2,17 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
+import { BoardStatusHero } from '@/components/result/board-status-hero'
 import { ResultCommandCenter } from '@/components/result/command-center'
 import { RollNumberLookup } from '@/components/result/roll-number-lookup'
 import { SourceObservations } from '@/components/result/source-observations'
 import { Breadcrumbs } from '@/components/seo/breadcrumbs'
 import { JsonLdScript } from '@/components/seo/json-ld'
 import { PerGroupStatus } from '@/components/result/per-group-status'
-import { ProvenanceBlock } from '@/components/result/provenance-block'
-import { StatusSentence } from '@/components/result/status-sentence'
 import { CURRENT_RESULT_YEAR, getBoardBySlug, routedBoards } from '@/lib/board/registry'
 import { breadcrumbSchema, webPageSchema } from '@/lib/schema/json-ld'
 import { capabilityLabel } from '@/lib/result/capability'
 import { getPageByPath } from '@/lib/content/registry'
-import { datasetForBoard } from '@/lib/gazettes/datasets'
 import { linkableSources } from '@/lib/result-sources/registry'
 import { metadataForPage } from '@/lib/seo/metadata'
 
@@ -62,7 +60,6 @@ export default async function BoardResultPage({ params }: { params: Promise<{ bo
 
   const sources = linkableSources(board.id)
   const year = CURRENT_RESULT_YEAR
-  const dataset = datasetForBoard(board.slug)
 
   return (
     <>
@@ -84,9 +81,17 @@ export default async function BoardResultPage({ params }: { params: Promise<{ bo
         <h1 className="mt-6 text-3xl font-bold tracking-tight sm:text-4xl">{page.h1}</h1>
         <p className="mt-3 text-[var(--text-muted)]">{board.officialName}</p>
 
-        {/* The extractable sentence comes FIRST, before any narrative. */}
+        {/*
+          THE ANSWER FIRST, from lib/board/result-status.ts.
+
+          This used to open with StatusSentence, which reads the board
+          registry’s `resultDate` fact — a field nobody updates during a result
+          cycle, so on result morning it still read “has not been announced, as
+          last checked on 14 September”. The hero reads the status registry,
+          which is checked against the boards’ own sites.
+        */}
         <div className="mt-8 max-w-3xl">
-          <StatusSentence board={board} year={year} />
+          <BoardStatusHero board={board} />
         </div>
 
         <div className="mt-8 max-w-3xl">
@@ -109,16 +114,17 @@ export default async function BoardResultPage({ params }: { params: Promise<{ bo
           </section>
         ) : null}
 
-        {dataset ? (
-          <RollNumberLookup
-            boardSlug={board.slug}
-            boardName={board.shortName}
-            year={dataset.year}
-            examinationLabel={dataset.examinationLabel}
-            gazetteSourceUrl={dataset.sourceUrl}
-            gazetteCheckedOn={dataset.checkedAt}
-          />
-        ) : null}
+        {/*
+          SHOWN FOR EVERY BOARD, not only those with a dataset.
+
+          The form used to appear only where a gazette was loaded, and it was
+          hard-wired to that gazette’s year — so Lahore’s page offered a box
+          headed “First Annual 2025” on the morning the 2026 result was due.
+          The session is now chosen here and validated on the server, and a
+          session with no gazette answers plainly and links the board’s portal,
+          which is a better answer than no box at all.
+        */}
+        <RollNumberLookup boardSlug={board.slug} boardName={board.shortName} />
 
         <PerGroupStatus board={board} year={year} />
 
@@ -178,12 +184,17 @@ export default async function BoardResultPage({ params }: { params: Promise<{ bo
           </p>
         </section>
 
-        <section className="mt-10 max-w-3xl">
-          <h2 className="text-xl font-bold tracking-tight">Where this came from</h2>
-          <div className="mt-4 rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-[var(--surface-sunken)] p-5">
-            <ProvenanceBlock fact={board.resultDate} />
-          </div>
-        </section>
+        {/*
+          THE “WHERE THIS CAME FROM” BLOCK IS GONE, not moved.
+
+          It rendered `board.resultDate`, which is `unknown` for every board
+          except Quetta, so it printed “Status: Not announced · Source: No
+          source · Last checked: Not yet checked” directly beneath a hero that
+          had just named a date, a source and a check date. Two provenance
+          claims on one page, disagreeing, is worse than one.
+
+          The hero carries its own sources and links the methodology page.
+        */}
 
         <p className="mt-10">
           <Link
